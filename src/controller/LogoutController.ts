@@ -23,8 +23,9 @@ import validateExpressRequest from '../validateExpressRequest'
 class LogoutController {
     public router = express.Router()
 
+    // GJA. Make this a POST also
     constructor() {
-        this.router.get('/', this.logoutUser)
+        this.router.post('/', this.logoutUser)
     }
 
     logoutUser = (req: express.Request, res: express.Response, next: express.NextFunction) => {
