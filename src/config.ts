@@ -17,6 +17,8 @@
 import {BFFConfiguration} from './lib'
 import {CookieSerializeOptions} from 'cookie'
 
+// GJA. This is the configuration for the Docker Compose setup
+// Would this be best managed via JSON files that customers copy into their Docker container?
 export const config: BFFConfiguration = {
     clientID: 'spa-client',
     clientSecret: 'Secr3t',
@@ -25,7 +27,7 @@ export const config: BFFConfiguration = {
     scope: 'openid profile',
 
     encKey: 'NF65meV>Ls#8GP>;!Cnov)rIPRoK^.NP', // 32-character long string,
-    cookieNamePrefix: 'example-bff',
+    cookieNamePrefix: 'example',
     cookieOptions: {
         httpOnly: true,
         sameSite: true,
@@ -36,7 +38,7 @@ export const config: BFFConfiguration = {
 
     trustedWebOrigins: ['http://www.example.com'],
 
-    authorizeEndpoint: 'http://localhost:8443/oauth/v2/oauth-authorize',
-    tokenEndpoint: 'http://localhost:8443/oauth/v2/oauth-token',
-    logoutEndpoint: 'http://localhost:8443/oauth/v2/oauth-session/logout'
+    authorizeEndpoint: 'http://curityserver:8443/oauth/v2/oauth-authorize',
+    tokenEndpoint: 'http://curityserver:8443/oauth/v2/oauth-token',
+    logoutEndpoint: 'http://curityserver:8443/oauth/v2/oauth-session/logout'
 }
