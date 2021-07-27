@@ -74,22 +74,22 @@ class LoginController {
             isLoggedIn = true
 
         } else {
+            
+            // See if we have a session cookie
+            isLoggedIn = !!(req.cookies && req.cookies[getAuthCookieName(config.cookieNamePrefix)])
             try {
                 
                 // GJA: If not logged in the SPA cannot send the anti forgery token yet
-                if (!isLoggedIn) {
+                if (isLoggedIn) {
                     validateExpressRequest(req)
                 } else {
 
-                    // GJA: Other checks, such as tghe web origin, should still be made though
+                    // GJA: Other checks, such as the web origin, should be made in all cases though
                 }
 
             } catch (error) {
                 return next(error)
             }
-
-            // See if we have a session cookie
-            isLoggedIn = !!(req.cookies && req.cookies[getAuthCookieName(config.cookieNamePrefix)])
         }
 
         //
