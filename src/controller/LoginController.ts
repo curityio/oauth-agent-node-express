@@ -75,7 +75,15 @@ class LoginController {
 
         } else {
             try {
-                validateExpressRequest(req)
+                
+                // GJA: If not logged in the SPA cannot send the anti forgery token yet
+                if (!isLoggedIn) {
+                    validateExpressRequest(req)
+                } else {
+
+                    // GJA: Other checks, such as tghe web origin, should still be made though
+                }
+
             } catch (error) {
                 return next(error)
             }

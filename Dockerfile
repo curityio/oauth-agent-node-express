@@ -5,7 +5,7 @@ COPY src                 /usr/bff-api/src
 COPY tsconfig.json       /usr/bff-api/
 COPY package*.json       /usr/bff-api/
 
-# Currently I am running source directly via ts-node
+# GJA. Currently I am running source directly via ts-node
 # Discuss with Michal whether webpack should build to a dist folder
 # RUN npm install --production
 RUN npm install
