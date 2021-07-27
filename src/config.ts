@@ -20,8 +20,8 @@ import {CookieSerializeOptions} from 'cookie'
 export const config: BFFConfiguration = {
     clientID: 'spa-client',
     clientSecret: 'Secr3t',
-    redirectUri: 'http://www.example.com',
-    postLogoutRedirectURI: 'http://www.example.com',
+    redirectUri: 'http://www.example.com/',
+    postLogoutRedirectURI: 'http://www.example.com/',
     scope: 'openid profile',
 
     encKey: 'NF65meV>Ls#8GP>;!Cnov)rIPRoK^.NP', // 32-character long string,
