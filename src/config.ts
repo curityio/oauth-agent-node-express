@@ -38,7 +38,10 @@ export const config: BFFConfiguration = {
 
     trustedWebOrigins: ['http://www.example.com'],
 
-    authorizeEndpoint: 'http://curityserver:8443/oauth/v2/oauth-authorize',
+    // GJA. These are front channel URLs that use public host names
+    authorizeEndpoint: 'http://localhost:8443/oauth/v2/oauth-authorize',
+    logoutEndpoint: 'http://localhost:8443/oauth/v2/oauth-session/logout',
+
+    // GJA. These are back channel URLs that use 'inside the cluster' host names
     tokenEndpoint: 'http://curityserver:8443/oauth/v2/oauth-token',
-    logoutEndpoint: 'http://curityserver:8443/oauth/v2/oauth-session/logout'
 }
