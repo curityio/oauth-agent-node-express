@@ -13,8 +13,6 @@ export default function validateRequest(data: ValidateRequestData, options: Vali
 
         if (data.csrfCookie) {
             const decryptedCookie = decryptCookie(data.encKey, data.csrfCookie)
-            console.log('decrypted cookie: ' + decryptedCookie)
-            console.log('csrf header: ' + data.csrfHeader)
             if (decryptedCookie !== data.csrfHeader) {
                 throw new InvalidRequestException()
             }

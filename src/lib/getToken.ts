@@ -21,7 +21,7 @@ import {BFFException, InvalidRequestException, InvalidStateException, MissingTem
 import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName'
 import {getTempLoginDataCookieForUnset} from './pkce'
 
-function getTokenEndpointResponse(config: BFFConfiguration, code: string, state: string, tempLoginData: string | undefined | null, ): Promise<any> {
+async function getTokenEndpointResponse(config: BFFConfiguration, code: string, state: string, tempLoginData: string | undefined | null, ): Promise<any> {
     if (!tempLoginData) {
         return Promise.reject(new MissingTempLoginDataException())
     }
@@ -32,78 +32,76 @@ function getTokenEndpointResponse(config: BFFConfiguration, code: string, state:
         return Promise.reject(new InvalidStateException())
     }
 
-    return fetch(
-        config.tokenEndpoint,
-        {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Basic ' + Buffer.from(config.clientID+ ":" + config.clientSecret).toString('base64'),
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'grant_type=authorization_code&redirect_uri=' + config.redirectUri + '&code=' + code + '&code_verifier=' + parsedTempLoginData.codeVerifier
-        }).then(res => {
-            // TODO Errors should be logged
-            if (res.status >= 500) {
-                throw new AuthorizationServerException()
-            }
-
-            if (res.status >= 400) {
-                throw new InvalidRequestException()
-            }
-
-            return res.json()
-    }).catch(err => {
-        if (!(err instanceof BFFException)) {
-            throw new AuthorizationServerException(err)
-        } else {
-            throw err
-        }
-    })
-}
-
-function refreshAccessToken(refreshToken: string, config: BFFConfiguration): Promise<any>
-{
-    console.log('*** in refreshAccessToken')
-    console.log('Sending clientID: ' + config.clientID)
-    console.log('Sending clientSecret: ' + config.clientSecret)
-    console.log('Sending refreshToken: ' + refreshToken)
-    console.log('Token endpoint: ' + config.tokenEndpoint)
-
-    return fetch(
-        config.tokenEndpoint,
-        {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Basic ' + Buffer.from(config.clientID+ ":" + config.clientSecret).toString('base64'),
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'grant_type=refresh_token&refresh_token='+refreshToken
-        }).then(res => {
-
-            console.log('*** error')
-            console.log(res.text())
-
+    try {
+        const res = await fetch(
+            config.tokenEndpoint,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Basic ' + Buffer.from(config.clientID+ ":" + config.clientSecret).toString('base64'),
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'grant_type=authorization_code&redirect_uri=' + config.redirectUri + '&code=' + code + '&code_verifier=' + parsedTempLoginData.codeVerifier
+            })
+        
         // TODO Errors should be logged
         if (res.status >= 500) {
-            console.log('*** Refresh token status 500')
             throw new AuthorizationServerException()
         }
 
         if (res.status >= 400) {
-            console.log('*** Refresh token status 400')
             throw new InvalidRequestException()
         }
 
-        return res.json()
+        return await res.json()
 
-    }).catch(err => {
+    } catch(err) {
 
         if (!(err instanceof BFFException)) {
             throw new AuthorizationServerException(err)
         } else {
             throw err
         }
-    })
+    }
+}
+
+async function refreshAccessToken(refreshToken: string, config: BFFConfiguration): Promise<any>
+{
+    try {
+
+        const res = await fetch(
+            config.tokenEndpoint,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Basic ' + Buffer.from(config.clientID+ ":" + config.clientSecret).toString('base64'),
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'grant_type=refresh_token&refresh_token='+refreshToken
+            })
+            
+        // TODO Errors should be logged
+        const text = await res.text()
+        console.log('*** FRESH TOKENS: ' + text)
+        if (res.status >= 500) {
+            throw new AuthorizationServerException()
+        }
+
+        if (res.status >= 400) {
+            throw new InvalidRequestException()
+        }
+
+        //return res.json()
+        return JSON.parse(text)
+
+    } catch (err) {
+
+        if (!(err instanceof BFFException)) {
+            throw new AuthorizationServerException(err)
+        } else {
+            throw err
+        }
+    }
 }
 
 function getCookiesForTokenResponse(tokenResponse: any, config: BFFConfiguration, unsetTempLoginDataCookie: boolean = false, csrfCookieValue?: string): string[] {

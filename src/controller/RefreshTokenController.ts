@@ -17,7 +17,7 @@
 import * as express from 'express'
 import {config} from '../config'
 import {InvalidBFFCookieException} from '../lib/exceptions'
-import {getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken} from '../lib'
+import {decryptCookie, getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken} from '../lib'
 import {ValidateRequestOptions} from '../lib/validateRequest'
 import validateExpressRequest from '../validateExpressRequest'
 
@@ -43,7 +43,8 @@ class RefreshTokenController {
         if (req.cookies && req.cookies[authCookieName]) {
             try {
 
-                const tokenResponse = await refreshAccessToken(req.cookies[authCookieName], config)
+                const refreshToken = decryptCookie(config.encKey, req.cookies[authCookieName])
+                const tokenResponse = await refreshAccessToken(refreshToken, config)
                 if (tokenResponse?.isNewAccessToken) {
                     const cookiesToSet = getCookiesForTokenResponse(tokenResponse.tokenEndpointResponse, config)
                     res.setHeader('Set-Cookie', cookiesToSet)
