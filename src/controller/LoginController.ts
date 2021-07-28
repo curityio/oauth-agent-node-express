@@ -18,6 +18,7 @@ import * as express from 'express'
 import * as urlparse from 'url-parse'
 import {
     getAuthorizationURL,
+    getCSRFCookieName,
     getTokenEndpointResponse,
     getTempLoginDataCookie,
     getTempLoginDataCookieName,
@@ -62,18 +63,31 @@ class LoginController {
         
         if (isOAuthResponse) {
             try {
+                
+                
+                // When processing a login, do the OAuth work, set cookies and create an anti forgery token
                 const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
                 const tokenResponse = await getTokenEndpointResponse(config, data.code, data.state, tempLoginData)
                 csrfToken = generateRandomString()
                 const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config, true, csrfToken)
-
                 res.set('Set-Cookie', cookiesToSet)
+
             } catch (error) {
                 return next(error)
             }
             isLoggedIn = true
 
         } else {
+
+            // During an authenticated page refresh or opening a new browser tab, we must return the anti forgery token
+            // This enables an attacker to get the value, but it is the only way it can work
+            console.log('*** Page load');
+            csrfToken = req.cookies[getCSRFCookieName(config.cookieNamePrefix)]
+            if (csrfToken) {
+                console.log('*** Page load found CSRF token');
+            } else {
+                console.log('*** Page load did NOT find a CSRF token');
+            }
             
             // See if we have a session cookie
             isLoggedIn = !!(req.cookies && req.cookies[getAuthCookieName(config.cookieNamePrefix)])
