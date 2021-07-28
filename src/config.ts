@@ -17,13 +17,11 @@
 import {BFFConfiguration} from './lib'
 import {CookieSerializeOptions} from 'cookie'
 
-// GJA. This is the configuration for the Docker Compose setup
-// Would this be best managed via JSON files that customers copy into their Docker container?
 export const config: BFFConfiguration = {
     clientID: 'spa-client',
     clientSecret: 'Secr3t',
-    redirectUri: 'http://www.example.com/',
-    postLogoutRedirectURI: 'http://www.example.com/',
+    redirectUri: 'http://www.example.com:3000/',
+    postLogoutRedirectURI: 'http://www.example.com:3000/',
     scope: 'openid profile',
 
     encKey: 'NF65meV>Ls#8GP>;!Cnov)rIPRoK^.NP', // 32-character long string,
@@ -36,12 +34,8 @@ export const config: BFFConfiguration = {
         path: '/',
     } as CookieSerializeOptions,
 
-    trustedWebOrigins: ['http://www.example.com'],
-
-    // GJA. These are front channel URLs that use public host names
+    trustedWebOrigins: ['http://www.example.com:3000'],
     authorizeEndpoint: 'http://localhost:8443/oauth/v2/oauth-authorize',
     logoutEndpoint: 'http://localhost:8443/oauth/v2/oauth-session/logout',
-
-    // GJA. These are back channel URLs that use 'inside the cluster' host names
-    tokenEndpoint: 'http://curityserver:8443/oauth/v2/oauth-token',
+    tokenEndpoint: 'http://localhost:8443/oauth/v2/oauth-token',
 }
