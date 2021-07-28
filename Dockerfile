@@ -1,8 +1,7 @@
 FROM node:15.11.0-alpine
 
 WORKDIR /usr/bff-api
-COPY src                 /usr/bff-api/src
-COPY tsconfig.json       /usr/bff-api/
+COPY dist                /usr/bff-api/dist
 COPY package*.json       /usr/bff-api/
 
 RUN npm install --production
