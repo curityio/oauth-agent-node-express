@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "An SPA using a Back End for Front End, deployed on Vercel platform.",
     "scripts": {
-        "build": "webpack",
+        "build": "tsc",
         "start": "ts-node src/server.ts"
     },
     "author": "Curity AB",
