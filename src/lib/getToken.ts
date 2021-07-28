@@ -63,6 +63,12 @@ function getTokenEndpointResponse(config: BFFConfiguration, code: string, state:
 
 function refreshAccessToken(refreshToken: string, config: BFFConfiguration): Promise<any>
 {
+    console.log('*** in refreshAccessToken')
+    console.log('Sending clientID: ' + config.clientID)
+    console.log('Sending clientSecret: ' + config.clientSecret)
+    console.log('Sending refreshToken: ' + refreshToken)
+    console.log('Token endpoint: ' + config.tokenEndpoint)
+
     return fetch(
         config.tokenEndpoint,
         {
@@ -73,17 +79,25 @@ function refreshAccessToken(refreshToken: string, config: BFFConfiguration): Pro
             },
             body: 'grant_type=refresh_token&refresh_token='+refreshToken
         }).then(res => {
+
+            console.log('*** error')
+            console.log(res.text())
+
         // TODO Errors should be logged
         if (res.status >= 500) {
+            console.log('*** Refresh token status 500')
             throw new AuthorizationServerException()
         }
 
         if (res.status >= 400) {
+            console.log('*** Refresh token status 400')
             throw new InvalidRequestException()
         }
 
         return res.json()
+
     }).catch(err => {
+
         if (!(err instanceof BFFException)) {
             throw new AuthorizationServerException(err)
         } else {

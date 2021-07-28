@@ -17,14 +17,17 @@
 import * as express from 'express'
 import * as urlparse from 'url-parse'
 import {
+    decryptCookie,
     getAuthorizationURL,
     getCSRFCookieName,
     getTokenEndpointResponse,
     getTempLoginDataCookie,
     getTempLoginDataCookieName,
     getCookiesForTokenResponse,
-    getAuthCookieName, generateRandomString
+    getAuthCookieName,
+    generateRandomString,
 } from '../lib'
+import {ValidateRequestData, ValidateRequestOptions} from '../lib/validateRequest';
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
 
@@ -37,6 +40,12 @@ class LoginController {
     }
 
     startLogin = (req: express.Request, res: express.Response) => {
+
+        // Check the web origin
+        const options = new ValidateRequestOptions();
+        options.requireCsrfHeader = false;
+        validateExpressRequest(req, options)
+
         const authorizationRequestData = getAuthorizationURL(config)
 
         res.setHeader('Set-Cookie',
@@ -54,6 +63,12 @@ class LoginController {
      * - JARM response parameters
      */
     handlePageLoad = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+        // Check the web origin
+        const options = new ValidateRequestOptions()
+        options.requireCsrfHeader = false
+        validateExpressRequest(req, options)
+        
         // Early logic to check for an OAuth response
         const data = this.getUrlParts(req.body?.pageUrl)
         const isOAuthResponse = !!(data.state && data.code)
@@ -63,7 +78,6 @@ class LoginController {
         
         if (isOAuthResponse) {
             try {
-                
                 
                 // When processing a login, do the OAuth work, set cookies and create an anti forgery token
                 const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
@@ -78,46 +92,25 @@ class LoginController {
             isLoggedIn = true
 
         } else {
-
-            // During an authenticated page refresh or opening a new browser tab, we must return the anti forgery token
-            // This enables an attacker to get the value, but it is the only way it can work
-            console.log('*** Page load');
-            csrfToken = req.cookies[getCSRFCookieName(config.cookieNamePrefix)]
-            if (csrfToken) {
-                console.log('*** Page load found CSRF token');
-            } else {
-                console.log('*** Page load did NOT find a CSRF token');
-            }
             
             // See if we have a session cookie
             isLoggedIn = !!(req.cookies && req.cookies[getAuthCookieName(config.cookieNamePrefix)])
-            try {
-                
-                // GJA: If not logged in the SPA cannot send the anti forgery token yet
-                // GJA: Other checks, such as the web origin, should be made in all cases though
-                // validateExpressRequest(req)
+            if (isLoggedIn) {
 
-            } catch (error) {
-                return next(error)
+                // During an authenticated page refresh or opening a new browser tab, we must return the anti forgery token
+                // This enables an XSS attack to get the value, but this is standard for CSRF tokens
+                csrfToken = decryptCookie(config.encKey, req.cookies[getCSRFCookieName(config.cookieNamePrefix)])
             }
         }
 
-        //
-        // Give the client the data it needs
-        //
-        // isLoggedIn enables the SPA to know it does not need to present a login option:
-        // - after a page reload or opening a new browser tab
-        //
+        // isLoggedIn enables the SPA to know it does not need to present a login option
         // handled enables the SPA to know a login has just completed
-        // - the SPA can restore its pre redirect state
-        // - the SPA can update the browser history API to reset back navigation
-        //
-
         const responseBody = {
             handled: isOAuthResponse,
             isLoggedIn,
         } as any
 
+        // The CSRF token is required for subsequent operations
         if (csrfToken) {
             responseBody.csrf = csrfToken
         }

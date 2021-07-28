@@ -18,27 +18,34 @@ import * as express from 'express'
 import {config} from '../config'
 import {getAuthCookieName, getCookiesForUnset, getCSRFCookieName, getLogoutURL} from '../lib'
 import {InvalidBFFCookieException} from '../lib/exceptions'
+import {ValidateRequestOptions} from '../lib/validateRequest'
 import validateExpressRequest from '../validateExpressRequest'
 
 class LogoutController {
     public router = express.Router()
 
-    // GJA. Make this a POST also
     constructor() {
         this.router.post('/', this.logoutUser)
     }
 
     logoutUser = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
         try {
-            validateExpressRequest(req)
+
+            // Check for an allowed origin and the presence of a CSRF token
+            const options = new ValidateRequestOptions()
+            validateExpressRequest(req, options)
+
         } catch(error) {
             return next(error)
         }
 
         if (req.cookies && req.cookies[getAuthCookieName(config.cookieNamePrefix)]) {
+
             const logoutURL = getLogoutURL(config)
             res.setHeader('Set-Cookie', getCookiesForUnset(config.cookieOptions, config.cookieNamePrefix))
             res.json({ url: logoutURL})
+
         } else {
             throw new InvalidBFFCookieException()
         }

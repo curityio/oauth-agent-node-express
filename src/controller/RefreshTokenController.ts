@@ -18,6 +18,7 @@ import * as express from 'express'
 import {config} from '../config'
 import {InvalidBFFCookieException} from '../lib/exceptions'
 import {getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken} from '../lib'
+import {ValidateRequestOptions} from '../lib/validateRequest'
 import validateExpressRequest from '../validateExpressRequest'
 
 class RefreshTokenController {
@@ -28,8 +29,12 @@ class RefreshTokenController {
     }
 
     RefreshTokenFromCookie = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
         try {
-            validateExpressRequest(req)
+            // Check for an allowed origin and the presence of a CSRF token
+            const options = new ValidateRequestOptions()
+            validateExpressRequest(req, options)
+
         } catch(error) {
             return next(error)
         }
@@ -37,12 +42,14 @@ class RefreshTokenController {
         const authCookieName = getAuthCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[authCookieName]) {
             try {
+
                 const tokenResponse = await refreshAccessToken(req.cookies[authCookieName], config)
                 if (tokenResponse?.isNewAccessToken) {
                     const cookiesToSet = getCookiesForTokenResponse(tokenResponse.tokenEndpointResponse, config)
                     res.setHeader('Set-Cookie', cookiesToSet)
                 }
                 res.status(204).send()
+
             } catch (error) {
                 return next(error)
             }
