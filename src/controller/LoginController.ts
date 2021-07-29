@@ -65,9 +65,13 @@ class LoginController {
     handlePageLoad = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         // Check the web origin
-        const options = new ValidateRequestOptions()
-        options.requireCsrfHeader = false
-        validateExpressRequest(req, options)
+        try {
+            const options = new ValidateRequestOptions()
+            options.requireCsrfHeader = false
+            validateExpressRequest(req, options)
+        } catch (error) {
+            return next(error)
+        }
         
         // Early logic to check for an OAuth response
         const data = this.getUrlParts(req.body?.pageUrl)
