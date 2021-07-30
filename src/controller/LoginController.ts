@@ -27,7 +27,8 @@ import {
     getAuthCookieName,
     generateRandomString,
 } from '../lib'
-import {ValidateRequestData, ValidateRequestOptions} from '../lib/validateRequest';
+import {ValidateRequestOptions} from '../lib/validateRequest';
+import {asyncCatch} from '../supportability/exceptionMiddleware';
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
 
@@ -36,12 +37,12 @@ class LoginController {
 
     constructor() {
         this.router.post('/start', this.startLogin)
-        this.router.post('/end', this.handlePageLoad)
+        this.router.post('/end', asyncCatch(this.handlePageLoad))
     }
 
     startLogin = (req: express.Request, res: express.Response) => {
 
-        // Check the web origin
+        // Verify the web origin
         const options = new ValidateRequestOptions();
         options.requireCsrfHeader = false;
         validateExpressRequest(req, options)
@@ -64,14 +65,10 @@ class LoginController {
      */
     handlePageLoad = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        // Check the web origin
-        try {
-            const options = new ValidateRequestOptions()
-            options.requireCsrfHeader = false
-            validateExpressRequest(req, options)
-        } catch (error) {
-            return next(error)
-        }
+        // Verify the web origin
+        const options = new ValidateRequestOptions()
+        options.requireCsrfHeader = false
+        validateExpressRequest(req, options)
         
         // Early logic to check for an OAuth response
         const data = this.getUrlParts(req.body?.pageUrl)
@@ -81,18 +78,13 @@ class LoginController {
         let csrfToken:string
         
         if (isOAuthResponse) {
-            try {
                 
-                // When processing a login, do the OAuth work, set cookies and create an anti forgery token
-                const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
-                const tokenResponse = await getTokenEndpointResponse(config, data.code, data.state, tempLoginData)
-                csrfToken = generateRandomString()
-                const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config, true, csrfToken)
-                res.set('Set-Cookie', cookiesToSet)
-
-            } catch (error) {
-                return next(error)
-            }
+            // Do the OAuth work, set cookies and create an anti forgery token
+            const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
+            const tokenResponse = await getTokenEndpointResponse(config, data.code, data.state, tempLoginData)
+            csrfToken = generateRandomString()
+            const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config, true, csrfToken)
+            res.set('Set-Cookie', cookiesToSet)
             isLoggedIn = true
 
         } else {
