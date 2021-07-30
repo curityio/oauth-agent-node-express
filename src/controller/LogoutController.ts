@@ -29,7 +29,7 @@ class LogoutController {
         this.router.post('/', asyncCatch(this.logoutUser))
     }
 
-    logoutUser = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logoutUser = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         // Check for an allowed origin and the presence of a CSRF token
         const options = new ValidateRequestOptions()

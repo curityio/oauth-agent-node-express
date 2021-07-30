@@ -40,7 +40,7 @@ class LoginController {
         this.router.post('/end', asyncCatch(this.handlePageLoad))
     }
 
-    startLogin = (req: express.Request, res: express.Response) => {
+    startLogin = async (req: express.Request, res: express.Response) => {
 
         // Verify the web origin
         const options = new ValidateRequestOptions();

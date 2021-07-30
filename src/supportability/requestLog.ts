@@ -69,7 +69,7 @@ export class RequestLog {
         this._addField(fields, 'ErrorCode', this.errorCode)
         this._addField(fields, 'Message', this.errorMessage)
         this._addField(fields, 'Details', this.errorDetails)
-        fields.join(', ')
+        console.log(fields.join(', '))
 
         if (this.status >= 500 && this.errorStack) {
             console.log('*** OUTPUT STACK TRACE')

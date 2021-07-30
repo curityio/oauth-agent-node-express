@@ -29,7 +29,7 @@ class UserInfoController {
         this.router.get('/', asyncCatch(this.getUserInfo))
     }
 
-    getUserInfo = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    getUserInfo = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         // Verify the web origin
         const options = new ValidateRequestOptions();
