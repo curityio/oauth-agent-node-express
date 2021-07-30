@@ -62,26 +62,25 @@ export class RequestLog {
     private _output() {
 
         let fields = []
-        fields.push(this._getField('Time', this.time))
-        fields.push(this._getField('Method', this.method))
-        fields.push(this._getField('Path', this.path))
-        fields.push(this._getField('Status', this.status.toString()))
-        fields.push(this._getField('ErrorCode', this.errorCode))
-        fields.push(this._getField('Message', this.errorMessage))
-        fields.push(this._getField('Details', this.errorDetails))
-        console.log(fields.join(', '))
+        this._addField(fields, 'Time', this.time)
+        this._addField(fields, 'Method', this.method)
+        this._addField(fields, 'Path', this.path)
+        this._addField(fields, 'Status', this.status.toString())
+        this._addField(fields, 'ErrorCode', this.errorCode)
+        this._addField(fields, 'Message', this.errorMessage)
+        this._addField(fields, 'Details', this.errorDetails)
+        fields.join(', ')
 
         if (this.status >= 500 && this.errorStack) {
+            console.log('*** OUTPUT STACK TRACE')
             console.log(this.errorStack)
         }
     }
 
-    private _getField(name: string, value?: string): string {
+    private _addField(fields: string[], name: string, value?: string) {
 
         if (value) {
-            return `${name}: ${value}`
+            fields.push(`${name}: ${value}`)
         }
-
-        return '';
     }
 }
