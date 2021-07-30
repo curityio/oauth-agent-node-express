@@ -16,7 +16,7 @@ export class RequestLog {
 
         this.time = new Date().toUTCString()
         this.method = request.method,
-        this.path = request.path
+        this.path = request.originalUrl
     }
 
     public setError(error: BFFException) {

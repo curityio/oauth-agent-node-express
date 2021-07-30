@@ -19,7 +19,7 @@ import {CookieSerializeOptions} from 'cookie'
 
 export const config: BFFConfiguration = {
     clientID: 'spa-client',
-    clientSecret: 'Secr3t',
+    clientSecret: 'Password1',
     redirectUri: 'http://www.example.com/',
     postLogoutRedirectURI: 'http://www.example.com/',
     scope: 'openid profile',
@@ -35,7 +35,7 @@ export const config: BFFConfiguration = {
     } as CookieSerializeOptions,
 
     trustedWebOrigins: ['http://www.example.com'],
-    authorizeEndpoint: 'http://localhost:8443/oauth/v2/oauth-authorize',
-    logoutEndpoint: 'http://localhost:8443/oauth/v2/oauth-session/logout',
-    tokenEndpoint: 'http://localhost:8443/oauth/v2/oauth-token',
+    authorizeEndpoint: 'http://login.example.com:8443/oauth/v2/oauth-authorize',
+    logoutEndpoint: 'http://login.example.com:8443/oauth/v2/oauth-session/logout',
+    tokenEndpoint: 'http://login.example.com:8443/oauth/v2/oauth-token',
 }
