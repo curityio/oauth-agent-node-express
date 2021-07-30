@@ -77,6 +77,7 @@ async function refreshAccessToken(refreshToken: string, config: BFFConfiguration
 {
     try {
 
+        console.log(`*** Using refresh token ${refreshToken}`)
         const res = await fetch(
             config.tokenEndpoint,
             {
@@ -85,7 +86,7 @@ async function refreshAccessToken(refreshToken: string, config: BFFConfiguration
                     'Authorization': 'Basic ' + Buffer.from(config.clientID+ ":" + config.clientSecret).toString('base64'),
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: 'grant_type=refresh_token&refresh_token=XX'+refreshToken
+                body: 'grant_type=refresh_token&refresh_token='+refreshToken
             })
         
         // Read text if it exists
