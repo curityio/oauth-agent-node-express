@@ -1,5 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import {BFFException} from '../lib/exceptions'
+import {RequestLog} from './requestLog';
 
 export default function exceptionMiddleware(
     err: any,
@@ -15,13 +16,17 @@ export default function exceptionMiddleware(
         statusCode = err.statusCode
         data = { code: err.code, message: err.message}
         response.locals.log.setError(err)
-
-    } else {
-
-        response.locals.log.setException(err, data.code)
     }
 
     response.status(statusCode).send(data)
+
+    // Errors such as malformed JSON
+    if (!response.locals.log) {
+        response.locals.log = new RequestLog()
+        response.locals.log.start(request)
+        response.locals.log.setException(err, data)
+        response.locals.log.end(response)
+    }
 }
 
 /*

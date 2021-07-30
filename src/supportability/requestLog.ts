@@ -42,11 +42,14 @@ export class RequestLog {
         }
     }
 
-    public setException(error: any, errorCode: any) {
+    public setException(error: any, data: any) {
 
-        this.errorCode = errorCode
+        this.errorCode = data.errorCode
         if (error.message) {
-            this.errorMessage = error.message
+            this.errorMessage = data.message
+        }
+        if (error.message) {
+            this.errorDetails = error.message
         }
         if (error.stack) {
             this.errorStack = error.stack
@@ -72,7 +75,6 @@ export class RequestLog {
         console.log(fields.join(', '))
 
         if (this.status >= 500 && this.errorStack) {
-            console.log('*** OUTPUT STACK TRACE')
             console.log(this.errorStack)
         }
     }
