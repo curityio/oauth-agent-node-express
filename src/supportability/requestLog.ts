@@ -52,7 +52,7 @@ export class RequestLog {
         fields.push(this._getField('Detail', this.errorMessage))
         console.log(fields.join(', '))
 
-        if (this.status >= 500 && this.errorStack) {
+        if (this.errorStack) {
             console.log(this.errorStack)
         }
     }
