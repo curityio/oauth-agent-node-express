@@ -77,7 +77,6 @@ async function refreshAccessToken(refreshToken: string, config: BFFConfiguration
 {
     try {
 
-        console.log(`*** Using refresh token ${refreshToken}`)
         const res = await fetch(
             config.tokenEndpoint,
             {
@@ -91,9 +90,6 @@ async function refreshAccessToken(refreshToken: string, config: BFFConfiguration
         
         // Read text if it exists
         const text = await res.text()
-        console.log('***' + text)
-
-        // GJA: write code for session_expired here and also in the UI
         
         if (res.status >= 500) {
             const error = new AuthorizationServerException()
@@ -124,6 +120,7 @@ async function refreshAccessToken(refreshToken: string, config: BFFConfiguration
 }
 
 function getCookiesForTokenResponse(tokenResponse: any, config: BFFConfiguration, unsetTempLoginDataCookie: boolean = false, csrfCookieValue?: string): string[] {
+    
     const cookies = [
         getEncryptedCookie(config.cookieOptions, tokenResponse.access_token, getATCookieName(config.cookieNamePrefix), config.encKey)
     ]
