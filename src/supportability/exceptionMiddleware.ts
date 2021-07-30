@@ -15,6 +15,10 @@ export default function exceptionMiddleware(
         statusCode = err.statusCode
         data = { code: err.code, message: err.message}
         response.locals.log.setError(err)
+
+    } else {
+
+        response.locals.log.setException(err, data.code)
     }
 
     response.status(statusCode).send(data)

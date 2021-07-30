@@ -22,7 +22,17 @@ export class RequestLog {
         
         this.errorCode = error.code
         this.errorMessage = error.message
-        this.errorStack = error.stack
+    }
+
+    public setException(error: any, errorCode: any) {
+
+        this.errorCode = errorCode
+        if (error.message) {
+            this.errorMessage = error.message
+        }
+        if (error.stack) {
+            this.errorStack = error.stack
+        }
     }
 
     public end(response: Response) {

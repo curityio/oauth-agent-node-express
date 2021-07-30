@@ -20,40 +20,32 @@ import {InvalidBFFCookieException} from '../lib/exceptions'
 import {decryptCookie, getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken} from '../lib'
 import {ValidateRequestOptions} from '../lib/validateRequest'
 import validateExpressRequest from '../validateExpressRequest'
+import {asyncCatch} from '../supportability/exceptionMiddleware';
 
 class RefreshTokenController {
     public router = express.Router()
 
     constructor() {
-        this.router.post('/', this.RefreshTokenFromCookie)
+        this.router.post('/', asyncCatch(this.RefreshTokenFromCookie))
     }
 
     RefreshTokenFromCookie = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        try {
-            // Check for an allowed origin and the presence of a CSRF token
-            const options = new ValidateRequestOptions()
-            validateExpressRequest(req, options)
-
-        } catch(error) {
-            return next(error)
-        }
+        // Check for an allowed origin and the presence of a CSRF token
+        const options = new ValidateRequestOptions()
+        validateExpressRequest(req, options)
 
         const authCookieName = getAuthCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[authCookieName]) {
-            try {
-
-                const refreshToken = decryptCookie(config.encKey, req.cookies[authCookieName])
-                const tokenResponse = await refreshAccessToken(refreshToken, config)
-                if (tokenResponse?.isNewAccessToken) {
-                    const cookiesToSet = getCookiesForTokenResponse(tokenResponse.tokenEndpointResponse, config)
-                    res.setHeader('Set-Cookie', cookiesToSet)
-                }
-                res.status(204).send()
-
-            } catch (error) {
-                return next(error)
+            
+            const refreshToken = decryptCookie(config.encKey, req.cookies[authCookieName])
+            const tokenResponse = await refreshAccessToken(refreshToken, config)
+            if (tokenResponse?.isNewAccessToken) {
+                const cookiesToSet = getCookiesForTokenResponse(tokenResponse.tokenEndpointResponse, config)
+                res.setHeader('Set-Cookie', cookiesToSet)
             }
+            res.status(204).send()
+
         } else {
             throw new InvalidBFFCookieException()
         }

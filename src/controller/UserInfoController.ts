@@ -18,23 +18,23 @@ import * as express from 'express'
 import {getIDCookieName, getUserInfo} from '../lib'
 import {config} from '../config'
 import {InvalidBFFCookieException} from '../lib/exceptions'
+import {asyncCatch} from '../supportability/exceptionMiddleware';
 
 class UserInfoController {
     public router = express.Router()
 
     constructor() {
-        this.router.get('/', this.getUserInfo)
+        this.router.get('/', asyncCatch(this.getUserInfo))
     }
 
     getUserInfo = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
         const idTokenCookieName = getIDCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[idTokenCookieName]) {
-            try {
-                const userData = getUserInfo(config.encKey, req.cookies[idTokenCookieName])
-                res.status(200).json(userData)
-            } catch (err) {
-                return next(err)
-            }
+
+            const userData = getUserInfo(config.encKey, req.cookies[idTokenCookieName])
+            res.status(200).json(userData)
+
         } else {
             throw new InvalidBFFCookieException()
         }

@@ -20,25 +20,20 @@ import {getAuthCookieName, getCookiesForUnset, getCSRFCookieName, getLogoutURL} 
 import {InvalidBFFCookieException} from '../lib/exceptions'
 import {ValidateRequestOptions} from '../lib/validateRequest'
 import validateExpressRequest from '../validateExpressRequest'
+import {asyncCatch} from '../supportability/exceptionMiddleware';
 
 class LogoutController {
     public router = express.Router()
 
     constructor() {
-        this.router.post('/', this.logoutUser)
+        this.router.post('/', asyncCatch(this.logoutUser))
     }
 
     logoutUser = (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        try {
-
-            // Check for an allowed origin and the presence of a CSRF token
-            const options = new ValidateRequestOptions()
-            validateExpressRequest(req, options)
-
-        } catch(error) {
-            return next(error)
-        }
+        // Check for an allowed origin and the presence of a CSRF token
+        const options = new ValidateRequestOptions()
+        validateExpressRequest(req, options)
 
         if (req.cookies && req.cookies[getAuthCookieName(config.cookieNamePrefix)]) {
 

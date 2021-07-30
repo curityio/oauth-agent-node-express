@@ -28,15 +28,15 @@ import {
     generateRandomString,
 } from '../lib'
 import {ValidateRequestOptions} from '../lib/validateRequest';
-import {asyncCatch} from '../supportability/exceptionMiddleware';
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
+import {asyncCatch} from '../supportability/exceptionMiddleware';
 
 class LoginController {
     public router = express.Router()
 
     constructor() {
-        this.router.post('/start', this.startLogin)
+        this.router.post('/start', asyncCatch(this.startLogin))
         this.router.post('/end', asyncCatch(this.handlePageLoad))
     }
 
