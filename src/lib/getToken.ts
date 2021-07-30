@@ -91,6 +91,9 @@ async function refreshAccessToken(refreshToken: string, config: BFFConfiguration
         
         // Read text if it exists
         const text = await res.text()
+        console.log('***' + text)
+
+        // GJA: write code for session_expired here and also in the UI
         
         if (res.status >= 500) {
             const error = new AuthorizationServerException()

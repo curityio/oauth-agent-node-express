@@ -40,10 +40,9 @@ class RefreshTokenController {
             
             const refreshToken = decryptCookie(config.encKey, req.cookies[authCookieName])
             const tokenResponse = await refreshAccessToken(refreshToken, config)
-            if (tokenResponse?.isNewAccessToken) {
-                const cookiesToSet = getCookiesForTokenResponse(tokenResponse.tokenEndpointResponse, config)
-                res.setHeader('Set-Cookie', cookiesToSet)
-            }
+            
+            const cookiesToSet = getCookiesForTokenResponse(tokenResponse.tokenEndpointResponse, config)
+            res.setHeader('Set-Cookie', cookiesToSet)
             res.status(204).send()
 
         } else {
