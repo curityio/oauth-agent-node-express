@@ -17,7 +17,7 @@
 import fetch from 'node-fetch'
 import {decryptCookie, getEncryptedCookie} from './cookieEncrypter'
 import BFFConfiguration from './BFFConfiguration'
-import {BFFException, InvalidRequestException, InvalidStateException, MissingTempLoginDataException, AuthorizationServerException} from './exceptions'
+import {BFFException, UnauthorizedException, InvalidStateException, MissingTempLoginDataException, AuthorizationServerException} from './exceptions'
 import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName'
 import {getTempLoginDataCookieForUnset} from './pkce'
 
@@ -54,7 +54,7 @@ async function getTokenEndpointResponse(config: BFFConfiguration, code: string, 
         }
 
         if (res.status >= 400) {
-            const error = new InvalidRequestException()
+            const error = new UnauthorizedException()
             error.logInfo = `Authorization Code Grant request was rejected: ${text}`
             throw error
         }
@@ -98,7 +98,7 @@ async function refreshAccessToken(refreshToken: string, config: BFFConfiguration
         }
 
         if (res.status >= 400) {
-            const error = new InvalidRequestException()
+            const error = new UnauthorizedException()
             error.logInfo = `Refresh Token Grant request was rejected: ${text}`
             throw error
         }

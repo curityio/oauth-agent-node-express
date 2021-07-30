@@ -22,7 +22,7 @@ export default class InvalidBFFCookieException extends BFFException {
     public cause?
 
     constructor(cause?: Error) {
-        super("Invalid or missing BFF Cookie")
+        super("The session is invalid or expired")
         this.cause = cause
     }
 }
