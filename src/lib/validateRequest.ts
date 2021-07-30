@@ -19,13 +19,13 @@ export default function validateRequest(data: ValidateRequestData, options: Vali
             if (decryptedCookie !== data.csrfHeader) {
 
                 const error = new UnauthorizedException()
-                error.logInfo = 'The CSRF header did not match the CSRF cookie'
+                error.logInfo = 'The CSRF header did not match the CSRF cookie in a POST request'
                 throw error
             }
         } else {
 
             const error = new UnauthorizedException()
-            error.logInfo = 'No CSRF cookie was supplied in a request'
+            error.logInfo = 'No CSRF cookie was supplied in a POST request'
             throw error
         }
     }
