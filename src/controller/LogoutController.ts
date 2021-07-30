@@ -42,7 +42,9 @@ class LogoutController {
             res.json({ url: logoutURL})
 
         } else {
-            throw new InvalidBFFCookieException()
+            const error = new InvalidBFFCookieException()
+            error.logInfo = 'No auth cookie was supplied in a logout call'
+            throw error
         }
     }
 }

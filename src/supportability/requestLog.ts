@@ -9,6 +9,7 @@ export class RequestLog {
     private status?: number
     private errorCode?: string
     private errorMessage?: string
+    private errorDetails?: string
     private errorStack?: string
 
     public start(request: Request) {
@@ -22,6 +23,23 @@ export class RequestLog {
         
         this.errorCode = error.code
         this.errorMessage = error.message
+        if (error.logInfo) {
+            this.errorDetails = error.logInfo
+        }
+        if (error.stack) {
+            this.errorStack = error.stack
+        }
+
+        const cause = (error as any).cause
+        if (cause) {
+
+            if (cause.message) {
+                this.errorDetails += `, ${cause.message}`
+            }
+            if (cause.stack) {
+                this.errorStack = cause.errorStack
+            }
+        }
     }
 
     public setException(error: any, errorCode: any) {
@@ -49,10 +67,11 @@ export class RequestLog {
         fields.push(this._getField('Path', this.path))
         fields.push(this._getField('Status', this.status.toString()))
         fields.push(this._getField('ErrorCode', this.errorCode))
-        fields.push(this._getField('Detail', this.errorMessage))
+        fields.push(this._getField('Message', this.errorMessage))
+        fields.push(this._getField('Details', this.errorDetails))
         console.log(fields.join(', '))
 
-        if (this.errorStack) {
+        if (this.status >= 500 && this.errorStack) {
             console.log(this.errorStack)
         }
     }

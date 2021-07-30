@@ -43,22 +43,30 @@ async function getTokenEndpointResponse(config: BFFConfiguration, code: string, 
                 },
                 body: 'grant_type=authorization_code&redirect_uri=' + config.redirectUri + '&code=' + code + '&code_verifier=' + parsedTempLoginData.codeVerifier
             })
+
+        // Read text if it exists
+        const text = await res.text()
         
-        // TODO Errors should be logged
         if (res.status >= 500) {
-            throw new AuthorizationServerException()
+            const error = new AuthorizationServerException()
+            error.logInfo = `Server error response in an Authorization Code Grant: ${text}`
+            throw error
         }
 
         if (res.status >= 400) {
-            throw new InvalidRequestException()
+            const error = new InvalidRequestException()
+            error.logInfo = `Authorization Code Grant request was rejected: ${text}`
+            throw error
         }
 
-        return await res.json()
+        return JSON.parse(text)
 
     } catch(err) {
 
         if (!(err instanceof BFFException)) {
-            throw new AuthorizationServerException(err)
+            const error = new AuthorizationServerException(err)
+            error.logInfo = 'Connectivity problem during an Authorization Code Grant'
+            throw error
         } else {
             throw err
         }
@@ -79,25 +87,32 @@ async function refreshAccessToken(refreshToken: string, config: BFFConfiguration
                 },
                 body: 'grant_type=refresh_token&refresh_token='+refreshToken
             })
-            
-        // TODO Errors should be logged
+        
+        // Read text if it exists
         const text = await res.text()
-        console.log('*** FRESH TOKENS: ' + text)
+        
         if (res.status >= 500) {
-            throw new AuthorizationServerException()
+            const error = new AuthorizationServerException()
+            error.logInfo = `Server error response in a Refresh Token Grant: ${text}`
+            throw error
         }
 
         if (res.status >= 400) {
-            throw new InvalidRequestException()
+            const error = new InvalidRequestException()
+            error.logInfo = `Refresh Token Grant request was rejected: ${text}`
+            throw error
         }
 
-        //return res.json()
         return JSON.parse(text)
 
     } catch (err) {
 
         if (!(err instanceof BFFException)) {
-            throw new AuthorizationServerException(err)
+
+            const error = new AuthorizationServerException(err)
+            error.logInfo = 'Connectivity problem during a Refresh Token Grant'
+            throw error
+
         } else {
             throw err
         }

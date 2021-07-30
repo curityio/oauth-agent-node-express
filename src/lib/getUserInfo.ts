@@ -24,7 +24,9 @@ function getUserInfo(encKey: string, encryptedCookie: string): Object {
         idToken = decryptCookie(encKey, encryptedCookie)
     } catch (err) {
         // error while decrypting or parsing cookie value
-        throw new InvalidBFFCookieException(err)
+        const error = new InvalidBFFCookieException(err)
+        error.logInfo = 'Unable to decrypt the ID cookie to get user info'
+        throw error
     }
 
     const tokenParts = idToken.split('.')

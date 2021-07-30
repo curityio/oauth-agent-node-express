@@ -5,7 +5,10 @@ export default function validateRequest(data: ValidateRequestData, options: Vali
 
     if (options.requireTrustedOrigin) {
         if (data.allowedOrigins.findIndex((value) => value === data.originHeader) == -1) {
-            throw new InvalidRequestException()
+            
+            const error = new InvalidRequestException()
+            error.logInfo = 'The call is from an untrusted web origin'
+            throw error
         }
     }
 
@@ -14,10 +17,16 @@ export default function validateRequest(data: ValidateRequestData, options: Vali
         if (data.csrfCookie) {
             const decryptedCookie = decryptCookie(data.encKey, data.csrfCookie)
             if (decryptedCookie !== data.csrfHeader) {
-                throw new InvalidRequestException()
+
+                const error = new InvalidRequestException()
+                error.logInfo = 'The CSRF header did not match the CSRF cookie'
+                throw error
             }
         } else {
-            throw new InvalidRequestException()
+
+            const error = new InvalidRequestException()
+            error.logInfo = 'No CSRF cookie was supplied in a request'
+            throw error
         }
     }
 }

@@ -27,8 +27,8 @@ import {
     getAuthCookieName,
     generateRandomString,
 } from '../lib'
-import {ValidateRequestOptions} from '../lib/validateRequest';
 import {config} from '../config'
+import {ValidateRequestOptions} from '../lib/validateRequest';
 import validateExpressRequest from '../validateExpressRequest'
 import {asyncCatch} from '../supportability/exceptionMiddleware';
 

@@ -47,7 +47,9 @@ class RefreshTokenController {
             res.status(204).send()
 
         } else {
-            throw new InvalidBFFCookieException()
+            const error = new InvalidBFFCookieException()
+            error.logInfo = 'No auth cookie was supplied in a token refresh call'
+            throw error
         }
     }
 }
