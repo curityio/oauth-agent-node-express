@@ -82,7 +82,7 @@ export class RequestLog {
     private _addField(fields: string[], name: string, value?: string) {
 
         if (value) {
-            fields.push(`${name}: ${value}`)
+            fields.push(value)
         }
     }
 }
