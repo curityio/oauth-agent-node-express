@@ -75,18 +75,23 @@ class LoginController {
         const isOAuthResponse = !!(data.state && data.code)
 
         let isLoggedIn: boolean
-        let csrfToken: string | undefined
+        let csrfToken: string
         
         if (isOAuthResponse) {
-                
+            
+            // Main OAuth response handling
             const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
             const tokenResponse = await getTokenEndpointResponse(config, data.code, data.state, tempLoginData)
-            
-            // Avoid setting this again if the user opens two tabs and signs in on both
-            if (!req.cookies[getCSRFCookieName(config.cookieNamePrefix)]) {
+
+            // Avoid setting a new value if the user opens two browser tabs and signs in on both
+            const csrfCookie = req.cookies[getCSRFCookieName(config.cookieNamePrefix)];
+            if (!csrfCookie) {
                 csrfToken = generateRandomString()
+            } else {
+                csrfToken = decryptCookie(config.encKey, csrfCookie);
             }
 
+            // Write the SameSite cookies
             const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config, true, csrfToken)
             res.set('Set-Cookie', cookiesToSet)
             isLoggedIn = true
