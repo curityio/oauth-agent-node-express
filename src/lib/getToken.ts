@@ -106,7 +106,11 @@ function getCookiesForTokenResponse(tokenResponse: any, config: BFFConfiguration
     }
 
     if (tokenResponse.refresh_token) {
-        cookies.push(getEncryptedCookie(config.cookieOptions, tokenResponse.refresh_token, getAuthCookieName(config.cookieNamePrefix), config.encKey))
+        const refreshTokenOptions = {
+            ...config.cookieOptions,
+            path: config.refreshEndpointPrefix + '/refresh'
+        }
+        cookies.push(getEncryptedCookie(refreshTokenOptions, tokenResponse.refresh_token, getAuthCookieName(config.cookieNamePrefix), config.encKey))
     }
 
     if (tokenResponse.id_token) {
