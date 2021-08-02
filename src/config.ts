@@ -26,6 +26,7 @@ export const config: BFFConfiguration = {
 
     encKey: 'NF65meV>Ls#8GP>;!Cnov)rIPRoK^.NP', // 32-character long string,
     cookieNamePrefix: 'example-bff',
+    bffEndpointsPrefix: '/bff',
     cookieOptions: {
         httpOnly: true,
         sameSite: true,
