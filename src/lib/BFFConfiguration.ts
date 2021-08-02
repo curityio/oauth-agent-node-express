@@ -31,7 +31,7 @@ export default class BFFConfiguration {
     public tokenEndpoint: string
 
     // BFF session cookie and CORS configuration
-    public refreshEndpointPrefix: string
+    public bffEndpointsPrefix: string
     public encKey: string
     public cookieOptions: CookieSerializeOptions
     public cookieNamePrefix: string
@@ -47,7 +47,7 @@ export default class BFFConfiguration {
         tokenEndpoint: string,
         encKey: string,
         trustedWebOrigins: string[],
-        refreshEndpointPrefix: string = '',
+        bffEndpointsPrefix: string = '',
         cookieNamePrefix?: string,
         postLogoutRedirectURI?: string,
         cookieOptions?: CookieSerializeOptions) {
@@ -71,6 +71,6 @@ export default class BFFConfiguration {
         this.authorizeEndpoint = authorizeEndpoint
         this.tokenEndpoint = tokenEndpoint
 
-        this.refreshEndpointPrefix = refreshEndpointPrefix
+        this.bffEndpointsPrefix = bffEndpointsPrefix
     }
 }

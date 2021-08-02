@@ -106,15 +106,19 @@ function getCookiesForTokenResponse(tokenResponse: any, config: BFFConfiguration
     }
 
     if (tokenResponse.refresh_token) {
-        const refreshTokenOptions = {
+        const refreshTokenCookieOptions = {
             ...config.cookieOptions,
-            path: config.refreshEndpointPrefix + '/refresh'
+            path: config.bffEndpointsPrefix + '/refresh'
         }
-        cookies.push(getEncryptedCookie(refreshTokenOptions, tokenResponse.refresh_token, getAuthCookieName(config.cookieNamePrefix), config.encKey))
+        cookies.push(getEncryptedCookie(refreshTokenCookieOptions, tokenResponse.refresh_token, getAuthCookieName(config.cookieNamePrefix), config.encKey))
     }
 
     if (tokenResponse.id_token) {
-        cookies.push(getEncryptedCookie(config.cookieOptions, tokenResponse.id_token, getIDCookieName(config.cookieNamePrefix), config.encKey))
+        const idTokenCookieOptions = {
+            ...config.cookieOptions,
+            path: config.bffEndpointsPrefix + '/userInfo'
+        }
+        cookies.push(getEncryptedCookie(idTokenCookieOptions, tokenResponse.id_token, getIDCookieName(config.cookieNamePrefix), config.encKey))
     }
 
     return cookies
