@@ -134,11 +134,19 @@ function getCookiesForTokenResponse(tokenResponse: any, config: BFFConfiguration
     }
 
     if (tokenResponse.refresh_token) {
-        cookies.push(getEncryptedCookie(config.cookieOptions, tokenResponse.refresh_token, getAuthCookieName(config.cookieNamePrefix), config.encKey))
+        const refreshTokenCookieOptions = {
+            ...config.cookieOptions,
+            path: config.bffEndpointsPrefix + '/refresh'
+        }
+        cookies.push(getEncryptedCookie(refreshTokenCookieOptions, tokenResponse.refresh_token, getAuthCookieName(config.cookieNamePrefix), config.encKey))
     }
 
     if (tokenResponse.id_token) {
-        cookies.push(getEncryptedCookie(config.cookieOptions, tokenResponse.id_token, getIDCookieName(config.cookieNamePrefix), config.encKey))
+        const idTokenCookieOptions = {
+            ...config.cookieOptions,
+            path: config.bffEndpointsPrefix + '/userInfo'
+        }
+        cookies.push(getEncryptedCookie(idTokenCookieOptions, tokenResponse.id_token, getIDCookieName(config.cookieNamePrefix), config.encKey))
     }
 
     return cookies
