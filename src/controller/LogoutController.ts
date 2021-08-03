@@ -16,7 +16,7 @@
 
 import * as express from 'express'
 import {config} from '../config'
-import {getAuthCookieName, getCookiesForUnset, getLogoutURL, ValidateRequestOptions} from '../lib'
+import {getATCookieName, getCookiesForUnset, getLogoutURL, ValidateRequestOptions} from '../lib'
 import {InvalidBFFCookieException} from '../lib/exceptions'
 import validateExpressRequest from '../validateExpressRequest'
 import {asyncCatch} from '../supportability/exceptionMiddleware';
@@ -34,7 +34,7 @@ class LogoutController {
         const options = new ValidateRequestOptions()
         validateExpressRequest(req, options)
 
-        if (req.cookies && req.cookies[getAuthCookieName(config.cookieNamePrefix)]) {
+        if (req.cookies && req.cookies[getATCookieName(config.cookieNamePrefix)]) {
 
             const logoutURL = getLogoutURL(config)
             res.setHeader('Set-Cookie', getCookiesForUnset(config.cookieOptions, config.cookieNamePrefix))

@@ -24,7 +24,7 @@ import {
     getTempLoginDataCookie,
     getTempLoginDataCookieName,
     getCookiesForTokenResponse,
-    getAuthCookieName,
+    getATCookieName,
     generateRandomString,
     ValidateRequestOptions,
 } from '../lib'
@@ -99,7 +99,7 @@ class LoginController {
         } else {
             
             // See if we have a session cookie
-            isLoggedIn = !!(req.cookies && req.cookies[getAuthCookieName(config.cookieNamePrefix)])
+            isLoggedIn = !!(req.cookies && req.cookies[getATCookieName(config.cookieNamePrefix)])
             if (isLoggedIn) {
 
                 // During an authenticated page refresh or opening a new browser tab, we must return the anti forgery token
