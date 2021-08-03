@@ -7,7 +7,7 @@ export default function validateRequest(data: ValidateRequestData, options: Vali
         if (data.allowedOrigins.findIndex((value) => value === data.originHeader) == -1) {
             
             const error = new UnauthorizedException()
-            error.logInfo = 'The call is from an untrusted web origin'
+            error.logInfo = `The call is from an untrusted web origin: ${data.originHeader}`
             throw error
         }
     }

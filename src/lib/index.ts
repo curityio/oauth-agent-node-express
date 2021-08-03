@@ -21,8 +21,9 @@ import getUserInfo from './getUserInfo'
 import getRedirectUri from './redirectUri'
 import getLogoutURL from './getLogoutURL'
 import BFFConfiguration from './BFFConfiguration'
-import {getTempLoginDataCookie, getTempLoginDataCookieForUnset, generateRandomString} from './pkce'
-import {getAuthCookieName, getIDCookieName, getCSRFCookieName, getATCookieName, getTempLoginDataCookieName} from './cookieName'
+import { getTempLoginDataCookie, getTempLoginDataCookieForUnset, generateRandomString } from './pkce'
+import { getAuthCookieName, getIDCookieName, getCSRFCookieName, getATCookieName, getTempLoginDataCookieName } from './cookieName'
+import { ValidateRequestOptions } from './validateRequest'
 
 export {
     getAuthorizationURL,
@@ -43,5 +44,6 @@ export {
     getCSRFCookieName,
     getIDCookieName,
     getAuthCookieName,
-    generateRandomString
+    generateRandomString,
+    ValidateRequestOptions,
 }

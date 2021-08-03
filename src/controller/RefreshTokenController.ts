@@ -17,8 +17,7 @@
 import * as express from 'express'
 import {config} from '../config'
 import {InvalidBFFCookieException} from '../lib/exceptions'
-import {decryptCookie, getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken} from '../lib'
-import {ValidateRequestOptions} from '../lib/validateRequest'
+import {decryptCookie, getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken, ValidateRequestOptions} from '../lib'
 import validateExpressRequest from '../validateExpressRequest'
 import {asyncCatch} from '../supportability/exceptionMiddleware';
 

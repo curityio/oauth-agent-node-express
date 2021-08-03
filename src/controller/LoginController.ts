@@ -26,9 +26,9 @@ import {
     getCookiesForTokenResponse,
     getAuthCookieName,
     generateRandomString,
+    ValidateRequestOptions,
 } from '../lib'
 import {config} from '../config'
-import {ValidateRequestOptions} from '../lib/validateRequest';
 import validateExpressRequest from '../validateExpressRequest'
 import {asyncCatch} from '../supportability/exceptionMiddleware';
 

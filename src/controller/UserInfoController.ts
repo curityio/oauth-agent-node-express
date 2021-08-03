@@ -15,9 +15,8 @@
  */
 
 import * as express from 'express'
-import {getIDCookieName, getUserInfo} from '../lib'
+import {getIDCookieName, getUserInfo, ValidateRequestOptions} from '../lib'
 import {config} from '../config'
-import {ValidateRequestOptions} from '../lib/validateRequest';
 import validateExpressRequest from '../validateExpressRequest'
 import {InvalidBFFCookieException} from '../lib/exceptions'
 import {asyncCatch} from '../supportability/exceptionMiddleware';

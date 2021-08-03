@@ -45,7 +45,7 @@ export class RequestLog {
     public setException(error: any, data: any) {
 
         this.errorCode = data.errorCode
-        if (error.message) {
+        if (data.message) {
             this.errorMessage = data.message
         }
         if (error.message) {
@@ -68,7 +68,7 @@ export class RequestLog {
         this._addField(fields, 'Time', this.time)
         this._addField(fields, 'Method', this.method)
         this._addField(fields, 'Path', this.path)
-        this._addField(fields, 'Status', this.status.toString())
+        this._addField(fields, 'Status', this.status?.toString())
         this._addField(fields, 'ErrorCode', this.errorCode)
         this._addField(fields, 'Message', this.errorMessage)
         this._addField(fields, 'Details', this.errorDetails)
