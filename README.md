@@ -1,6 +1,6 @@
 # The Backend-For-Frontend API
 
-A node implementation of th BFF API using the Express framework. The API can be deployed to a host of your choice.
+A node implementation of the BFF API using the Express framework. The API can be deployed to a host of your choice.
 
 This BFF is a stateless one. It takes the token response from an Authorization Server, encrypts tokens and sets them in http-only cookies. Those cookies can then be used to get user info or call business APIs.
 
