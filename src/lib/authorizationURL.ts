@@ -22,7 +22,7 @@ function getAuthorizationURL(config: BFFConfiguration): AuthorizationRequestData
     const state = generateRandomString()
 
     let authorizationRequestUrl = config.authorizeEndpoint + "?" +
-        "&client_id=" + encodeURIComponent(config.clientID) +
+        "client_id=" + encodeURIComponent(config.clientID) +
         "&state=" + encodeURIComponent(state) +
         "&response_type=code" +
         "&redirect_uri=" + encodeURIComponent(config.redirectUri) +

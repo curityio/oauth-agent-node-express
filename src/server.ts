@@ -23,8 +23,9 @@ import {
     LogoutController,
     RefreshTokenController
 } from './controller'
-import jsonErrorHandler from './JSONErrorHandler'
 import {config} from './config'
+import loggingMiddleware from './supportability/loggingMiddleware';
+import exceptionMiddleware from './supportability/exceptionMiddleware';
 
 const app = express()
 const port = process.env.PORT ? process.env.PORT: 3001
@@ -38,6 +39,8 @@ const corsConfiguration = {
 app.use(cors(corsConfiguration))
 app.use(cookieParser())
 app.use('*', express.json())
+app.use('*', loggingMiddleware);
+app.use('*', exceptionMiddleware);
 app.set('etag', false)
 
 const controllers = {
@@ -48,10 +51,8 @@ const controllers = {
 }
 
 for (const [path, controller] of Object.entries(controllers)) {
-    app.use(path, controller.router)
+    app.use(config.bffEndpointsPrefix + path, controller.router)
 }
-
-app.use(jsonErrorHandler)
 
 const server = app.listen(port, function() {
     console.log("BFF API is listening on port " + port)

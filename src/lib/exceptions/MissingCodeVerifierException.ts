@@ -21,6 +21,6 @@ export default class MissingCodeVerifierException extends BFFException {
     public code = 'invalid_request'
 
     constructor() {
-        super("Missing code verifier")
+        super("Missing code verifier when completing a login")
     }
 }

@@ -17,37 +17,37 @@
 import * as express from 'express'
 import {config} from '../config'
 import {InvalidBFFCookieException} from '../lib/exceptions'
-import {getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken} from '../lib'
+import {decryptCookie, getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken, ValidateRequestOptions} from '../lib'
 import validateExpressRequest from '../validateExpressRequest'
+import {asyncCatch} from '../supportability/exceptionMiddleware';
 
 class RefreshTokenController {
     public router = express.Router()
 
     constructor() {
-        this.router.post('/', this.RefreshTokenFromCookie)
+        this.router.post('/', asyncCatch(this.RefreshTokenFromCookie))
     }
 
     RefreshTokenFromCookie = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        try {
-            validateExpressRequest(req)
-        } catch(error) {
-            return next(error)
-        }
+
+        // Check for an allowed origin and the presence of a CSRF token
+        const options = new ValidateRequestOptions()
+        validateExpressRequest(req, options)
 
         const authCookieName = getAuthCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[authCookieName]) {
-            try {
-                const tokenResponse = await refreshAccessToken(req.cookies[authCookieName], config)
-                if (tokenResponse?.isNewAccessToken) {
-                    const cookiesToSet = getCookiesForTokenResponse(tokenResponse.tokenEndpointResponse, config)
-                    res.setHeader('Set-Cookie', cookiesToSet)
-                }
-                res.status(204).send()
-            } catch (error) {
-                return next(error)
-            }
+            
+            const refreshToken = decryptCookie(config.encKey, req.cookies[authCookieName])
+            const tokenResponse = await refreshAccessToken(refreshToken, config)
+            
+            const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config)
+            res.setHeader('Set-Cookie', cookiesToSet)
+            res.status(204).send()
+
         } else {
-            throw new InvalidBFFCookieException()
+            const error = new InvalidBFFCookieException()
+            error.logInfo = 'No auth cookie was supplied in a token refresh call'
+            throw error
         }
     }
 }

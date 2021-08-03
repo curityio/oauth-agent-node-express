@@ -17,25 +17,36 @@
 import * as express from 'express'
 import * as urlparse from 'url-parse'
 import {
+    decryptCookie,
     getAuthorizationURL,
+    getCSRFCookieName,
     getTokenEndpointResponse,
     getTempLoginDataCookie,
     getTempLoginDataCookieName,
     getCookiesForTokenResponse,
-    getAuthCookieName, generateRandomString
+    getAuthCookieName,
+    generateRandomString,
+    ValidateRequestOptions,
 } from '../lib'
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
+import {asyncCatch} from '../supportability/exceptionMiddleware';
 
 class LoginController {
     public router = express.Router()
 
     constructor() {
-        this.router.post('/start', this.startLogin)
-        this.router.post('/end', this.handlePageLoad)
+        this.router.post('/start', asyncCatch(this.startLogin))
+        this.router.post('/end', asyncCatch(this.handlePageLoad))
     }
 
-    startLogin = (req: express.Request, res: express.Response) => {
+    startLogin = async (req: express.Request, res: express.Response) => {
+
+        // Verify the web origin
+        const options = new ValidateRequestOptions();
+        options.requireCsrfHeader = false;
+        validateExpressRequest(req, options)
+
         const authorizationRequestData = getAuthorizationURL(config)
 
         res.setHeader('Set-Cookie',
@@ -53,53 +64,58 @@ class LoginController {
      * - JARM response parameters
      */
     handlePageLoad = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+        // Verify the web origin
+        const options = new ValidateRequestOptions()
+        options.requireCsrfHeader = false
+        validateExpressRequest(req, options)
+        
         // Early logic to check for an OAuth response
         const data = this.getUrlParts(req.body?.pageUrl)
         const isOAuthResponse = !!(data.state && data.code)
 
         let isLoggedIn: boolean
-        let csrfToken:string
+        let csrfToken: string
         
         if (isOAuthResponse) {
-            try {
-                const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
-                const tokenResponse = await getTokenEndpointResponse(config, data.code, data.state, tempLoginData)
-                csrfToken = generateRandomString()
-                const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config, true, csrfToken)
+            
+            // Main OAuth response handling
+            const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
+            const tokenResponse = await getTokenEndpointResponse(config, data.code, data.state, tempLoginData)
 
-                res.set('Set-Cookie', cookiesToSet)
-            } catch (error) {
-                return next(error)
+            // Avoid setting a new value if the user opens two browser tabs and signs in on both
+            const csrfCookie = req.cookies[getCSRFCookieName(config.cookieNamePrefix)];
+            if (!csrfCookie) {
+                csrfToken = generateRandomString()
+            } else {
+                csrfToken = decryptCookie(config.encKey, csrfCookie);
             }
+
+            // Write the SameSite cookies
+            const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config, true, csrfToken)
+            res.set('Set-Cookie', cookiesToSet)
             isLoggedIn = true
 
         } else {
-            try {
-                validateExpressRequest(req)
-            } catch (error) {
-                return next(error)
-            }
-
+            
             // See if we have a session cookie
             isLoggedIn = !!(req.cookies && req.cookies[getAuthCookieName(config.cookieNamePrefix)])
+            if (isLoggedIn) {
+
+                // During an authenticated page refresh or opening a new browser tab, we must return the anti forgery token
+                // This enables an XSS attack to get the value, but this is standard for CSRF tokens
+                csrfToken = decryptCookie(config.encKey, req.cookies[getCSRFCookieName(config.cookieNamePrefix)])
+            }
         }
 
-        //
-        // Give the client the data it needs
-        //
-        // isLoggedIn enables the SPA to know it does not need to present a login option:
-        // - after a page reload or opening a new browser tab
-        //
+        // isLoggedIn enables the SPA to know it does not need to present a login option
         // handled enables the SPA to know a login has just completed
-        // - the SPA can restore its pre redirect state
-        // - the SPA can update the browser history API to reset back navigation
-        //
-
         const responseBody = {
             handled: isOAuthResponse,
             isLoggedIn,
         } as any
 
+        // The CSRF token is required for subsequent operations
         if (csrfToken) {
             responseBody.csrf = csrfToken
         }

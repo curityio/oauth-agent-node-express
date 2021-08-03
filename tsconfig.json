@@ -4,6 +4,7 @@
         "target": "es2017",
         "outDir": "./dist",
         "baseUrl": "./src",
+        "module": "commonjs",
         "moduleResolution": "node"
     },
     "include": [

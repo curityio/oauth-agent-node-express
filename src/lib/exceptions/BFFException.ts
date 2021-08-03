@@ -17,4 +17,5 @@
 export default abstract class BFFException extends Error {
     public statusCode = 500
     public code = 'server_error'
+    public logInfo: string
 }

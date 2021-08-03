@@ -17,11 +17,11 @@
 import fetch from 'node-fetch'
 import {decryptCookie, getEncryptedCookie} from './cookieEncrypter'
 import BFFConfiguration from './BFFConfiguration'
-import {BFFException, InvalidRequestException, InvalidStateException, MissingTempLoginDataException, AuthorizationServerException} from './exceptions'
+import {BFFException, UnauthorizedException, InvalidStateException, MissingTempLoginDataException, AuthorizationServerException} from './exceptions'
 import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName'
 import {getTempLoginDataCookieForUnset} from './pkce'
 
-function getTokenEndpointResponse(config: BFFConfiguration, code: string, state: string, tempLoginData: string | undefined | null, ): Promise<any> {
+async function getTokenEndpointResponse(config: BFFConfiguration, code: string, state: string, tempLoginData: string | undefined | null, ): Promise<any> {
     if (!tempLoginData) {
         return Promise.reject(new MissingTempLoginDataException())
     }
@@ -32,67 +32,95 @@ function getTokenEndpointResponse(config: BFFConfiguration, code: string, state:
         return Promise.reject(new InvalidStateException())
     }
 
-    return fetch(
-        config.tokenEndpoint,
-        {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Basic ' + Buffer.from(config.clientID+ ":" + config.clientSecret).toString('base64'),
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'grant_type=authorization_code&redirect_uri=' + config.redirectUri + '&code=' + code + '&code_verifier=' + parsedTempLoginData.codeVerifier
-        }).then(res => {
-            // TODO Errors should be logged
-            if (res.status >= 500) {
-                throw new AuthorizationServerException()
-            }
+    try {
+        const res = await fetch(
+            config.tokenEndpoint,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Basic ' + Buffer.from(config.clientID+ ":" + config.clientSecret).toString('base64'),
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'grant_type=authorization_code&redirect_uri=' + config.redirectUri + '&code=' + code + '&code_verifier=' + parsedTempLoginData.codeVerifier
+            })
 
-            if (res.status >= 400) {
-                throw new InvalidRequestException()
-            }
-
-            return res.json()
-    }).catch(err => {
-        if (!(err instanceof BFFException)) {
-            throw new AuthorizationServerException(err)
-        } else {
-            throw err
-        }
-    })
-}
-
-function refreshAccessToken(refreshToken: string, config: BFFConfiguration): Promise<any>
-{
-    return fetch(
-        config.tokenEndpoint,
-        {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Basic ' + Buffer.from(config.clientID+ ":" + config.clientSecret).toString('base64'),
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'grant_type=refresh_token&refresh_token='+refreshToken
-        }).then(res => {
-        // TODO Errors should be logged
+        // Read text if it exists
+        const text = await res.text()
+        
         if (res.status >= 500) {
-            throw new AuthorizationServerException()
+            const error = new AuthorizationServerException()
+            error.logInfo = `Server error response in an Authorization Code Grant: ${text}`
+            throw error
         }
 
         if (res.status >= 400) {
-            throw new InvalidRequestException()
+            const error = new UnauthorizedException()
+            error.logInfo = `Authorization Code Grant request was rejected: ${text}`
+            throw error
         }
 
-        return res.json()
-    }).catch(err => {
+        return JSON.parse(text)
+
+    } catch(err) {
+
         if (!(err instanceof BFFException)) {
-            throw new AuthorizationServerException(err)
+            const error = new AuthorizationServerException(err)
+            error.logInfo = 'Connectivity problem during an Authorization Code Grant'
+            throw error
         } else {
             throw err
         }
-    })
+    }
+}
+
+async function refreshAccessToken(refreshToken: string, config: BFFConfiguration): Promise<any>
+{
+    try {
+
+        const res = await fetch(
+            config.tokenEndpoint,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Basic ' + Buffer.from(config.clientID+ ":" + config.clientSecret).toString('base64'),
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'grant_type=refresh_token&refresh_token='+refreshToken
+            })
+        
+        // Read text if it exists
+        const text = await res.text()
+        
+        if (res.status >= 500) {
+            const error = new AuthorizationServerException()
+            error.logInfo = `Server error response in a Refresh Token Grant: ${text}`
+            throw error
+        }
+
+        if (res.status >= 400) {
+            const error = new UnauthorizedException()
+            error.logInfo = `Refresh Token Grant request was rejected: ${text}`
+            throw error
+        }
+
+        return JSON.parse(text)
+
+    } catch (err) {
+
+        if (!(err instanceof BFFException)) {
+
+            const error = new AuthorizationServerException(err)
+            error.logInfo = 'Connectivity problem during a Refresh Token Grant'
+            throw error
+
+        } else {
+            throw err
+        }
+    }
 }
 
 function getCookiesForTokenResponse(tokenResponse: any, config: BFFConfiguration, unsetTempLoginDataCookie: boolean = false, csrfCookieValue?: string): string[] {
+    
     const cookies = [
         getEncryptedCookie(config.cookieOptions, tokenResponse.access_token, getATCookieName(config.cookieNamePrefix), config.encKey)
     ]

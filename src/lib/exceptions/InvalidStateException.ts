@@ -21,6 +21,6 @@ export default class InvalidStateException extends BFFException {
     public code = 'invalid_request'
 
     constructor() {
-        super("State parameter mismatch")
+        super("State parameter mismatch when completing a login")
     }
 }
