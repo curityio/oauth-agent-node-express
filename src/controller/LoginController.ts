@@ -115,7 +115,7 @@ class LoginController {
             isLoggedIn,
         } as any
 
-        // The CSRF token is required for subsequent operations
+        // The CSRF token is required for subsequent operations and calling APIs
         if (csrfToken) {
             responseBody.csrf = csrfToken
         }
