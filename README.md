@@ -1,5 +1,8 @@
 # The Backend-For-Frontend API
 
+[![Quality](https://img.shields.io/badge/quality-experiment-red)](https://curity.io/resources/code-examples/status/)
+[![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
+
 A node implementation of the BFF API using the Express framework. The API can be deployed to a host of your choice.
 
 This BFF is a stateless one. It takes the token response from an Authorization Server, encrypts tokens and sets them in http-only cookies. Those cookies can then be used to get user info or call business APIs.
