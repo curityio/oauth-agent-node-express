@@ -19,7 +19,7 @@ import InvalidIDTokenException from './InvalidIDTokenException'
 import MissingTempLoginDataException from './MissingCodeVerifierException'
 import InvalidStateException from './InvalidStateException'
 import BFFException from './BFFException'
-import UnauthorizedException from './unauthorizedException'
+import UnauthorizedException from './UnauthorizedException'
 import AuthorizationServerException from './AuthorizationServerException'
 
 export {
