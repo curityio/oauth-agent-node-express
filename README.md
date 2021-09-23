@@ -1,15 +1,24 @@
-# The Backend-For-Frontend API
+# The Backend for Frontend API
 
 [![Quality](https://img.shields.io/badge/quality-experiment-red)](https://curity.io/resources/code-examples/status/)
 [![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
 
-A node implementation of the BFF API using the Express framework. The API can be deployed to a host of your choice.
+An API that acts as an `OAuth Agent` when implementing the [Token Handler Pattern](https://curity.io/resources/learn/the-token-handler-pattern) for SPAs.
 
-This BFF is a stateless one. It takes the token response from an Authorization Server, encrypts tokens and sets them in http-only cookies. Those cookies can then be used to get user info or call business APIs.
+- The API implements OAuth work and calling the Authorization Server on behalf of the SPA
+- This includes sending of OAuth requests, supplying secrets, then receiving tokens and storing them securely
+- Only `SameSite=strict` cookies are issued to the SPA, so that recommended browser security is used
 
-## Endpoints of the BFF API
+## Implementation
 
-The BFF API exposes the following endpoints:
+Node and the Express framework are used to build the API, enabling you to deploy it to a host of your choice.\
+The API takes the token response from an Authorization Server, encrypts tokens and sets them in http-only cookies.\
+The API is therefore stateless and easy to manage, and does not require a database.\
+The SPA can then use secure cookies to call business APIs, or to get userinfo from the Backend for Frontend API.
+
+## API Endpoints
+
+The API exposes the following endpoints to the SPA:
 
 1. POST `/login/start`
 2. POST `/login/end`
@@ -21,7 +30,7 @@ The BFF API exposes the following endpoints:
 
 This endpoint is used to initialize an authorization request. The API responds with a URL which the SPA should navigate to in order to start the authorization flow at the Authorization Server. The URL returned can contain query parameters or be a JAR or PAR URL. However, the format of the URL is irrelevant to the SPA, it should just redirect the user to that URL.
 
-The BFF responds with a JSON containing the `authorizationRequestUrl` field.
+The API responds with a JSON containing the `authorizationRequestUrl` field.
 
 #### Example request
 
@@ -36,7 +45,7 @@ Response:
 
 ### POST `/login/end`
 
-This endpoint should be be called by the SPA on any page load. The SPA sends the current URL to the BFF, which can either finish the authorization flow (if it was a response from the Authorization Server), or inform the SPA whether the user is logged in or not (basing on the presence of BFF cookies).
+This endpoint should be be called by the SPA on any page load. The SPA sends the current URL to the API, which can either finish the authorization flow (if it was a response from the Authorization Server), or inform the SPA whether the user is logged in or not (basing on the presence of BFF cookies).
 
 #### Example request
 
@@ -75,8 +84,8 @@ Response
 
 ### POST `/logout`
 
-This endpoint can be called to get a logout URL. The SPA should navigate the user to that URL in order to perform a logout in the Authorization Server. The BFF also sets empty session cookies in the response. 
+This endpoint can be called to get a logout URL. The SPA should navigate the user to that URL in order to perform a logout in the Authorization Server. The API also sets empty session cookies in the response. 
 
 ### POST `/refresh`
 
-This endpoint can be called to force the BFF to refresh the access token. If the BFF is able to perform the refresh new cookies will be set in the response (which is a 204 response), otherwise the BFF will respond with a 401 response (e.g. when the refresh token is expired) to inform the SPA that a new login is required. 
+This endpoint can be called to force the API to refresh the access token. If the API is able to perform the refresh new cookies will be set in the response (which is a 204 response), otherwise the API will respond with a 401 response (e.g. when the refresh token is expired) to inform the SPA that a new login is required. 
