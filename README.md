@@ -21,7 +21,10 @@ The API has the role of an `OAuth Agent`, and performs the intricate OAuth and c
 
 ![Logical Components](/images/logical-components.png)
 
-See also the [Example Gateway Plugin](https://github.com/curityio/kong-bff-plugin), which has the `OAuth Proxy` role.
+See also the following resources:
+
+- The [Example SPA](https://github.com/curityio/web-oauth-via-bff) acts as a client to this API
+- The [Example Gateway Plugin](https://github.com/curityio/kong-bff-plugin), which has the `OAuth Proxy` role.
 
 ## Implementation
 
