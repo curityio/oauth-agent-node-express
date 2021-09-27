@@ -31,7 +31,7 @@ See also the following resources:
 Node and the Express framework are used to build the API, enabling you to deploy it to a host of your choice.\
 The API handles token responses from an Authorization Server, then saves encrypted tokens in http-only cookies.\
 The API is therefore stateless and easy to manage, and does not require a database.\
-The SPA can then use secure cookies to call business APIs, or to get userinfo from the Backend for Frontend API.
+The SPA can then use secure cookies to call business APIs, or to get userinfo from this API.
 
 ## API Endpoints
 
