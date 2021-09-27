@@ -3,11 +3,23 @@
 [![Quality](https://img.shields.io/badge/quality-experiment-red)](https://curity.io/resources/code-examples/status/)
 [![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
 
-An API that acts as an `OAuth Agent` when implementing the [Token Handler Pattern](https://curity.io/resources/learn/the-token-handler-pattern) for SPAs.
+An API that acts as a `Back End for Front End (BFF) for an SPA, in line with [best practices for browser based apps](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps).
+
+## The Token Handler Pattern
+
+A modern evolution of Back End for Front End is used, called the [Token Handler Pattern](https://curity.io/resources/learn/the-token-handler-pattern/):
 
 - The API implements OAuth work and calling the Authorization Server on behalf of the SPA
 - This includes sending of OAuth requests, supplying secrets, then receiving tokens and storing them securely
 - Only `SameSite=strict` cookies are issued to the SPA, so that recommended browser security is used
+
+See the [Curity OAuth for Web Home Page](https://curity.io/product/token-service/oauth-for-web/) for further documentation.
+
+## Components
+
+The API performs the role of the OAuth agent in the below diagram, aand performs the intricate OAuth and cookie handling work:
+
+![Logical Components](/images/logical-components.png)
 
 ## Implementation
 
