@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+
+  #
+  # A SQL database used by the Curity Identity Server
+  #
+  curity-data:
+    image: postgres:13.2
+    hostname: dbserver
+    volumes:
+      - ./data-backup.sql:/docker-entrypoint-initdb.d/data-backup.sql
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'Password1'
+      POSTGRES_DB: 'idsvr'
+
+  #
+  # A standalone instance of the Curity Identity Server
+  #
+  curity-idsvr:
+    image: curity.azurecr.io/curity/idsvr:6.6.0
+    hostname: idsvr
+    ports:
+     - 6749:6749
+     - 8443:8443
+    volumes:
+     - ./license.json:/opt/idsvr/etc/init/license/license.json
+     - ./config-backup.xml:/opt/idsvr/etc/init/config.xml
+     - ./log4j2.xml:/opt/idsvr/etc/log4j2.xml
+    environment:
+      PASSWORD: 'Password1'

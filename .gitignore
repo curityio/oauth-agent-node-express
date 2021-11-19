@@ -1,2 +1,5 @@
-/node_modules
-/dist
+license.json
+node_modules
+dist
+test/data
+.DS_Store

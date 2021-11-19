@@ -25,29 +25,29 @@ Ensure that the hosts file contains the following development domain names:
 
 ## Understand URLs
 
-For local development of the token handler the following URLs are used.\
-HTTP is used for simplicity, to reduce infrastructure, though it is recommended to update to HTTPS:
+For local development of the token handler the following URLs are used, with HTTP to reduce development infrastructure:
 
 | Component | Base URL | Usage |
 | --------- | -------- | ----- |
 | Token Handler API | http://api.example.local:8080/tokenhandler | This acts as a Back End for Front End for SPAs |
-| Curity Identity Server | http://login.example.local:8443 | This will receive a Mutual TLS secret from the token handler | 
+| Curity Identity Server | http://login.example.local:8443 | This will receive a Mutual TLS secret from the token handler |
+
+If you want to update to an HTTPS setup, see the use of certificates in the [Financial-grade Token Handler](https://github.com/curityio/token-handler-kotlin-spring-fapi).
 
 ## Build and Run the Token Handler API
 
-Run this command from the root folder and the API will then listen on SSL over port 8080.\
-Alternatively the API can be run in an IDE of your choice:
+Run these commands from the root folder and the API will then listen on HTTP over port 8080:
 
 ```bash
-./gradlew bootRun
+npm install
+npm start
 ```
 
 Test that the API is contactable by running this command from the root folder:
 
 ```bash
-curl --cacert ./certs/example.ca.pem -i -X POST https://api.example.local:8080/tokenhandler/refresh \
--H "origin: https://www.example.local" \
--d {}
+curl -X POST http://api.example.local:8080/tokenhandler/login/start \
+-H "origin: http://www.example.local" | jq
 ```
 
 ## Deploy the Curity Identity Server

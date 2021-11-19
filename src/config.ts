@@ -20,23 +20,23 @@ import {CookieSerializeOptions} from 'cookie'
 export const config: BFFConfiguration = {
     clientID: 'spa-client',
     clientSecret: 'Password1',
-    redirectUri: 'http://www.example.com/',
-    postLogoutRedirectURI: 'http://www.example.com/',
+    redirectUri: 'http://www.example.local/',
+    postLogoutRedirectURI: 'http://www.example.local/',
     scope: 'openid profile',
 
     encKey: 'NF65meV>Ls#8GP>;!Cnov)rIPRoK^.NP', // 32-character long string,
     cookieNamePrefix: 'example',
-    bffEndpointsPrefix: '/bff',
+    bffEndpointsPrefix: '/tokenhandler',
     cookieOptions: {
         httpOnly: true,
         sameSite: true,
         secure: false,
-        domain: '.example.com',
+        domain: 'api.example.local',
         path: '/',
     } as CookieSerializeOptions,
 
-    trustedWebOrigins: ['http://www.example.com'],
-    authorizeEndpoint: 'http://login.example.com:8443/oauth/v2/oauth-authorize',
-    logoutEndpoint: 'http://login.example.com:8443/oauth/v2/oauth-session/logout',
-    tokenEndpoint: 'http://login.example.com:8443/oauth/v2/oauth-token',
+    trustedWebOrigins: ['http://www.example.local'],
+    authorizeEndpoint: 'http://login.example.local:8443/oauth/v2/oauth-authorize',
+    logoutEndpoint: 'http://login.example.local:8443/oauth/v2/oauth-session/logout',
+    tokenEndpoint: 'http://login.example.local:8443/oauth/v2/oauth-token',
 }
