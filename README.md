@@ -34,10 +34,9 @@ This enables a test driven approach to developing the token handler, without the
 
 ## End-to-End SPA Flow
 
-See the below tutorials for further details on how to run the end-to-end solution in a browser:
+See the below article for details on how to run the end-to-end solution in a browser:
 
 - [SPA Code Example](https://curity.io/resources/learn/token-handler-spa-example/)
-- [Token Handler Code Example](https://curity.io/resources/learn/token-handler-example/)
 
 ## Website Documentation
 
