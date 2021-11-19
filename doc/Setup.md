@@ -1,15 +1,16 @@
-# How to Develop the Token Handler
+# How to Run the Token Handler Locally
 
-Follow the below steps to get set up for developing and testing the financial-grade token handler.
+Follow the below steps to get set up for developing and testing the token handler itself.
 
 ## Prerequisites
 
-- Ensure that Node.js is installed
-- Ensure that Docker Desktop is installed
-- Ensure that OpenSSL is installed
-- Ensure that the jq tool is installed
+Ensure that these tools are installed locally:
 
-Also get a License File for the Curity Identity Server:
+- [Node.js](https://nodejs.org/en/download/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- [jq](https://stedolan.github.io/jq/download/)
+
+Also get a license file for the Curity Identity Server:
 
 - Sign in to the [Curity Developer Portal](https://developer.curity.io/) with your Github account.
 - You can get a [Free Community Edition License](https://curity.io/product/community/) if you are new to the Curity Identity Server.
@@ -32,7 +33,7 @@ For local development of the token handler the following URLs are used, with HTT
 | Token Handler API | http://api.example.local:8080/tokenhandler | This acts as a Back End for Front End for SPAs |
 | Curity Identity Server | http://login.example.local:8443 | This will receive a Mutual TLS secret from the token handler |
 
-If you want to update to an HTTPS setup, see the use of certificates in the [Financial-grade Token Handler](https://github.com/curityio/token-handler-kotlin-spring-fapi).
+If you want to update to an HTTPS setup, see the use of OpenSSL certificates in the [Financial-grade Token Handler](https://github.com/curityio/token-handler-kotlin-spring-fapi).
 
 ## Build and Run the Token Handler API
 
