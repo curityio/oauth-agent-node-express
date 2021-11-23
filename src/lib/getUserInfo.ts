@@ -35,8 +35,7 @@ function getUserInfo(encKey: string, encryptedCookie: string): Object {
         throw new InvalidIDTokenException()
     }
 
-    // TODO this should properly verify id token
-    // TODO - what to do when id token is expired or missing? Call userinfo endpoint? It may have different data than the id token
+    // We could verify the ID token, though it is received over a trusted POST to the token endpoint
     try {
         return JSON.parse(String(Buffer.from(tokenParts[1], 'base64').toString('binary')));
     } catch (err) {
