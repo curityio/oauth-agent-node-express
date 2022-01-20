@@ -55,7 +55,7 @@ function decryptCookie(encKeyHex: string, encryptedbase64value: string): string 
 
     const version = allBytes[0]
     if (version != CURRENT_VERSION) {
-        throw new Error("The received cookie has invalid format")
+        throw new Error("The received cookie has an invalid format")
     }
 
     let offset = VERSION_SIZE
