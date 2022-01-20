@@ -1,7 +1,7 @@
 {
-    "name": "spa-with-express-bff",
+    "name": "bff-node-express",
     "version": "1.0.0",
-    "description": "An SPA using a Back End for Front End, deployed on Vercel platform.",
+    "description": "A token handler (OAuth Agent) that runs on the Express web server",
     "scripts": {
         "build": "rimraf dist && tsc",
         "start": "ts-node src/server.ts"
