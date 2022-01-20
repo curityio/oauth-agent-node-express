@@ -9,6 +9,7 @@
     "author": "Curity AB",
     "license": "Apache-2.0",
     "dependencies": {
+        "base64url": "^3.0.1",
         "cookie": "^0.4.1",
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
