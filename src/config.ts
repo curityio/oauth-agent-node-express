@@ -24,7 +24,8 @@ export const config: BFFConfiguration = {
     postLogoutRedirectURI: process.env.POST_LOGOUT_REDIRECT_URI || 'http://www.example.local/',
     scope: process.env.SCOPE || 'openid profile',
 
-    encKey: process.env.COOKIE_ENCRYPTION_KEY || 'NF65meV>Ls#8GP>;!Cnov)rIPRoK^.NP', // 32-character long string,
+    // 32 hex bytes are required for AES256
+    encKey: process.env.COOKIE_ENCRYPTION_KEY || '4e4636356d65563e4c73233847503e3b21436e6f7629724950526f4b5e2e4e50',
     cookieNamePrefix: process.env.COOKIE_NAME_PREFIX || 'example',
     bffEndpointsPrefix: '/tokenhandler',
     cookieOptions: {

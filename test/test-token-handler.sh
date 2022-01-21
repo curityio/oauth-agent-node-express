@@ -258,7 +258,7 @@ fi
 JSON=$(tail -n 1 $RESPONSE_FILE) 
 echo $JSON | jq
 CODE=$(jq -r .code <<< "$JSON")
-if [ "$CODE" != 'session_expired' ]; then
+if [ "$CODE" != 'unauthorized_request' ]; then
    echo "*** User Info returned an unexpected error code"
    exit
 fi

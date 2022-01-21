@@ -15,6 +15,7 @@
  */
 
 import InvalidBFFCookieException from './InvalidBFFCookieException'
+import CookieDecryptionException from './CookieDecryptionException'
 import InvalidIDTokenException from './InvalidIDTokenException'
 import MissingTempLoginDataException from './MissingCodeVerifierException'
 import InvalidStateException from './InvalidStateException'
@@ -24,6 +25,7 @@ import AuthorizationServerException from './AuthorizationServerException'
 
 export {
     InvalidBFFCookieException,
+    CookieDecryptionException,
     InvalidIDTokenException,
     MissingTempLoginDataException,
     InvalidStateException,

@@ -1,7 +1,7 @@
 {
-    "name": "spa-with-express-bff",
+    "name": "token-handler-node-express",
     "version": "1.0.0",
-    "description": "An SPA using a Back End for Front End, deployed on Vercel platform.",
+    "description": "A token handler (OAuth Agent) that runs on the Express web server",
     "scripts": {
         "build": "rimraf dist && tsc",
         "start": "ts-node src/server.ts"
@@ -9,6 +9,7 @@
     "author": "Curity AB",
     "license": "Apache-2.0",
     "dependencies": {
+        "base64url": "^3.0.1",
         "cookie": "^0.4.1",
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",

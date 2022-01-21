@@ -63,7 +63,7 @@ Response
   "nbf":1626259989,
   "jti":"34e76304-0bc3-46ee-bc70-e21685eb5282",
   "iss":"https://idsvr.example.com/oauth",
-  "aud":"bff-client",
+  "aud":"token-handler-client",
   "sub":"user",
   "auth_time":1626259937,
   "iat":1626259989

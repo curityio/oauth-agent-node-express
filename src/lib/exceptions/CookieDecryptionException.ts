@@ -16,7 +16,7 @@
 
 import BFFException from './BFFException'
 
-export default class InvalidBFFCookieException extends BFFException {
+export default class CookieDecryptionException extends BFFException {
     public statusCode = 401
     public code = 'unauthorized_request'
     public cause?
