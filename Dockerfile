@@ -1,8 +1,8 @@
 FROM node:15.11.0-alpine
 
-WORKDIR /usr/bff-api
-COPY dist                /usr/bff-api/dist
-COPY package*.json       /usr/bff-api/
+WORKDIR /usr/token-handler-api
+COPY dist                /usr/token-handler-api/dist
+COPY package*.json       /usr/token-handler-api/
 
 RUN npm install --production
 

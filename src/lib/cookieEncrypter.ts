@@ -61,7 +61,7 @@ function decryptCookie(encKeyHex: string, encryptedbase64value: string): string 
     let offset = VERSION_SIZE
     const ivBytes = allBytes.slice(offset, offset + GCM_IV_SIZE)
 
-    offset = VERSION_SIZE + GCM_IV_SIZE
+    offset += GCM_IV_SIZE
     const ciphertextBytes = allBytes.slice(offset, allBytes.length - GCM_TAG_SIZE)
 
     offset = allBytes.length - GCM_TAG_SIZE

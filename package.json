@@ -1,5 +1,5 @@
 {
-    "name": "bff-node-express",
+    "name": "token-handler-node-express",
     "version": "1.0.0",
     "description": "A token handler (OAuth Agent) that runs on the Express web server",
     "scripts": {
