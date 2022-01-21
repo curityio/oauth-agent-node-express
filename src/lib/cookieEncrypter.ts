@@ -18,6 +18,7 @@ import * as crypto from 'crypto'
 import base64url from 'base64url';
 import {CookieSerializeOptions, serialize} from 'cookie'
 import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName'
+import {CookieDecryptionException, InvalidBFFCookieException} from '../lib/exceptions'
 
 const VERSION_SIZE = 1;
 const GCM_IV_SIZE = 12;
@@ -50,12 +51,14 @@ function decryptCookie(encKeyHex: string, encryptedbase64value: string): string 
 
     const minSize = VERSION_SIZE + GCM_IV_SIZE + 1 + GCM_TAG_SIZE
     if (allBytes.length < minSize) {
-        throw new Error("The received cookie has an invalid length")
+        const error = new Error("The received cookie has an invalid length")
+        throw new InvalidBFFCookieException(error)
     }
 
     const version = allBytes[0]
     if (version != CURRENT_VERSION) {
-        throw new Error("The received cookie has an invalid format")
+        const error = new Error("The received cookie has an invalid format")
+        throw new InvalidBFFCookieException(error)
     }
 
     let offset = VERSION_SIZE
@@ -67,12 +70,22 @@ function decryptCookie(encKeyHex: string, encryptedbase64value: string): string 
     offset = allBytes.length - GCM_TAG_SIZE
     const tagBytes = allBytes.slice(offset, allBytes.length)
 
-    const encKeyBytes = Buffer.from(encKeyHex, "hex")
-    const decipher = crypto.createDecipheriv('aes-256-gcm', encKeyBytes, ivBytes)
-    decipher.setAuthTag(tagBytes)
+    try {
+    
+        const encKeyBytes = Buffer.from(encKeyHex, "hex")
+        const decipher = crypto.createDecipheriv('aes-256-gcm', encKeyBytes, ivBytes)
+        decipher.setAuthTag(tagBytes)
 
-    const plaintextBytes = Buffer.concat([decipher.update(ciphertextBytes), decipher.final()])
-    return plaintextBytes.toString();
+        const decryptedBytes = decipher.update(ciphertextBytes)
+        const finalBytes = decipher.final()
+        
+        const plaintextBytes = Buffer.concat([decryptedBytes, finalBytes])
+        return plaintextBytes.toString()
+
+    } catch(e: any) {
+
+        throw new CookieDecryptionException(e)
+    }
 }
 
 function getEncryptedCookie(options: CookieSerializeOptions, value: string, name: string, encKey: string): string {
