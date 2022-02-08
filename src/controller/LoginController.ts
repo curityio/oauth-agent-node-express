@@ -83,12 +83,23 @@ class LoginController {
             const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
             const tokenResponse = await getTokenEndpointResponse(config, data.code, data.state, tempLoginData)
 
-            // Avoid setting a new value if the user opens two browser tabs and signs in on both
+            csrfToken = generateRandomString()
             const csrfCookie = req.cookies[getCSRFCookieName(config.cookieNamePrefix)];
-            if (!csrfCookie) {
-                csrfToken = generateRandomString()
+            if (csrfCookie) {
+                
+                try {
+                    // Avoid setting a new value if the user opens two browser tabs and signs in on both
+                    csrfToken = decryptCookie(config.encKey, csrfCookie);
+
+                } catch (e) {
+
+                    // But if the system has been redeployed with a new cookie encryption key, ensure that we can recover
+                    csrfToken = generateRandomString()
+                }
             } else {
-                csrfToken = decryptCookie(config.encKey, csrfCookie);
+
+                // By default generate a new token
+                csrfToken = generateRandomString()
             }
 
             // Write the SameSite cookies
