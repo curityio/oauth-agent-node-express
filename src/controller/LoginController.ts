@@ -83,12 +83,24 @@ class LoginController {
             const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
             const tokenResponse = await getTokenEndpointResponse(config, data.code, data.state, tempLoginData)
 
-            // Avoid setting a new value if the user opens two browser tabs and signs in on both
-            const csrfCookie = req.cookies[getCSRFCookieName(config.cookieNamePrefix)];
-            if (!csrfCookie) {
-                csrfToken = generateRandomString()
+            csrfToken = generateRandomString()
+            const csrfCookie = req.cookies[getCSRFCookieName(config.cookieNamePrefix)]
+            if (csrfCookie) {
+                
+                try {
+                    // Avoid setting a new value if the user opens two browser tabs and signs in on both
+                    csrfToken = decryptCookie(config.encKey, csrfCookie)
+
+                } catch (e) {
+
+                    // If the system has been redeployed with a new cookie encryption key, decrypting old cookies from the browser will fail
+                    // In this case generate a new CSRF token so that the SPA can complete its login without errors
+                    csrfToken = generateRandomString()
+                }
             } else {
-                csrfToken = decryptCookie(config.encKey, csrfCookie);
+
+                // By default generate a new token
+                csrfToken = generateRandomString()
             }
 
             // Write the SameSite cookies
