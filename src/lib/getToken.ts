@@ -17,7 +17,7 @@
 import fetch from 'node-fetch'
 import {decryptCookie, getEncryptedCookie} from './cookieEncrypter'
 import OAuthAgentConfiguration from './oauthAgentConfiguration'
-import {BFFException, UnauthorizedException, InvalidStateException, MissingTempLoginDataException, AuthorizationServerException} from './exceptions'
+import {OAuthAgentException, UnauthorizedException, InvalidStateException, MissingTempLoginDataException, AuthorizationServerException} from './exceptions'
 import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName'
 import {getTempLoginDataCookieForUnset} from './pkce'
 
@@ -63,7 +63,7 @@ async function getTokenEndpointResponse(config: OAuthAgentConfiguration, code: s
 
     } catch(err) {
 
-        if (!(err instanceof BFFException)) {
+        if (!(err instanceof OAuthAgentException)) {
             const error = new AuthorizationServerException(err)
             error.logInfo = 'Connectivity problem during an Authorization Code Grant'
             throw error
@@ -107,7 +107,7 @@ async function refreshAccessToken(refreshToken: string, config: OAuthAgentConfig
 
     } catch (err) {
 
-        if (!(err instanceof BFFException)) {
+        if (!(err instanceof OAuthAgentException)) {
 
             const error = new AuthorizationServerException(err)
             error.logInfo = 'Connectivity problem during a Refresh Token Grant'

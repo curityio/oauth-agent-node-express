@@ -18,7 +18,7 @@ import * as crypto from 'crypto'
 import base64url from 'base64url';
 import {CookieSerializeOptions, serialize} from 'cookie'
 import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName'
-import {CookieDecryptionException, InvalidBFFCookieException} from '../lib/exceptions'
+import {CookieDecryptionException, InvalidCookieException} from '../lib/exceptions'
 
 const VERSION_SIZE = 1;
 const GCM_IV_SIZE = 12;
@@ -52,13 +52,13 @@ function decryptCookie(encKeyHex: string, encryptedbase64value: string): string 
     const minSize = VERSION_SIZE + GCM_IV_SIZE + 1 + GCM_TAG_SIZE
     if (allBytes.length < minSize) {
         const error = new Error("The received cookie has an invalid length")
-        throw new InvalidBFFCookieException(error)
+        throw new InvalidCookieException(error)
     }
 
     const version = allBytes[0]
     if (version != CURRENT_VERSION) {
         const error = new Error("The received cookie has an invalid format")
-        throw new InvalidBFFCookieException(error)
+        throw new InvalidCookieException(error)
     }
 
     let offset = VERSION_SIZE

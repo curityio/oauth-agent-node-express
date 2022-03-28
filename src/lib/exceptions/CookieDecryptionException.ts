@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-import BFFException from './BFFException'
+import OAuthAgentException from './OAuthAgentException'
 
-export default class CookieDecryptionException extends BFFException {
+export default class CookieDecryptionException extends OAuthAgentException {
     public statusCode = 401
     public code = 'unauthorized_request'
     public cause?

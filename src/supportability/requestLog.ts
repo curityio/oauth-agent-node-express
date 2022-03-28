@@ -1,5 +1,5 @@
 import {Request, Response} from 'express'
-import {BFFException} from '../lib/exceptions';
+import {OAuthAgentException} from '../lib/exceptions';
 
 export class RequestLog {
 
@@ -19,7 +19,7 @@ export class RequestLog {
         this.path = request.originalUrl
     }
 
-    public setError(error: BFFException) {
+    public setError(error: OAuthAgentException) {
         
         this.errorCode = error.code
         this.errorMessage = error.message

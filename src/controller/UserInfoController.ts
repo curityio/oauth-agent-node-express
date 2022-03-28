@@ -18,7 +18,7 @@ import * as express from 'express'
 import {getIDCookieName, getUserInfo, ValidateRequestOptions} from '../lib'
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
-import {InvalidBFFCookieException} from '../lib/exceptions'
+import {InvalidCookieException} from '../lib/exceptions'
 import {asyncCatch} from '../supportability/exceptionMiddleware';
 
 class UserInfoController {
@@ -42,7 +42,7 @@ class UserInfoController {
             res.status(200).json(userData)
 
         } else {
-            const error = new InvalidBFFCookieException()
+            const error = new InvalidCookieException()
             error.logInfo = 'No ID cookie was supplied in a call to get user info'
             throw error
         }

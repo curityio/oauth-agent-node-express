@@ -15,7 +15,7 @@
  */
 
 import {decryptCookie} from './cookieEncrypter'
-import {InvalidBFFCookieException, InvalidIDTokenException} from './exceptions'
+import {InvalidCookieException, InvalidIDTokenException} from './exceptions'
 
 function getUserInfo(encKey: string, encryptedCookie: string): Object {
     let idToken = null
@@ -24,7 +24,7 @@ function getUserInfo(encKey: string, encryptedCookie: string): Object {
         idToken = decryptCookie(encKey, encryptedCookie)
     } catch (err) {
         // error while decrypting or parsing cookie value
-        const error = new InvalidBFFCookieException(err)
+        const error = new InvalidCookieException(err)
         error.logInfo = 'Unable to decrypt the ID cookie to get user info'
         throw error
     }
