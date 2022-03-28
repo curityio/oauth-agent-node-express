@@ -1,8 +1,8 @@
-# Architecture of the Token Handler API
+# Architecture of the OAuth Agent
 
 ## Overview
 
-Node and the Express framework are used to build the Token Handler API using the Spring framework. The API can be deployed to a host of your choice. The API handles token responses from an Authorization Server, then saves encrypted tokens in http-only cookies. The API is therefore stateless and easy to manage, and does not require a database. The SPA can then use secure cookies to call business APIs, or to get userinfo from this API.
+Node and the Express framework are used to build the OAuth Agent using Node.js. The API can be deployed to a host of your choice. The API handles token responses from an Authorization Server, then saves encrypted tokens in http-only cookies. The API is therefore stateless and easy to manage, and does not require a database. The SPA can then use secure cookies to call business APIs, or to get userinfo from this API.
 
 ## Endpoints
 
@@ -22,12 +22,12 @@ The API responds with a JSON containing the `authorizationRequestUrl` field.
 
 #### Example request
 
-`POST https://bff.example.com/login/start`
+`POST https://api.example.com/oauth-agent/login/start`
 
 Response:
 ```json
 {
-  "authorizationRequestUrl": "https://idsvr.example.com/oauth/authorize?client_id=bff_client&response_type=code&scope=openid%20read&redirect_uri=https://www.example.com/"
+  "authorizationRequestUrl": "https://idsvr.example.com/oauth/authorize?client_id=spa-client&response_type=code&scope=openid%20read&redirect_uri=https://www.example.com/"
 }
 ```
 
@@ -38,7 +38,7 @@ This endpoint should be be called by the SPA on any page load. The SPA sends the
 #### Example request
 
 ```http
-POST https://bff.example.com/login/end
+POST https://api.example.com/oauth-agent/login/end
 pageUrl=http://www.example.com?code=abcdef&state=qwerty
 ```
 
@@ -51,7 +51,7 @@ Endpoint which returns claims of the ID token contained in the session cookie.
 #### Example
 
 ```http
-GET https://bff.example.com
+GET https://api.example.com/oauth-agent/userInfo
 Cookie: myBFFSess=2558e7806c0523fd96d105...
 ```
 
@@ -63,7 +63,7 @@ Response
   "nbf":1626259989,
   "jti":"34e76304-0bc3-46ee-bc70-e21685eb5282",
   "iss":"https://idsvr.example.com/oauth",
-  "aud":"token-handler-client",
+  "aud":"spa-client",
   "sub":"user",
   "auth_time":1626259937,
   "iat":1626259989

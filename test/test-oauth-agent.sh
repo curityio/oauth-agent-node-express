@@ -1,10 +1,10 @@
 #!/bin/bash
 
-##################################################################
-# Tests to run against token handler endpoints outside the browser
-##################################################################
+################################################################
+# Tests to run against OAuth Agent endpoints outside the browser
+################################################################
 
-TOKEN_HANDLER_BASE_URL='http://api.example.local:8080/tokenhandler'
+TOKEN_HANDLER_BASE_URL='http://api.example.local:8080/oauth-agent'
 WEB_BASE_URL='http://www.example.local'
 RESPONSE_FILE=data/response.txt
 MAIN_COOKIES_FILE=data/main_cookies.txt

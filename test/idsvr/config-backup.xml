@@ -307,7 +307,7 @@
               <client>
                 <id>spa-client</id>
                 <client-name>spa-client</client-name>
-                <description>SPA using a Token Handler</description>
+                <description>SPA using an OAuth Agent</description>
                 <secret>$5$TCfYst/ysngW7RbV$rMLasvlJpnQ0wmFoeTrdIHPjVdnsqOVelkqawZ.fZ17</secret>
                 <redirect-uris>http://www.example.local/</redirect-uris>
                 <scope>openid</scope>

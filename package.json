@@ -1,7 +1,7 @@
 {
-    "name": "token-handler-node-express",
+    "name": "oauth-agent-node-express",
     "version": "1.0.0",
-    "description": "A token handler (OAuth Agent) that runs on the Express web server",
+    "description": "An OAuth Agent that runs on the Express web server",
     "scripts": {
         "build": "rimraf dist && tsc",
         "start": "ts-node src/server.ts"

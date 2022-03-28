@@ -27,7 +27,7 @@ export const config: BFFConfiguration = {
     // 32 hex bytes are required for AES256
     encKey: process.env.COOKIE_ENCRYPTION_KEY || '4e4636356d65563e4c73233847503e3b21436e6f7629724950526f4b5e2e4e50',
     cookieNamePrefix: process.env.COOKIE_NAME_PREFIX || 'example',
-    bffEndpointsPrefix: '/tokenhandler',
+    bffEndpointsPrefix: '/oauth-agent',
     cookieOptions: {
         httpOnly: true,
         sameSite: true,
