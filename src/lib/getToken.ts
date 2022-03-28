@@ -61,7 +61,7 @@ async function getTokenEndpointResponse(config: OAuthAgentConfiguration, code: s
 
         return JSON.parse(text)
 
-    } catch(err) {
+    } catch (err: any) {
 
         if (!(err instanceof OAuthAgentException)) {
             const error = new AuthorizationServerException(err)
@@ -105,7 +105,7 @@ async function refreshAccessToken(refreshToken: string, config: OAuthAgentConfig
 
         return JSON.parse(text)
 
-    } catch (err) {
+    } catch (err: any) {
 
         if (!(err instanceof OAuthAgentException)) {
 

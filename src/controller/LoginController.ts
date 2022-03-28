@@ -75,7 +75,7 @@ class LoginController {
         const isOAuthResponse = !!(data.state && data.code)
 
         let isLoggedIn: boolean
-        let csrfToken: string
+        let csrfToken: string = ''
         
         if (isOAuthResponse) {
             
