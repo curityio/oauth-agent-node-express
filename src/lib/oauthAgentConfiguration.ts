@@ -58,7 +58,7 @@ export default class OAuthAgentConfiguration {
         this.scope = scope
 
         this.encKey = encKey
-        this.cookieNamePrefix = cookieNamePrefix ? cookieNamePrefix : "bff"
+        this.cookieNamePrefix = cookieNamePrefix ? cookieNamePrefix : "oauthagent"
         this.cookieOptions = cookieOptions ? cookieOptions : {
             httpOnly: true,
             secure: true,
