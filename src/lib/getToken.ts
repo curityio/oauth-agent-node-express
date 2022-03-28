@@ -136,7 +136,7 @@ function getCookiesForTokenResponse(tokenResponse: any, config: OAuthAgentConfig
     if (tokenResponse.refresh_token) {
         const refreshTokenCookieOptions = {
             ...config.cookieOptions,
-            path: config.bffEndpointsPrefix + '/refresh'
+            path: config.endpointsPrefix + '/refresh'
         }
         cookies.push(getEncryptedCookie(refreshTokenCookieOptions, tokenResponse.refresh_token, getAuthCookieName(config.cookieNamePrefix), config.encKey))
     }
@@ -144,7 +144,7 @@ function getCookiesForTokenResponse(tokenResponse: any, config: OAuthAgentConfig
     if (tokenResponse.id_token) {
         const idTokenCookieOptions = {
             ...config.cookieOptions,
-            path: config.bffEndpointsPrefix + '/userInfo'
+            path: config.endpointsPrefix + '/userInfo'
         }
         cookies.push(getEncryptedCookie(idTokenCookieOptions, tokenResponse.id_token, getIDCookieName(config.cookieNamePrefix), config.encKey))
     }

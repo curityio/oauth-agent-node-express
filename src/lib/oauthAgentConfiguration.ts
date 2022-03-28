@@ -31,7 +31,7 @@ export default class OAuthAgentConfiguration {
     public tokenEndpoint: string
 
     // Secure cookie and CORS configuration
-    public bffEndpointsPrefix: string
+    public endpointsPrefix: string
     public encKey: string
     public cookieOptions: CookieSerializeOptions
     public cookieNamePrefix: string
@@ -47,7 +47,7 @@ export default class OAuthAgentConfiguration {
         tokenEndpoint: string,
         encKey: string,
         trustedWebOrigins: string[],
-        bffEndpointsPrefix: string = '',
+        endpointsPrefix: string = '',
         cookieNamePrefix?: string,
         postLogoutRedirectURI?: string,
         cookieOptions?: CookieSerializeOptions) {
@@ -71,6 +71,6 @@ export default class OAuthAgentConfiguration {
         this.authorizeEndpoint = authorizeEndpoint
         this.tokenEndpoint = tokenEndpoint
 
-        this.bffEndpointsPrefix = bffEndpointsPrefix
+        this.endpointsPrefix = endpointsPrefix
     }
 }

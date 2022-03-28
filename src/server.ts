@@ -51,7 +51,7 @@ const controllers = {
 }
 
 for (const [path, controller] of Object.entries(controllers)) {
-    app.use(config.bffEndpointsPrefix + path, controller.router)
+    app.use(config.endpointsPrefix + path, controller.router)
 }
 
 const server = app.listen(port, function() {
