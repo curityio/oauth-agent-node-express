@@ -20,7 +20,7 @@ import { getTokenEndpointResponse, refreshAccessToken, getCookiesForTokenRespons
 import getUserInfo from './getUserInfo'
 import getRedirectUri from './redirectUri'
 import getLogoutURL from './getLogoutURL'
-import BFFConfiguration from './BFFConfiguration'
+import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import { getTempLoginDataCookie, getTempLoginDataCookieForUnset, generateRandomString } from './pkce'
 import { getAuthCookieName, getIDCookieName, getCSRFCookieName, getATCookieName, getTempLoginDataCookieName } from './cookieName'
 import { ValidateRequestOptions } from './validateRequest'
@@ -35,7 +35,6 @@ export {
     getLogoutURL,
     refreshAccessToken,
     getCookiesForUnset,
-    BFFConfiguration,
     getTempLoginDataCookieForUnset,
     getTempLoginDataCookie,
     getCookiesForTokenResponse,
@@ -45,5 +44,6 @@ export {
     getIDCookieName,
     getAuthCookieName,
     generateRandomString,
+    OAuthAgentConfiguration,
     ValidateRequestOptions,
 }

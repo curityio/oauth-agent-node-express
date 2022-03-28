@@ -16,7 +16,7 @@
 
 import {CookieSerializeOptions} from 'cookie'
 
-export default class BFFConfiguration {
+export default class OAuthAgentConfiguration {
 
     // Client Configuration
     public clientID: string
@@ -30,7 +30,7 @@ export default class BFFConfiguration {
     public authorizeEndpoint: string
     public tokenEndpoint: string
 
-    // BFF session cookie and CORS configuration
+    // Secure cookie and CORS configuration
     public bffEndpointsPrefix: string
     public encKey: string
     public cookieOptions: CookieSerializeOptions

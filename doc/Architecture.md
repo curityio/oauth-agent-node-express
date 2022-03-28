@@ -33,7 +33,7 @@ Response:
 
 ### POST `/login/end`
 
-This endpoint should be be called by the SPA on any page load. The SPA sends the current URL to the API, which can either finish the authorization flow (if it was a response from the Authorization Server), or inform the SPA whether the user is logged in or not (basing on the presence of BFF cookies).
+This endpoint should be be called by the SPA on any page load. The SPA sends the current URL to the API, which can either finish the authorization flow (if it was a response from the Authorization Server), or inform the SPA whether the user is logged in or not (based on the presence of secure cookies).
 
 #### Example request
 
@@ -52,7 +52,7 @@ Endpoint which returns claims of the ID token contained in the session cookie.
 
 ```http
 GET https://api.example.com/oauth-agent/userInfo
-Cookie: myBFFSess=2558e7806c0523fd96d105...
+Cookie: example-id=2558e7806c0523fd96d105...
 ```
 
 Response

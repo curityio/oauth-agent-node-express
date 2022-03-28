@@ -14,10 +14,10 @@
  *  limitations under the License.
  */
 
-import {BFFConfiguration} from './lib'
+import {OAuthAgentConfiguration} from './lib'
 import {CookieSerializeOptions} from 'cookie'
 
-export const config: BFFConfiguration = {
+export const config: OAuthAgentConfiguration = {
     clientID: process.env.CLIENT_ID || 'spa-client',
     clientSecret: process.env.CLIENT_SECRET || 'Password1',
     redirectUri: process.env.REDIRECT_URI || 'http://www.example.local/',

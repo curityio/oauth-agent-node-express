@@ -16,12 +16,12 @@
 
 import fetch from 'node-fetch'
 import {decryptCookie, getEncryptedCookie} from './cookieEncrypter'
-import BFFConfiguration from './BFFConfiguration'
+import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import {BFFException, UnauthorizedException, InvalidStateException, MissingTempLoginDataException, AuthorizationServerException} from './exceptions'
 import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName'
 import {getTempLoginDataCookieForUnset} from './pkce'
 
-async function getTokenEndpointResponse(config: BFFConfiguration, code: string, state: string, tempLoginData: string | undefined | null, ): Promise<any> {
+async function getTokenEndpointResponse(config: OAuthAgentConfiguration, code: string, state: string, tempLoginData: string | undefined | null, ): Promise<any> {
     if (!tempLoginData) {
         return Promise.reject(new MissingTempLoginDataException())
     }
@@ -73,7 +73,7 @@ async function getTokenEndpointResponse(config: BFFConfiguration, code: string, 
     }
 }
 
-async function refreshAccessToken(refreshToken: string, config: BFFConfiguration): Promise<any>
+async function refreshAccessToken(refreshToken: string, config: OAuthAgentConfiguration): Promise<any>
 {
     try {
 
@@ -119,7 +119,7 @@ async function refreshAccessToken(refreshToken: string, config: BFFConfiguration
     }
 }
 
-function getCookiesForTokenResponse(tokenResponse: any, config: BFFConfiguration, unsetTempLoginDataCookie: boolean = false, csrfCookieValue?: string): string[] {
+function getCookiesForTokenResponse(tokenResponse: any, config: OAuthAgentConfiguration, unsetTempLoginDataCookie: boolean = false, csrfCookieValue?: string): string[] {
     
     const cookies = [
         getEncryptedCookie(config.cookieOptions, tokenResponse.access_token, getATCookieName(config.cookieNamePrefix), config.encKey)

@@ -55,5 +55,5 @@ for (const [path, controller] of Object.entries(controllers)) {
 }
 
 const server = app.listen(port, function() {
-    console.log("BFF API is listening on port " + port)
+    console.log("OAuth Agent is listening on port " + port)
 })
