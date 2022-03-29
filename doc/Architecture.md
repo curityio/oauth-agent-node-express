@@ -2,7 +2,7 @@
 
 ## Overview
 
-Node and the Express framework are used to build the OAuth Agent using Node.js. The API can be deployed to a host of your choice. The API handles token responses from an Authorization Server, then saves encrypted tokens in http-only cookies. The API is therefore stateless and easy to manage, and does not require a database. The SPA can then use secure cookies to call business APIs, or to get userinfo from this API.
+Node and the Express framework are used to build the OAuth Agent. The API can be deployed to a host of your choice. The API handles token responses from an Authorization Server, then saves encrypted tokens in http-only cookies. The API is therefore stateless and easy to manage, and does not require a database. The SPA can then use secure cookies to call business APIs, or to get userinfo from this API.
 
 ## Endpoints
 
