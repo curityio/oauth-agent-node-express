@@ -1,10 +1,10 @@
 #!/bin/bash
 
-##################################################################
-# Tests to run against token handler endpoints outside the browser
-##################################################################
+################################################################
+# Tests to run against OAuth Agent endpoints outside the browser
+################################################################
 
-TOKEN_HANDLER_BASE_URL='http://api.example.local:8080/tokenhandler'
+TOKEN_HANDLER_BASE_URL='http://api.example.local:8080/oauth-agent'
 WEB_BASE_URL='http://www.example.local'
 RESPONSE_FILE=data/response.txt
 MAIN_COOKIES_FILE=data/main_cookies.txt
@@ -33,7 +33,7 @@ function getHeaderValue(){
 mkdir -p data
 
 #
-# Test sending an invalid web origin to the BFF API in an OPTIONS request
+# Test sending an invalid web origin to the OAuth Agent in an OPTIONS request
 # The logic around CORS is configured, not coded, so ensure that it works as expected
 #
 echo '1. Testing OPTIONS request with an invalid web origin ...'
@@ -52,7 +52,7 @@ fi
 echo '1. OPTIONS with invalid web origin was not granted access'
 
 #
-# Test sending a valid web origin to the BFF API in an OPTIONS request
+# Test sending a valid web origin to the OAuth Agent in an OPTIONS request
 #
 echo '2. Testing OPTIONS request with a valid web origin ...'
 HTTP_STATUS=$(curl -i -s -X OPTIONS "$TOKEN_HANDLER_BASE_URL/login/start" \
@@ -518,7 +518,7 @@ echo '23. End session redirect completed successfully'
 #
 # Test sending malformed JSON which currently results in a 500 error
 #
-echo '24. Testing sending malformed JSON to the BFF API ...'
+echo '24. Testing sending malformed JSON to the OAuth Agent ...'
 HTTP_STATUS=$(curl -i -s -X POST "$TOKEN_HANDLER_BASE_URL/login/end" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \

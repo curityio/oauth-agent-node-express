@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-import BFFConfiguration from './BFFConfiguration'
+import OAuthAgentConfiguration from './oauthAgentConfiguration'
 
-function getLogoutURL(config: BFFConfiguration): string {
+function getLogoutURL(config: OAuthAgentConfiguration): string {
     const postLogoutRedirectUriParam = config.postLogoutRedirectURI ? "&post_logout_redirect_uri=" + encodeURIComponent(config.postLogoutRedirectURI) : ""
 
     return config.logoutEndpoint + "?client_id=" + encodeURIComponent(config.clientID) + postLogoutRedirectUriParam

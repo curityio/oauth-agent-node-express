@@ -15,16 +15,16 @@
  */
 
 import {decryptCookie} from './cookieEncrypter'
-import {InvalidBFFCookieException, InvalidIDTokenException} from './exceptions'
+import {InvalidCookieException, InvalidIDTokenException} from './exceptions'
 
 function getUserInfo(encKey: string, encryptedCookie: string): Object {
     let idToken = null
 
     try {
         idToken = decryptCookie(encKey, encryptedCookie)
-    } catch (err) {
+    } catch (err: any) {
         // error while decrypting or parsing cookie value
-        const error = new InvalidBFFCookieException(err)
+        const error = new InvalidCookieException(err)
         error.logInfo = 'Unable to decrypt the ID cookie to get user info'
         throw error
     }
@@ -38,7 +38,7 @@ function getUserInfo(encKey: string, encryptedCookie: string): Object {
     // We could verify the ID token, though it is received over a trusted POST to the token endpoint
     try {
         return JSON.parse(String(Buffer.from(tokenParts[1], 'base64').toString('binary')));
-    } catch (err) {
+    } catch (err: any) {
         throw new InvalidIDTokenException(err)
     }
 }

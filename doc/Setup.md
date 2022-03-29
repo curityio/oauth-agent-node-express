@@ -1,6 +1,6 @@
-# How to Run the Token Handler Locally
+# How to Run the OAuth Agent Locally
 
-Follow the below steps to get set up for developing and testing the token handler itself.
+Follow the below steps to get set up for developing and testing the OAuth Agent itself.
 
 ## Prerequisites
 
@@ -26,16 +26,16 @@ Ensure that the hosts file contains the following development domain names:
 
 ## Understand URLs
 
-For local development of the token handler the following URLs are used, with HTTP to reduce development infrastructure:
+For local development of the OAuth Agent the following URLs are used, with HTTP to reduce development infrastructure:
 
 | Component | Base URL | Usage |
 | --------- | -------- | ----- |
-| Token Handler API | http://api.example.local:8080/tokenhandler | This acts as a Back End for Front End for SPAs |
-| Curity Identity Server | http://login.example.local:8443 | This will receive a Mutual TLS secret from the token handler |
+| OAuth Agent | http://api.example.local:8080/oauth-agent | This acts as a Back End for Front End for SPAs |
+| Curity Identity Server | http://login.example.local:8443 | This will receive a string client secret from the OAuth Agent |
 
-If you want to update to an HTTPS setup, see the use of OpenSSL certificates in the [Financial-grade Token Handler](https://github.com/curityio/token-handler-kotlin-spring-fapi).
+If you want to update to an HTTPS setup, see the use of OpenSSL certificates in the [Financial-grade OAuth Agent](https://github.com/curityio/oauth-agent-kotlin-spring-fapi).
 
-## Build and Run the Token Handler API
+## Build and Run the OAuth Agent
 
 Run these commands from the root folder and the API will then listen on HTTP over port 8080:
 
@@ -47,7 +47,7 @@ npm start
 Test that the API is contactable by running this command from the root folder:
 
 ```bash
-curl -X POST http://api.example.local:8080/tokenhandler/login/start \
+curl -X POST http://api.example.local:8080/oauth-agent/login/start \
 -H "origin: http://www.example.local" | jq
 ```
 
@@ -60,13 +60,13 @@ cd test/idsvr
 ./deploy.sh
 ```
 
-## Test the Token Handler API
+## Test the OAuth Agent
 
-The test script can then be used to verify the token handler's operations using the curl tool:
+The test script can then be used to verify the OAuth Agent's operations using the curl tool:
 
 ```bash
 cd test
-./test-token-handler.sh
+./test-oauth-agent.sh
 ```
 
 ![API Tests](api-tests.png)

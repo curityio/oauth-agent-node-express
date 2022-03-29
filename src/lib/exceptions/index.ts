@@ -14,22 +14,22 @@
  *  limitations under the License.
  */
 
-import InvalidBFFCookieException from './InvalidBFFCookieException'
+import OAuthAgentException from './OAuthAgentException'
+import InvalidCookieException from './InvalidCookieException'
 import CookieDecryptionException from './CookieDecryptionException'
 import InvalidIDTokenException from './InvalidIDTokenException'
 import MissingTempLoginDataException from './MissingCodeVerifierException'
 import InvalidStateException from './InvalidStateException'
-import BFFException from './BFFException'
 import UnauthorizedException from './UnauthorizedException'
 import AuthorizationServerException from './AuthorizationServerException'
 
 export {
-    InvalidBFFCookieException,
+    OAuthAgentException,
+    InvalidCookieException,
     CookieDecryptionException,
     InvalidIDTokenException,
     MissingTempLoginDataException,
     InvalidStateException,
     UnauthorizedException,
-    BFFException,
     AuthorizationServerException
 }

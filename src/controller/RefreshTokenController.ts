@@ -16,7 +16,7 @@
 
 import * as express from 'express'
 import {config} from '../config'
-import {InvalidBFFCookieException} from '../lib/exceptions'
+import {InvalidCookieException} from '../lib/exceptions'
 import {decryptCookie, getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken, ValidateRequestOptions} from '../lib'
 import validateExpressRequest from '../validateExpressRequest'
 import {asyncCatch} from '../supportability/exceptionMiddleware';
@@ -45,7 +45,7 @@ class RefreshTokenController {
             res.status(204).send()
 
         } else {
-            const error = new InvalidBFFCookieException()
+            const error = new InvalidCookieException()
             error.logInfo = 'No auth cookie was supplied in a token refresh call'
             throw error
         }

@@ -14,10 +14,10 @@
  *  limitations under the License.
  */
 
-import {BFFConfiguration} from './lib'
+import {OAuthAgentConfiguration} from './lib'
 import {CookieSerializeOptions} from 'cookie'
 
-export const config: BFFConfiguration = {
+export const config: OAuthAgentConfiguration = {
     clientID: process.env.CLIENT_ID || 'spa-client',
     clientSecret: process.env.CLIENT_SECRET || 'Password1',
     redirectUri: process.env.REDIRECT_URI || 'http://www.example.local/',
@@ -27,7 +27,7 @@ export const config: BFFConfiguration = {
     // 32 hex bytes are required for AES256
     encKey: process.env.COOKIE_ENCRYPTION_KEY || '4e4636356d65563e4c73233847503e3b21436e6f7629724950526f4b5e2e4e50',
     cookieNamePrefix: process.env.COOKIE_NAME_PREFIX || 'example',
-    bffEndpointsPrefix: '/tokenhandler',
+    endpointsPrefix: '/oauth-agent',
     cookieOptions: {
         httpOnly: true,
         sameSite: true,

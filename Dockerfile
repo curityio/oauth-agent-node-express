@@ -1,8 +1,8 @@
 FROM node:15.11.0-alpine
 
-WORKDIR /usr/token-handler-api
-COPY dist                /usr/token-handler-api/dist
-COPY package*.json       /usr/token-handler-api/
+WORKDIR /usr/oauth-agent
+COPY dist                /usr/oauth-agent/dist
+COPY package*.json       /usr/oauth-agent/
 
 RUN npm install --production
 

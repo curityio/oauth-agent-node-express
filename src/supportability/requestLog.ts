@@ -1,5 +1,5 @@
 import {Request, Response} from 'express'
-import {BFFException} from '../lib/exceptions';
+import {OAuthAgentException} from '../lib/exceptions';
 
 export class RequestLog {
 
@@ -19,7 +19,7 @@ export class RequestLog {
         this.path = request.originalUrl
     }
 
-    public setError(error: BFFException) {
+    public setError(error: OAuthAgentException) {
         
         this.errorCode = error.code
         this.errorMessage = error.message
@@ -64,7 +64,7 @@ export class RequestLog {
 
     private _output() {
 
-        let fields = []
+        let fields: string[] = []
         this._addField(fields, 'Time', this.time)
         this._addField(fields, 'Method', this.method)
         this._addField(fields, 'Path', this.path)
@@ -74,7 +74,7 @@ export class RequestLog {
         this._addField(fields, 'Details', this.errorDetails)
         console.log(fields.join(', '))
 
-        if (this.status >= 500 && this.errorStack) {
+        if (this.status && this.status >= 500 && this.errorStack) {
             console.log(this.errorStack)
         }
     }

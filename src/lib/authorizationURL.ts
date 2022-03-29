@@ -14,10 +14,10 @@
  *  limitations under the License.
  */
 
-import BFFConfiguration from './BFFConfiguration'
+import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import {generateHash, generateRandomString} from './pkce'
 
-function getAuthorizationURL(config: BFFConfiguration): AuthorizationRequestData {
+function getAuthorizationURL(config: OAuthAgentConfiguration): AuthorizationRequestData {
     const codeVerifier = generateRandomString()
     const state = generateRandomString()
 

@@ -14,8 +14,15 @@
  *  limitations under the License.
  */
 
-export default abstract class BFFException extends Error {
-    public statusCode = 500
-    public code = 'server_error'
-    public logInfo: string
+import OAuthAgentException from './OAuthAgentException'
+
+export default class InvalidCookieException extends OAuthAgentException {
+    public statusCode = 401
+    public code = 'unauthorized_request'
+    public cause?
+
+    constructor(cause?: Error) {
+        super("Access denied due to invalid request details")
+        this.cause = cause
+    }
 }

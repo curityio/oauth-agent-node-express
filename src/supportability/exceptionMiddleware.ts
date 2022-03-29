@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
-import {BFFException} from '../lib/exceptions'
+import {OAuthAgentException} from '../lib/exceptions'
 import {RequestLog} from './requestLog';
 
 export default function exceptionMiddleware(
@@ -9,9 +9,9 @@ export default function exceptionMiddleware(
     next: NextFunction): void {
 
     let statusCode = 500
-    let data = { code: 'server_error', message: 'A technical problem occurred in the BFF API' }
+    let data = { code: 'server_error', message: 'A technical problem occurred in the OAuth Agent' }
 
-    if (err instanceof BFFException) {
+    if (err instanceof OAuthAgentException) {
 
         statusCode = err.statusCode
         data = { code: err.code, message: err.message}

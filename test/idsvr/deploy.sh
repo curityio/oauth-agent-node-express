@@ -2,7 +2,7 @@
 
 ##############################################################
 # Deploy the Curity Identity Server with the required settings
-# This enables the token handler API to be tested in isolation 
+# This enables the OAuth Agent to be tested in isolation 
 ##############################################################
 
 #
@@ -26,7 +26,7 @@ fi
 #
 # Run Docker to deploy the Curity Identity Server
 #
-docker compose --project-name tokenhandler up --force-recreate
+docker compose --project-name oauthagent up --force-recreate
 if [ $? -ne 0 ]; then
   echo "Problem encountered starting Docker components"
   exit 1

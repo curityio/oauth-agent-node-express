@@ -4,7 +4,7 @@
 # Basic automation to get tokens from the Authorization Server
 ##############################################################
 
-TOKEN_HANDLER_BASE_URL='http://api.example.local:8080/tokenhandler'
+TOKEN_HANDLER_BASE_URL='http://api.example.local:8080/oauth-agent'
 WEB_BASE_URL='http://www.example.local'
 AUTHORIZATION_SERVER_BASE_URL='http://login.example.local:8443'
 RESPONSE_FILE=data/response.txt

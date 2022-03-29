@@ -17,7 +17,7 @@
 import * as express from 'express'
 import {config} from '../config'
 import {getATCookieName, getCookiesForUnset, getLogoutURL, ValidateRequestOptions} from '../lib'
-import {InvalidBFFCookieException} from '../lib/exceptions'
+import {InvalidCookieException} from '../lib/exceptions'
 import validateExpressRequest from '../validateExpressRequest'
 import {asyncCatch} from '../supportability/exceptionMiddleware';
 
@@ -41,7 +41,7 @@ class LogoutController {
             res.json({ url: logoutURL})
 
         } else {
-            const error = new InvalidBFFCookieException()
+            const error = new InvalidCookieException()
             error.logInfo = 'No auth cookie was supplied in a logout call'
             throw error
         }

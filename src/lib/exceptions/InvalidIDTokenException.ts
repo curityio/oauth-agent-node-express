@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-import BFFException from './BFFException'
+import OAuthAgentException from './OAuthAgentException'
 
-export default class InvalidIDTokenException extends BFFException {
+export default class InvalidIDTokenException extends OAuthAgentException {
     public statusCode = 400
     public code = 'invalid_request'
     public cause?: Error
