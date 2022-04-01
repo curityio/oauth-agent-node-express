@@ -40,4 +40,5 @@ export const config: OAuthAgentConfiguration = {
     authorizeEndpoint: process.env.AUTHORIZE_ENDPOINT || 'http://login.example.local:8443/oauth/v2/oauth-authorize',
     logoutEndpoint: process.env.LOGOUT_ENDPOINT || 'http://login.example.local:8443/oauth/v2/oauth-session/logout',
     tokenEndpoint: process.env.TOKEN_ENDPOINT || 'http://login.example.local:8443/oauth/v2/oauth-token',
+    userInfoEndpoint: process.env.USERINFO_ENDPOINT || 'http://login.example.local:8443/oauth/v2/oauth-userinfo',
 }

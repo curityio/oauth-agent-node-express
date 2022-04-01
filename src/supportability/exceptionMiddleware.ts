@@ -40,7 +40,7 @@ export function asyncCatch(fn: any): any {
         Promise
             .resolve(fn(request, response, next))
             .catch((e) => {
-                exceptionMiddleware(e, request, response, next);
-            });
+                exceptionMiddleware(e, request, response, next)
+            })
     };
 }

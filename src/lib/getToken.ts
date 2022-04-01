@@ -144,7 +144,7 @@ function getCookiesForTokenResponse(tokenResponse: any, config: OAuthAgentConfig
     if (tokenResponse.id_token) {
         const idTokenCookieOptions = {
             ...config.cookieOptions,
-            path: config.endpointsPrefix + '/userInfo'
+            path: config.endpointsPrefix + '/claims'
         }
         cookies.push(getEncryptedCookie(idTokenCookieOptions, tokenResponse.id_token, getIDCookieName(config.cookieNamePrefix), config.encKey))
     }

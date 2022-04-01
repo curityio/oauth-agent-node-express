@@ -15,7 +15,7 @@
  */
 
 import * as express from 'express'
-import {getIDCookieName, getUserInfo, ValidateRequestOptions} from '../lib'
+import {getATCookieName, getUserInfo, ValidateRequestOptions} from '../lib'
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
 import {InvalidCookieException} from '../lib/exceptions'
@@ -31,19 +31,19 @@ class UserInfoController {
     getUserInfo = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         // Verify the web origin
-        const options = new ValidateRequestOptions();
+        const options = new ValidateRequestOptions()
         options.requireCsrfHeader = false;
         validateExpressRequest(req, options)
 
-        const idTokenCookieName = getIDCookieName(config.cookieNamePrefix)
-        if (req.cookies && req.cookies[idTokenCookieName]) {
+        const atCookieName = getATCookieName(config.cookieNamePrefix)
+        if (req.cookies && req.cookies[atCookieName]) {
 
-            const userData = getUserInfo(config.encKey, req.cookies[idTokenCookieName])
+            const userData = await getUserInfo(config, config.encKey, req.cookies[atCookieName])
             res.status(200).json(userData)
 
         } else {
             const error = new InvalidCookieException()
-            error.logInfo = 'No ID cookie was supplied in a call to get user info'
+            error.logInfo = 'No AT cookie was supplied in a call to get user info'
             throw error
         }
     }

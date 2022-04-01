@@ -13,5 +13,5 @@ export default function validateExpressRequest(req: express.Request, options: Va
         config.encKey,
     )
 
-    validateRequest(data, options);
+    validateRequest(data, options)
 }

@@ -13,5 +13,5 @@ export default function loggingMiddleware(
             response.locals.log.end(response)
         })
 
-        next();
+        next()
 }

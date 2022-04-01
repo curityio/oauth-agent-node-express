@@ -31,7 +31,7 @@ class ClaimsController {
     getClaims = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         // Verify the web origin
-        const options = new ValidateRequestOptions();
+        const options = new ValidateRequestOptions()
         options.requireCsrfHeader = false;
         validateExpressRequest(req, options)
 

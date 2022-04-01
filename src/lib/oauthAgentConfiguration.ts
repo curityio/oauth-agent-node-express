@@ -29,6 +29,7 @@ export default class OAuthAgentConfiguration {
     public logoutEndpoint: string
     public authorizeEndpoint: string
     public tokenEndpoint: string
+    public userInfoEndpoint: string
 
     // Secure cookie and CORS configuration
     public endpointsPrefix: string
@@ -45,6 +46,7 @@ export default class OAuthAgentConfiguration {
         logoutEndpoint: string,
         authorizeEndpoint: string,
         tokenEndpoint: string,
+        userInfoEndpoint: string,
         encKey: string,
         trustedWebOrigins: string[],
         endpointsPrefix: string = '',
@@ -70,6 +72,7 @@ export default class OAuthAgentConfiguration {
         this.logoutEndpoint = logoutEndpoint
         this.authorizeEndpoint = authorizeEndpoint
         this.tokenEndpoint = tokenEndpoint
+        this.userInfoEndpoint = userInfoEndpoint
 
         this.endpointsPrefix = endpointsPrefix
     }

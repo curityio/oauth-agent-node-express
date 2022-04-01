@@ -40,8 +40,8 @@ const corsConfiguration = {
 app.use(cors(corsConfiguration))
 app.use(cookieParser())
 app.use('*', express.json())
-app.use('*', loggingMiddleware);
-app.use('*', exceptionMiddleware);
+app.use('*', loggingMiddleware)
+app.use('*', exceptionMiddleware)
 app.set('etag', false)
 
 const controllers = {

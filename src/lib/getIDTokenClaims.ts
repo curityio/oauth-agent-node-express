@@ -18,26 +18,24 @@ import {decryptCookie} from './cookieEncrypter'
 import {InvalidCookieException, InvalidIDTokenException} from './exceptions'
 
 function getIDTokenClaims(encKey: string, encryptedCookie: string): Object {
-    let idToken = null
 
+    let idToken = null
     try {
         idToken = decryptCookie(encKey, encryptedCookie)
     } catch (err: any) {
-        // error while decrypting or parsing cookie value
         const error = new InvalidCookieException(err)
-        error.logInfo = 'Unable to decrypt the ID cookie to get user info'
+        error.logInfo = 'Unable to decrypt the ID cookie to get claims'
         throw error
     }
 
     const tokenParts = idToken.split('.')
-
     if (tokenParts.length !== 3) {
         throw new InvalidIDTokenException()
     }
 
-    // We could verify the ID token, though it is received over a trusted POST to the token endpoint
     try {
-        return JSON.parse(String(Buffer.from(tokenParts[1], 'base64').toString('binary')));
+        const claims = JSON.parse(String(Buffer.from(tokenParts[1], 'base64').toString('binary')))
+        return claims
     } catch (err: any) {
         throw new InvalidIDTokenException(err)
     }
