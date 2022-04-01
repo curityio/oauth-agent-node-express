@@ -18,6 +18,7 @@ import { getAuthorizationURL } from './authorizationURL'
 import { getEncryptedCookie, decryptCookie, getCookiesForUnset } from './cookieEncrypter'
 import { getTokenEndpointResponse, refreshAccessToken, getCookiesForTokenResponse } from './getToken'
 import getUserInfo from './getUserInfo'
+import getIDTokenClaims from './getIDTokenClaims'
 import getRedirectUri from './redirectUri'
 import getLogoutURL from './getLogoutURL'
 import OAuthAgentConfiguration from './oauthAgentConfiguration'
@@ -31,6 +32,7 @@ export {
     decryptCookie,
     getTokenEndpointResponse,
     getUserInfo,
+    getIDTokenClaims,
     getRedirectUri,
     getLogoutURL,
     refreshAccessToken,

@@ -17,11 +17,13 @@
 import LoginController from './LoginController'
 import LogoutController from './LogoutController'
 import UserInfoController from './UserInfoController'
+import ClaimsController from './ClaimsController'
 import RefreshTokenController from './RefreshTokenController'
 
 export {
     LoginController,
     LogoutController,
     UserInfoController,
+    ClaimsController,
     RefreshTokenController
 }

@@ -17,8 +17,7 @@
 import {decryptCookie} from './cookieEncrypter'
 import {InvalidCookieException, InvalidIDTokenException} from './exceptions'
 
-function getUserInfo(encKey: string, encryptedCookie: string): Object {
-    
+function getIDTokenClaims(encKey: string, encryptedCookie: string): Object {
     let idToken = null
 
     try {
@@ -44,4 +43,4 @@ function getUserInfo(encKey: string, encryptedCookie: string): Object {
     }
 }
 
-export default getUserInfo
+export default getIDTokenClaims

@@ -20,6 +20,7 @@ import * as cookieParser from 'cookie-parser'
 import {
     LoginController,
     UserInfoController,
+    ClaimsController,
     LogoutController,
     RefreshTokenController
 } from './controller'
@@ -46,6 +47,7 @@ app.set('etag', false)
 const controllers = {
     '/login': new LoginController(),
     '/userInfo': new UserInfoController(),
+    '/claims': new ClaimsController(),
     '/logout': new LogoutController(),
     '/refresh': new RefreshTokenController()
 }
