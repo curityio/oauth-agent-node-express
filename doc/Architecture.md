@@ -12,8 +12,8 @@ The API exposes the following endpoints to the SPA:
 2. POST `/login/end`
 3. GET `/userInfo`
 4. GET `/claims`
-5. POST `/logout`
-6. POST `/refresh`
+5. POST `/refresh`
+6. POST `/logout`
 
 ### POST `/login/start`
 
@@ -47,13 +47,13 @@ The response will contain a few `Set-Cookie` headers.
 
 ### GET `/userInfo`
 
-Endpoint which send the access token to the user info endpoint, then returns data.
+Endpoint which sends the access token to the user info endpoint, then returns data.
 
 #### Example
 
 ```http
 GET https://api.example.com/oauth-agent/userInfo
-Cookie: example-id=2558e7806c0523fd96d105...
+Cookie: example-at=2558e7806c0523fd96d105...
 ```
 
 Response
@@ -94,10 +94,10 @@ Response
 }
 ```
 
-### POST `/logout`
-
-This endpoint can be called to get a logout URL. The SPA should navigate the user to that URL in order to perform a logout in the Authorization Server. The API also sets empty session cookies in the response. 
-
 ### POST `/refresh`
 
 This endpoint can be called to force the API to refresh the access token. If the API is able to perform the refresh new cookies will be set in the response (which is a 204 response), otherwise the API will respond with a 401 response (e.g. when the refresh token is expired) to inform the SPA that a new login is required. 
+
+### POST `/logout`
+
+This endpoint can be called to get a logout URL. The SPA should navigate the user to that URL in order to perform a logout in the Authorization Server. The API also sets empty session cookies in the response. 
