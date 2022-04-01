@@ -18,62 +18,73 @@ import {CookieSerializeOptions} from 'cookie'
 
 export default class OAuthAgentConfiguration {
 
+    // Host settings
+    public port: string
+    public endpointsPrefix: string
+    public serverCertPath: string
+    public serverCertPassword: string
+    
     // Client Configuration
     public clientID: string
     public clientSecret: string
     public redirectUri: string
-    public postLogoutRedirectURI?: string
+    public postLogoutRedirectURI: string
     public scope: string
 
-    // Authorization Server Configuration
-    public logoutEndpoint: string
+    // Authorization Server settings
     public authorizeEndpoint: string
+    public logoutEndpoint: string
     public tokenEndpoint: string
     public userInfoEndpoint: string
 
     // Secure cookie and CORS configuration
-    public endpointsPrefix: string
-    public encKey: string
-    public cookieOptions: CookieSerializeOptions
     public cookieNamePrefix: string
+    public encKey: string
     public trustedWebOrigins: string[]
+    public cookieOptions: CookieSerializeOptions
 
     constructor(
+        port: string,
+        endpointsPrefix: string,
+        serverCertPath: string,
+        serverCertPassword: string,
         clientID: string,
         clientSecret: string,
         redirectUri: string,
+        postLogoutRedirectURI: string,
         scope: string,
-        logoutEndpoint: string,
         authorizeEndpoint: string,
+        logoutEndpoint: string,
         tokenEndpoint: string,
         userInfoEndpoint: string,
+        cookieNamePrefix: string,
         encKey: string,
         trustedWebOrigins: string[],
-        endpointsPrefix: string = '',
-        cookieNamePrefix?: string,
-        postLogoutRedirectURI?: string,
         cookieOptions?: CookieSerializeOptions) {
+
+        this.port = port
+        this.endpointsPrefix = endpointsPrefix
+        this.serverCertPath = serverCertPath
+        this.serverCertPassword = serverCertPassword
+
         this.clientID = clientID
         this.clientSecret = clientSecret
         this.redirectUri = redirectUri
         this.postLogoutRedirectURI = postLogoutRedirectURI
         this.scope = scope
 
-        this.encKey = encKey
         this.cookieNamePrefix = cookieNamePrefix ? cookieNamePrefix : "oauthagent"
+        this.encKey = encKey
+        this.trustedWebOrigins = trustedWebOrigins
         this.cookieOptions = cookieOptions ? cookieOptions : {
             httpOnly: true,
             secure: true,
             sameSite: true
         } as CookieSerializeOptions
 
-        this.trustedWebOrigins = trustedWebOrigins
-
-        this.logoutEndpoint = logoutEndpoint
         this.authorizeEndpoint = authorizeEndpoint
+        this.logoutEndpoint = logoutEndpoint
         this.tokenEndpoint = tokenEndpoint
         this.userInfoEndpoint = userInfoEndpoint
-
-        this.endpointsPrefix = endpointsPrefix
     }
 }

@@ -17,6 +17,8 @@
 import * as express from 'express'
 import * as cors from 'cors'
 import * as cookieParser from 'cookie-parser'
+import * as fs from 'fs'
+import * as https from 'https'
 import {
     LoginController,
     UserInfoController,
@@ -25,8 +27,8 @@ import {
     RefreshTokenController
 } from './controller'
 import {config} from './config'
-import loggingMiddleware from './supportability/loggingMiddleware';
-import exceptionMiddleware from './supportability/exceptionMiddleware';
+import loggingMiddleware from './supportability/loggingMiddleware'
+import exceptionMiddleware from './supportability/exceptionMiddleware'
 
 const app = express()
 const port = process.env.PORT ? process.env.PORT: 8080
@@ -56,6 +58,22 @@ for (const [path, controller] of Object.entries(controllers)) {
     app.use(config.endpointsPrefix + path, controller.router)
 }
 
-const server = app.listen(port, function() {
-    console.log("OAuth Agent is listening on port " + port)
-})
+if (config.serverCertPath) {
+
+    const pfx = fs.readFileSync(config.serverCertPath);
+    const sslOptions = {
+        pfx,
+        passphrase: config.serverCertPassword,
+    };
+
+    const httpsServer = https.createServer(sslOptions, app);
+    httpsServer.listen(config.port, () => {
+        console.log(`OAuth Agent is listening on HTTPS port ${config.port}`);
+    });
+
+} else {
+
+    app.listen(config.port, function() {
+        console.log(`OAuth Agent is listening on HTTP port ${config.port}`)
+    })
+}
