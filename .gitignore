@@ -1,5 +1,5 @@
 license.json
 node_modules
 dist
-test/data
+data
 .DS_Store
