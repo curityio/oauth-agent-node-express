@@ -1,6 +1,6 @@
 import * as assert from 'assert'
 import fetch from 'node-fetch';
-import {config} from '../../../src/config';
+import {config} from '../../src/config';
 
 describe('ClaimsController', () => {
 

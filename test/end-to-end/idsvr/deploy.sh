@@ -13,7 +13,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 #
 # This is for Curity developers only
 #
-cp ./pre-commit ../../.git/hooks
+cp ./pre-commit ../../../.git/hooks
 
 #
 # Check for a license file

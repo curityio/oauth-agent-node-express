@@ -51,21 +51,28 @@ curl -X POST http://api.example.local:8080/oauth-agent/login/start \
 -H "origin: http://www.example.local" | jq
 ```
 
-## Deploy the Curity Identity Server
+## Run Integration Tests
 
-Copy a license file into the `test/idsvr` folder and then run the following commands:
+Run some tests that require only a running OAuth Agent, with a mocked Identity Server:
 
 ```bash
-cd test/idsvr
+npm test
+```
+
+## Run End-to-End Tests
+
+Run some tests that also use the Curity Identity Server.\
+First copy a license file into the `test/idsvr` folder and then run the following commands:
+
+```bash
+cd test/end-to-end/idsvr
 ./deploy.sh
 ```
 
-## Test the OAuth Agent
-
-The test script can then be used to verify the OAuth Agent's operations using the curl tool:
+Then run a test script that uses curl requests to verify the OAuth Agent's operations:
 
 ```bash
-cd test
+cd ..
 ./test-oauth-agent.sh
 ```
 
