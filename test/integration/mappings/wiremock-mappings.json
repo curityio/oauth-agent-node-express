@@ -1,0 +1,10 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/oauth/v2/oauth-token"
+    },
+    "response": {
+        "status": 200,
+        "body": "{\"access_token\":\"AT\",\"refresh_token\":\"RT\",\"id_token\":\"ID\"}"
+    }
+}

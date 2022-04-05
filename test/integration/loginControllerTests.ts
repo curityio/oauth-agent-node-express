@@ -1,14 +1,12 @@
-import {assert, expect} from 'chai';
-import fetch, {RequestInit} from 'node-fetch';
-import {config} from '../../src/config';
-import {getTempLoginData} from './testUtils';
+import {assert, expect} from 'chai'
+import fetch, {RequestInit} from 'node-fetch'
+import {config} from '../../src/config'
+import {getTempLoginData} from './testUtils'
 
-describe('LoginController', () => {
+describe('LoginControllerTests', () => {
 
     const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`
-    const spaBaseUrl = 'http://www.example.com'
 
-    /*
     it('Sending an OPTIONS request with wrong Origin should return 204 response without CORS headers', async () => {
 
         const response = await fetch(
@@ -117,14 +115,14 @@ describe('LoginController', () => {
         const body = await response.json()
         const authorizationRequestUrl = body.authorizationRequestUrl as string
         expect(authorizationRequestUrl).contains(`client_id=${config.clientID}`, 'Invalid authorization request URL')
-    })*/
+    })
 
     it('Posting a code flow response to login end should result in authenticating the user', async () => {
 
         const [state, cookie] = await getTempLoginData()
         const code = '4a4246d6-b4bd-11ec-b909-0242ac120002'
         const payload = {
-            pageUrl: `http://www.example.com?code=${code}&state=${state}`
+            pageUrl: `${oauthAgentBaseUrl}?code=${code}&state=${state}`
         }
         
         const options = {
@@ -136,14 +134,12 @@ describe('LoginController', () => {
             },
             body: JSON.stringify(payload),
         } as RequestInit
-
         const response = await fetch(`${oauthAgentBaseUrl}/login/end`, options)
 
         assert.equal(response.status, 200, 'Incorrect HTTP status')
         const body = await response.json()
-        console.log(body)
         assert.equal(body.isLoggedIn, true, 'Incorrect isLoggedIn value')
         assert.equal(body.handled, true, 'Incorrect handled value')
-        expect(body.csrfToken, 'Invalid CSRF token').length.above(0)
+        expect(body.csrf, 'Missing csrfToken value').length.above(0)
     })
 })

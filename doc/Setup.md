@@ -56,6 +56,7 @@ curl -X POST http://api.example.local:8080/oauth-agent/login/start \
 Run some tests that require only a running OAuth Agent, with a mocked Identity Server:
 
 ```bash
+npm run wiremock
 npm test
 ```
 
