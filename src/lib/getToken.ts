@@ -28,6 +28,9 @@ async function getTokenEndpointResponse(config: OAuthAgentConfiguration, code: s
 
     const parsedTempLoginData = JSON.parse(decryptCookie(config.encKey, tempLoginData))
 
+    console.log('*** DEBUG')
+    console.log(parsedTempLoginData)
+    console.log(state)
     if (parsedTempLoginData.state !== state) {
         return Promise.reject(new InvalidStateException())
     }

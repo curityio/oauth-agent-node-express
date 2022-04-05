@@ -1,12 +1,149 @@
-import * as assert from 'assert'
-import fetch from 'node-fetch';
+import {assert, expect} from 'chai';
+import fetch, {RequestInit} from 'node-fetch';
 import {config} from '../../src/config';
+import {getTempLoginData} from './testUtils';
 
-describe('ClaimsController', () => {
+describe('LoginController', () => {
 
-    const baseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`
+    const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`
+    const spaBaseUrl = 'http://www.example.com'
 
-    it('TODO: login tests', async () => {
-        console.log('*** here')
+    /*
+    it('Sending an OPTIONS request with wrong Origin should return 204 response without CORS headers', async () => {
+
+        const response = await fetch(
+            `${oauthAgentBaseUrl}/login/start`,
+            {
+                method: 'OPTIONS',
+                headers: {
+                    origin: 'https://malicious-site.com',
+                },
+            },
+        )
+
+        assert.equal(response.status, 204, 'Incorrect HTTP status')
+        assert.equal(response.headers.get('access-control-allow-origin'), null, 'Incorrect allowed origin');
+    })
+
+    it('Sending OPTIONS request with a valid web origin should return a 204 response with proper CORS headers', async () => {
+
+        const response = await fetch(
+            `${oauthAgentBaseUrl}/login/start`,
+            {
+                method: 'OPTIONS',
+                headers: {
+                    origin: config.trustedWebOrigins[0],
+                },
+            },
+        )
+
+        assert.equal(response.status, 204, 'Incorrect HTTP status')
+        assert.equal(response.headers.get('access-control-allow-origin'), config.trustedWebOrigins[0], 'Incorrect allowed origin');
+    })
+
+    it('Request to end login with invalid web origin should return 401 response', async () => {
+
+        const payload = {
+            pageUrl: 'http://www.example.com'
+        }
+        const response = await fetch(
+            `${oauthAgentBaseUrl}/login/end`,
+            {
+                method: 'POST',
+                headers: {
+                    origin: 'https://malicious-site.com',
+                },
+                body: JSON.stringify(payload),
+            },
+        )
+
+        assert.equal(response.status, 401, 'Incorrect HTTP status')
+        const body = await response.json()
+        assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
+    })
+
+    it('Request to end login should return correct unauthenticated response', async () => {
+
+        const payload = {
+            authorizationUrl: 'http://www.example.com'
+        }
+        const response = await fetch(
+            `${oauthAgentBaseUrl}/login/end`,
+            {
+                method: 'POST',
+                headers: {
+                    origin: config.trustedWebOrigins[0],
+                },
+                body: JSON.stringify(payload),
+            },
+        )
+
+        assert.equal(response.status, 200, 'Incorrect HTTP status')
+        const body = await response.json()
+        assert.equal(body.isLoggedIn, false, 'Incorrect isLoggedIn value')
+        assert.equal(body.handled, false, 'Incorrect handled value')
+    })
+
+    it('POST request to start login with invalid web origin should return a 401 response', async () => {
+
+        const response = await fetch(
+            `${oauthAgentBaseUrl}/login/start`,
+            {
+                method: 'POST',
+                headers: {
+                    origin: 'https://malicious-site.com',
+                },
+            },
+        )
+
+        assert.equal(response.status, 401, 'Incorrect HTTP status')
+        const body = await response.json()
+        assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
+    })
+
+    it('Request to start login should return authorization request URL', async () => {
+
+        const response = await fetch(
+            `${oauthAgentBaseUrl}/login/start`,
+            {
+                method: 'POST',
+                headers: {
+                    origin: config.trustedWebOrigins[0],
+                },
+            },
+        )
+
+        assert.equal(response.status, 200, 'Incorrect HTTP status')
+        const body = await response.json()
+        const authorizationRequestUrl = body.authorizationRequestUrl as string
+        expect(authorizationRequestUrl).contains(`client_id=${config.clientID}`, 'Invalid authorization request URL')
+    })*/
+
+    it('Posting a code flow response to login end should result in authenticating the user', async () => {
+
+        const [state, cookie] = await getTempLoginData()
+        const code = '4a4246d6-b4bd-11ec-b909-0242ac120002'
+        const payload = {
+            pageUrl: `http://www.example.com?code=${code}&state=${state}`
+        }
+        
+        const options = {
+            method: 'POST',
+            headers: {
+                origin: config.trustedWebOrigins[0],
+                'Content-Type': 'application/json',
+                cookie: `${cookie.name}=${cookie.value}`,
+            },
+            body: JSON.stringify(payload),
+        } as RequestInit
+
+        const response = await fetch(`${oauthAgentBaseUrl}/login/end`, options)
+
+        assert.equal(response.status, 200, 'Incorrect HTTP status')
+        const body = await response.json()
+        console.log(body)
+        assert.equal(body.isLoggedIn, true, 'Incorrect isLoggedIn value')
+        assert.equal(body.handled, true, 'Incorrect handled value')
+        expect(body.csrfToken, 'Invalid CSRF token').length.above(0)
     })
 })
