@@ -46,7 +46,6 @@ async function getTokenEndpointResponse(config: OAuthAgentConfiguration, code: s
 
         // Read text if it exists
         const text = await res.text()
-        console.log(text)
         
         if (res.status >= 500) {
             const error = new AuthorizationServerException()
