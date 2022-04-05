@@ -76,7 +76,7 @@ class LoginController {
 
         let isLoggedIn: boolean
         let csrfToken: string = ''
-        
+
         if (isOAuthResponse) {
             
             // Main OAuth response handling

@@ -31,8 +31,6 @@ import loggingMiddleware from './supportability/loggingMiddleware'
 import exceptionMiddleware from './supportability/exceptionMiddleware'
 
 const app = express()
-const port = process.env.PORT ? process.env.PORT: 8080
-
 const corsConfiguration = {
     origin: config.trustedWebOrigins,
     credentials: true,

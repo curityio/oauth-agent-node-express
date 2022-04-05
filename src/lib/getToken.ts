@@ -82,7 +82,7 @@ async function refreshAccessToken(refreshToken: string, config: OAuthAgentConfig
             {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Basic ' + Buffer.from(config.clientID+ ":" + config.clientSecret).toString('base64'),
+                    'Authorization': 'Basic ' + Buffer.from(config.clientID + ":" + config.clientSecret).toString('base64'),
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: 'grant_type=refresh_token&refresh_token='+refreshToken
