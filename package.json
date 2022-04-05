@@ -30,7 +30,6 @@
         "@types/set-cookie-parser": "^2.4.2",
         "@types/url-parse": "^1.4.8",
         "chai": "^4.3.6",
-        "guid-typescript": "^1.0.9",
         "mocha": "^9.2.2",
         "rimraf": "^3.0.2",
         "set-cookie-parser": "^2.4.8",

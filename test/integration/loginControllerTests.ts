@@ -119,9 +119,10 @@ describe('LoginControllerTests', () => {
 
     it('Posting a code flow response to login end should result in authenticating the user', async () => {
 
-        const [status, body] = await performLogin()
+        const [status, body, cookieString] = await performLogin()
 
         assert.equal(status, 200, 'Incorrect HTTP status')
+        expect(cookieString, 'Missing secure cookies').length.above(0)
         assert.equal(body.isLoggedIn, true, 'Incorrect isLoggedIn value')
         assert.equal(body.handled, true, 'Incorrect handled value')
         expect(body.csrf, 'Missing csrfToken value').length.above(0)
