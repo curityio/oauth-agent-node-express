@@ -1,4 +1,4 @@
-import {assert, expect} from 'chai';
+import {assert} from 'chai';
 import fetch from 'node-fetch';
 import {config} from '../../src/config';
 import {performLogin} from './testUtils'
@@ -18,6 +18,7 @@ describe('UserInfoControllerTests', () => {
                 },
             },
         )
+
         assert.equal(response.status, 401, 'Incorrect HTTP status')
         const body = await response.json()
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
@@ -34,6 +35,7 @@ describe('UserInfoControllerTests', () => {
                 },
             },
         )
+
         assert.equal(response.status, 401, 'Incorrect HTTP status')
         const body = await response.json()
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')

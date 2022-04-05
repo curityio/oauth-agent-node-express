@@ -18,6 +18,7 @@ describe('ClaimsControllerTests', () => {
                 },
             },
         )
+
         assert.equal(response.status, 401, 'Incorrect HTTP status')
         const body = await response.json()
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
@@ -34,6 +35,7 @@ describe('ClaimsControllerTests', () => {
                 },
             },
         )
+
         assert.equal(response.status, 401, 'Incorrect HTTP status')
         const body = await response.json()
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
