@@ -167,7 +167,7 @@ if [ "$?" != '0' ]; then
   echo '*** Problem encountered implementing an API driven login'
   exit
 fi
-
+exit
 #
 # Next verify that the OAuth state is correctly verified against the request value
 #

@@ -1,8 +1,9 @@
-import {assert} from 'chai';
+import {assert, expect} from 'chai';
 import fetch from 'node-fetch';
 import {config} from '../../src/config';
+import {performLogin} from './testUtils'
 
-describe('ClaimsController', () => {
+describe('ClaimsControllerTests', () => {
 
     const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`
 
@@ -38,21 +39,22 @@ describe('ClaimsController', () => {
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
-    // TODO: make this pass by implementing startLogin and endLogin
-    it.skip('Requesting claims with valid cookies should return ID Token claims', async () => {
+    it('Requesting claims with valid cookies should return ID Token claims', async () => {
 
+        const [, , cookieString] = await performLogin()
         const response = await fetch(
             `${oauthAgentBaseUrl}/claims`,
             {
                 method: 'GET',
                 headers: {
                     origin: config.trustedWebOrigins[0],
-                    cookie: 'example-id: xxx',
+                    cookie: cookieString,
                 },
             },
         )
+
         assert.equal(response.status, 200, 'GET claims with valid cookies returned incorrect HTTP status')
         const body = await response.json()
-        console.log(body)
+        expect(body.auth_time.toString(), 'Missing auth_time claim').length.above(0)
     })
 })

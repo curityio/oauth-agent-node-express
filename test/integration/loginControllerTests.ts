@@ -1,7 +1,7 @@
 import {assert, expect} from 'chai'
-import fetch, {RequestInit} from 'node-fetch'
+import fetch from 'node-fetch'
 import {config} from '../../src/config'
-import {getTempLoginData} from './testUtils'
+import {performLogin} from './testUtils'
 
 describe('LoginControllerTests', () => {
 
@@ -119,25 +119,9 @@ describe('LoginControllerTests', () => {
 
     it('Posting a code flow response to login end should result in authenticating the user', async () => {
 
-        const [state, cookie] = await getTempLoginData()
-        const code = '4a4246d6-b4bd-11ec-b909-0242ac120002'
-        const payload = {
-            pageUrl: `${oauthAgentBaseUrl}?code=${code}&state=${state}`
-        }
-        
-        const options = {
-            method: 'POST',
-            headers: {
-                origin: config.trustedWebOrigins[0],
-                'Content-Type': 'application/json',
-                cookie: `${cookie.name}=${cookie.value}`,
-            },
-            body: JSON.stringify(payload),
-        } as RequestInit
-        const response = await fetch(`${oauthAgentBaseUrl}/login/end`, options)
+        const [status, body] = await performLogin()
 
-        assert.equal(response.status, 200, 'Incorrect HTTP status')
-        const body = await response.json()
+        assert.equal(status, 200, 'Incorrect HTTP status')
         assert.equal(body.isLoggedIn, true, 'Incorrect isLoggedIn value')
         assert.equal(body.handled, true, 'Incorrect handled value')
         expect(body.csrf, 'Missing csrfToken value').length.above(0)
