@@ -63,7 +63,7 @@ describe('LoginControllerTests', () => {
     it('Request to end login should return correct unauthenticated response', async () => {
 
         const payload = {
-            authorizationUrl: 'http://www.example.com'
+            pageUrl: 'http://www.example.com'
         }
         const response = await fetch(
             `${oauthAgentBaseUrl}/login/end`,
@@ -124,6 +124,40 @@ describe('LoginControllerTests', () => {
         assert.equal(status, 200, 'Incorrect HTTP status')
         assert.equal(body.isLoggedIn, true, 'Incorrect isLoggedIn value')
         assert.equal(body.handled, true, 'Incorrect handled value')
+        expect(body.csrf, 'Missing csrfToken value').length.above(0)
+    })
+
+    it('Posting a code flow response with malicous state to login end should return a 400 invalid_request response', async () => {
+
+        const [status, body] = await performLogin('ad0316c6-b4e8-11ec-b909-0242ac120002')
+
+        assert.equal(status, 400, 'Incorrect HTTP status')
+        assert.equal(body.code, 'invalid_request', 'Incorrect error code')
+    })
+
+    it("Posting to end login with session cookies should return proper 200 response", async () => {
+
+        const [, , cookieString] = await performLogin()
+
+        const payload = {
+            pageUrl: 'http://www.example.com',
+        }
+        const response = await fetch(
+            `${oauthAgentBaseUrl}/login/end`,
+            {
+                method: 'POST',
+                headers: {
+                    origin: config.trustedWebOrigins[0],
+                    cookie: cookieString,
+                },
+                body: JSON.stringify(payload),
+            },
+        )
+
+        assert.equal(response.status, 200, 'Incorrect HTTP status')
+        const body = await response.json()
+        assert.equal(body.isLoggedIn, true, 'Incorrect isLoggedIn value')
+        assert.equal(body.handled, false, 'Incorrect handled value')
         expect(body.csrf, 'Missing csrfToken value').length.above(0)
     })
 })

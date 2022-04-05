@@ -35,12 +35,12 @@ export async function startLogin(): Promise<[string, string]> {
 /*
  * Do a complete login, including ending the login and getting cookies
  */
-export async function performLogin(): Promise<[number, any, string]> {
+export async function performLogin(stateOverride: string = ''): Promise<[number, any, string]> {
 
     const [state, loginCookieString] = await startLogin()
     const code = '4a4246d6-b4bd-11ec-b909-0242ac120002'
     const payload = {
-        pageUrl: `${oauthAgentBaseUrl}?code=${code}&state=${state}`
+        pageUrl: `${oauthAgentBaseUrl}?code=${code}&state=${stateOverride || state}`
     }
     
     const options = {

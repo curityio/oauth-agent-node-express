@@ -3,14 +3,14 @@ import fetch from 'node-fetch';
 import {config} from '../../src/config';
 import {performLogin} from './testUtils'
 
-describe('ClaimsControllerTests', () => {
+describe('UserInfoControllerTests', () => {
 
     const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`
 
-    it('Requesting claims from an untrusted origin should return a 401 response', async () => {
+    it('Requesting user info from an untrusted origin should return a 401 response', async () => {
 
         const response = await fetch(
-            `${oauthAgentBaseUrl}/claims`,
+            `${oauthAgentBaseUrl}/userInfo`,
             {
                 method: 'GET',
                 headers: {
@@ -23,10 +23,10 @@ describe('ClaimsControllerTests', () => {
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
-    it('Requesting claims without session cookies should return a 401 response', async () => {
+    it('Requesting user info without session cookies should return a 401 response', async () => {
 
         const response = await fetch(
-            `${oauthAgentBaseUrl}/claims`,
+            `${oauthAgentBaseUrl}/userInfo`,
             {
                 method: 'GET',
                 headers: {
@@ -39,11 +39,11 @@ describe('ClaimsControllerTests', () => {
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
-    it('Requesting claims with valid cookies should return ID Token claims', async () => {
+    it('Requesting user info with valid cookies should return user data', async () => {
 
         const [, , cookieString] = await performLogin()
         const response = await fetch(
-            `${oauthAgentBaseUrl}/claims`,
+            `${oauthAgentBaseUrl}/userInfo`,
             {
                 method: 'GET',
                 headers: {
@@ -55,6 +55,7 @@ describe('ClaimsControllerTests', () => {
 
         assert.equal(response.status, 200, 'Incorrect HTTP status')
         const body = await response.json()
-        expect(body.auth_time.toString(), 'Missing auth_time claim').length.above(0)
+        assert.equal(body.given_name, 'Demo')
+        assert.equal(body.family_name, 'User')
     })
 })
