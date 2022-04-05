@@ -1,7 +1,7 @@
 import {assert, expect} from 'chai'
-import fetch, {RequestInit} from 'node-fetch'
+import fetch, {RequestInit, Response} from 'node-fetch'
 import {config} from '../../src/config'
-import {addStub, deleteStub, getCookieString, performLogin} from './testUtils'
+import {fetchStubbedResponse, getCookieString, performLogin} from './testUtils'
 
 describe('RefreshTokenControllerTests', () => {
 
@@ -90,19 +90,6 @@ describe('RefreshTokenControllerTests', () => {
 
         const [, loginBody, cookieString] = await performLogin()
 
-        const stubbedResponse = {
-            id: '1527eaa0-6af2-45c2-a2b2-e433eaf7cf04',
-            priority: 1,
-            request: {
-                method: 'POST',
-                'url': '/oauth/v2/oauth-token'
-            },
-            response: {
-                status: 400,
-                body: "{\"error\":\"invalid_client\"}"
-            }
-        }
-        
         const options = {
             method: 'POST',
             headers: {
@@ -115,9 +102,21 @@ describe('RefreshTokenControllerTests', () => {
         const customHeaders = options.headers as any
         customHeaders[`x-${config.cookieNamePrefix}-csrf`] = loginBody.csrf
 
-        await addStub(stubbedResponse)
-        const response = await fetch(`${oauthAgentBaseUrl}/refresh`, options)
-        await deleteStub(stubbedResponse.id)
+        const stubbedResponse = {
+            id: '1527eaa0-6af2-45c2-a2b2-e433eaf7cf04',
+            priority: 1,
+            request: {
+                method: 'POST',
+                'url': '/oauth/v2/oauth-token'
+            },
+            response: {
+                status: 400,
+                body: "{\"error\":\"invalid_client\"}"
+            }
+        }
+        const response = await fetchStubbedResponse(stubbedResponse, async () => {
+            return await fetch(`${oauthAgentBaseUrl}/refresh`, options)
+        })
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
         const body = await response.json()

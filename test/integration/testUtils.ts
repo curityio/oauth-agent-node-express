@@ -8,29 +8,6 @@ const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPref
 const wiremockAdminBaseUrl = `http://localhost:8443/__admin/mappings`
 
 /*
- * Do the work to start a login and get the temp cookie
- */
-export async function startLogin(): Promise<[string, string]> {
-
-    const response = await fetch(
-        `${oauthAgentBaseUrl}/login/start`,
-        {
-            method: 'POST',
-            headers: {
-                origin: config.trustedWebOrigins[0],
-            },
-        },
-    )
-
-    const body = await response.json();
-    const parsedUrl = urlParse(body.authorizationRequestUrl, true)
-    const state = parsedUrl.query.state
-    
-    const cookieString = getCookieString(response)
-    return [state!, cookieString]
-}
-
-/*
  * Do a complete login, including ending the login and getting cookies
  */
 export async function performLogin(stateOverride: string = ''): Promise<[number, any, string]> {
@@ -75,16 +52,53 @@ export function getCookieString(response: Response) {
 }
 
 /*
+ * Do a fetch with a stubbed response, dealing with adding the stub to wiremock and then deleting it
+ */
+export async function fetchStubbedResponse(stubbedResponse: any, fetchAction: () => Promise<any>): Promise<any> {
+
+    try {
+        await addStub(stubbedResponse)
+        return await fetchAction()
+
+    } finally {
+        await deleteStub(stubbedResponse.id)
+    }
+}
+
+/*
+ * Do the work to start a login and get the temp cookie
+ */
+async function startLogin(): Promise<[string, string]> {
+
+    const response = await fetch(
+        `${oauthAgentBaseUrl}/login/start`,
+        {
+            method: 'POST',
+            headers: {
+                origin: config.trustedWebOrigins[0],
+            },
+        },
+    )
+
+    const body = await response.json();
+    const parsedUrl = urlParse(body.authorizationRequestUrl, true)
+    const state = parsedUrl.query.state
+    
+    const cookieString = getCookieString(response)
+    return [state!, cookieString]
+}
+
+/*
  * Add a stubbed response to Wiremock via its Admin API
  */
-export async function addStub(wiremockData: any): Promise<void> {
+async function addStub(stubbedResponse: any): Promise<void> {
 
     const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(wiremockData),
+        body: JSON.stringify(stubbedResponse),
     } as RequestInit
 
     const response = await fetch(wiremockAdminBaseUrl, options)
@@ -98,7 +112,7 @@ export async function addStub(wiremockData: any): Promise<void> {
 /*
  * Delete a stubbed response to Wiremock via its Admin API
  */
-export async function deleteStub(id: string): Promise<void> {
+async function deleteStub(id: string): Promise<void> {
 
     const response = await fetch(`${wiremockAdminBaseUrl}/${id}`, {method: 'DELETE'})
     if (response.status !== 200) {
