@@ -21,7 +21,8 @@ The following endpoints are used so that the SPA uses simple one liners to perfo
 | -------- | ----------- |
 | POST /login/start | Start a login by providing the request URL to the SPA and setting temporary cookies |
 | POST /login/end | Complete a login and issuing secure cookies for the SPA containing encrypted tokens |
-| GET /userInfo | Return Personally Identifiable Information (PII) for the SPA to display |
+| GET /userInfo | Return information from the User Info endpoint for the SPA to display |
+| GET /claims | Return ID token claims such as `auth_time` and `acr` |
 | POST /refresh | Refresh an access token and rewrite cookies |
 | POST /logout | Clear cookies and return an end session request URL |
 

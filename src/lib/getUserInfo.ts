@@ -14,32 +14,59 @@
  *  limitations under the License.
  */
 
+import fetch from 'node-fetch'
 import {decryptCookie} from './cookieEncrypter'
-import {InvalidCookieException, InvalidIDTokenException} from './exceptions'
+import OAuthAgentConfiguration from './oauthAgentConfiguration'
+import {OAuthAgentException, UnauthorizedException, InvalidCookieException, AuthorizationServerException} from './exceptions'
 
-function getUserInfo(encKey: string, encryptedCookie: string): Object {
-    let idToken = null
+async function getUserInfo(config: OAuthAgentConfiguration, encKey: string, encryptedCookie: string): Promise<Object> {
 
     try {
-        idToken = decryptCookie(encKey, encryptedCookie)
+        let accessToken = null
+        try {
+            accessToken = decryptCookie(encKey, encryptedCookie)
+        } catch (err: any) {
+            const error = new InvalidCookieException(err)
+            error.logInfo = 'Unable to decrypt the access token cookie to get user info'
+            throw error
+        }
+
+        const res = await fetch(
+            config.userInfoEndpoint,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            })
+
+        // Read text if it exists
+        const text = await res.text()
+        
+        if (res.status >= 500) {
+            const error = new AuthorizationServerException()
+            error.logInfo = `Server error response in a User Info request: ${text}`
+            throw error
+        }
+
+        if (res.status >= 400) {
+            const error = new UnauthorizedException()
+            error.logInfo = `User Info request was rejected: ${text}`
+            throw error
+        }
+
+        return JSON.parse(text)
+
     } catch (err: any) {
-        // error while decrypting or parsing cookie value
-        const error = new InvalidCookieException(err)
-        error.logInfo = 'Unable to decrypt the ID cookie to get user info'
-        throw error
-    }
 
-    const tokenParts = idToken.split('.')
-
-    if (tokenParts.length !== 3) {
-        throw new InvalidIDTokenException()
-    }
-
-    // We could verify the ID token, though it is received over a trusted POST to the token endpoint
-    try {
-        return JSON.parse(String(Buffer.from(tokenParts[1], 'base64').toString('binary')));
-    } catch (err: any) {
-        throw new InvalidIDTokenException(err)
+        if (!(err instanceof OAuthAgentException)) {
+            const error = new AuthorizationServerException(err)
+            error.logInfo = 'Connectivity problem during a User Info request'
+            throw error
+        } else {
+            throw err
+        }
     }
 }
 

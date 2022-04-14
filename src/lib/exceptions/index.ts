@@ -22,6 +22,7 @@ import MissingTempLoginDataException from './MissingCodeVerifierException'
 import InvalidStateException from './InvalidStateException'
 import UnauthorizedException from './UnauthorizedException'
 import AuthorizationServerException from './AuthorizationServerException'
+import UnhandledException from './UnhandledException'
 
 export {
     OAuthAgentException,
@@ -31,5 +32,6 @@ export {
     MissingTempLoginDataException,
     InvalidStateException,
     UnauthorizedException,
-    AuthorizationServerException
+    AuthorizationServerException,
+    UnhandledException,
 }

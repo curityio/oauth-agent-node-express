@@ -1,32 +1,34 @@
 import {NextFunction, Request, Response} from 'express';
 import {OAuthAgentException} from '../lib/exceptions'
+import {UnhandledException} from '../lib/exceptions'
 import {RequestLog} from './requestLog';
 
 export default function exceptionMiddleware(
-    err: any,
+    caught: any,
     request: Request,
     response: Response,
     next: NextFunction): void {
 
-    let statusCode = 500
-    let data = { code: 'server_error', message: 'A technical problem occurred in the OAuth Agent' }
-
-    if (err instanceof OAuthAgentException) {
-
-        statusCode = err.statusCode
-        data = { code: err.code, message: err.message}
-        response.locals.log.setError(err)
-    }
-
-    response.status(statusCode).send(data)
-
-    // Errors such as malformed JSON
+    const exception = caught instanceof OAuthAgentException ? caught : new UnhandledException(caught)
+    
     if (!response.locals.log) {
+        
+        // For malformed JSON errors, middleware does not get created so write the whole log here
         response.locals.log = new RequestLog()
         response.locals.log.start(request)
-        response.locals.log.setException(err, data)
+        response.locals.log.addError(exception)
         response.locals.log.end(response)
+
+    } else {
+
+        // Otherwise just include error details in logs
+        response.locals.log.addError(exception)
     }
+    
+    // Send the response to the client
+    const statusCode = exception.statusCode
+    const data = { code: exception.code, message: exception.message}
+    response.status(statusCode).send(data)
 }
 
 /*
@@ -40,7 +42,7 @@ export function asyncCatch(fn: any): any {
         Promise
             .resolve(fn(request, response, next))
             .catch((e) => {
-                exceptionMiddleware(e, request, response, next);
-            });
+                exceptionMiddleware(e, request, response, next)
+            })
     };
 }

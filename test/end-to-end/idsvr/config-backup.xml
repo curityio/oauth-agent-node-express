@@ -252,27 +252,6 @@
             <claims-mappers>
               <claims-mapper>
                 <id>default</id>
-                <id_token>
-                  <claim>address</claim>
-                  <claim>birthdate</claim>
-                  <claim>email</claim>
-                  <claim>email_verified</claim>
-                  <claim>family_name</claim>
-                  <claim>gender</claim>
-                  <claim>given_name</claim>
-                  <claim>locale</claim>
-                  <claim>middle_name</claim>
-                  <claim>name</claim>
-                  <claim>nickname</claim>
-                  <claim>phone_number</claim>
-                  <claim>phone_number_verified</claim>
-                  <claim>picture</claim>
-                  <claim>preferred_username</claim>
-                  <claim>profile</claim>
-                  <claim>updated_at</claim>
-                  <claim>website</claim>
-                  <claim>zoneinfo</claim>
-                </id_token>
                 <userinfo>
                   <claim>address</claim>
                   <claim>birthdate</claim>

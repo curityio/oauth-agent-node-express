@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Curity AB
+ *  Copyright 2022 Curity AB
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,38 +15,38 @@
  */
 
 import * as express from 'express'
-import {getATCookieName, getUserInfo, ValidateRequestOptions} from '../lib'
+import {getIDCookieName, getIDTokenClaims, ValidateRequestOptions} from '../lib'
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
 import {InvalidCookieException} from '../lib/exceptions'
 import {asyncCatch} from '../supportability/exceptionMiddleware';
 
-class UserInfoController {
+class ClaimsController {
     public router = express.Router()
 
     constructor() {
-        this.router.get('/', asyncCatch(this.getUserInfo))
+        this.router.get('/', asyncCatch(this.getClaims))
     }
 
-    getUserInfo = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    getClaims = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
         // Verify the web origin
         const options = new ValidateRequestOptions()
         options.requireCsrfHeader = false;
         validateExpressRequest(req, options)
 
-        const atCookieName = getATCookieName(config.cookieNamePrefix)
-        if (req.cookies && req.cookies[atCookieName]) {
+        const idTokenCookieName = getIDCookieName(config.cookieNamePrefix)
+        if (req.cookies && req.cookies[idTokenCookieName]) {
 
-            const userData = await getUserInfo(config, config.encKey, req.cookies[atCookieName])
+            const userData = getIDTokenClaims(config.encKey, req.cookies[idTokenCookieName])
             res.status(200).json(userData)
 
         } else {
             const error = new InvalidCookieException()
-            error.logInfo = 'No AT cookie was supplied in a call to get user info'
+            error.logInfo = 'No ID cookie was supplied in a call to get claims'
             throw error
         }
     }
 }
 
-export default UserInfoController
+export default ClaimsController

@@ -43,7 +43,7 @@ class LoginController {
     startLogin = async (req: express.Request, res: express.Response) => {
 
         // Verify the web origin
-        const options = new ValidateRequestOptions();
+        const options = new ValidateRequestOptions()
         options.requireCsrfHeader = false;
         validateExpressRequest(req, options)
 
@@ -76,7 +76,7 @@ class LoginController {
 
         let isLoggedIn: boolean
         let csrfToken: string = ''
-        
+
         if (isOAuthResponse) {
             
             // Main OAuth response handling
