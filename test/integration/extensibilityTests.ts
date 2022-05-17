@@ -15,7 +15,7 @@ describe('ExtensibilityTests', () => {
                     value: 'login',
                 },
             ],
-        };
+        }
 
         const response = await fetch(
             `${oauthAgentBaseUrl}/login/start`,
@@ -51,7 +51,7 @@ describe('ExtensibilityTests', () => {
                     value: 'fr',
                 },
             ],
-        };
+        }
 
         const response = await fetch(
             `${oauthAgentBaseUrl}/login/start`,
@@ -72,8 +72,8 @@ describe('ExtensibilityTests', () => {
         options.extraParams.forEach((p: any) => {
             expect(authorizationRequestUrl).contains(
                 `${p.key}=${p.value}`,
-                'The extra parameter was not added to the authorization request URL')
-        });
+                'The extra parameters were not added to the authorization request URL')
+        })
     })
 
     it('Starting a login request with the OpenID Connect acr_values parameter should include it in the request URL', async () => {
@@ -82,10 +82,10 @@ describe('ExtensibilityTests', () => {
             extraParams: [
                 {
                     key: 'acr_values',
-                    value: 'acr_values',
+                    value: 'urn:se:curity:authentication:html-form:htmlform1',
                 },
             ],
-        };
+        }
 
         const response = await fetch(
             `${oauthAgentBaseUrl}/login/start`,
@@ -104,8 +104,8 @@ describe('ExtensibilityTests', () => {
         const authorizationRequestUrl = body.authorizationRequestUrl as string
         
         expect(authorizationRequestUrl).contains(
-            `${options.extraParams[0].key}=${options.extraParams[0].value}`,
-            'The extra parameter was not added to the authorization request URL')
+            `${options.extraParams[0].key}=${encodeURIComponent(options.extraParams[0].value)}`,
+            'The acr_values parameter was not added to the authorization request URL')
     })
 
     it('Starting a login request with the OpenID Connect claims parameter should include it in the request URL', async () => {
@@ -115,13 +115,15 @@ describe('ExtensibilityTests', () => {
                 acr: {
                     essential: true,
                     values: [
-                        "acr_1", "acr_2"
+                        "urn:se:curity:authentication:html-form:htmlform1"
                     ]
+                },
+                my_custom_claim: {
+                    essential: true
                 }
             }
-        };
-        const claimsText = JSON.stringify(claims);
-        console.log(claimsText);
+        }
+        const claimsText = JSON.stringify(claims)
 
         const options = {
             extraParams: [
@@ -130,7 +132,7 @@ describe('ExtensibilityTests', () => {
                     value: claimsText,
                 },
             ],
-        };
+        }
 
         const response = await fetch(
             `${oauthAgentBaseUrl}/login/start`,
@@ -150,6 +152,6 @@ describe('ExtensibilityTests', () => {
 
         expect(authorizationRequestUrl).contains(
             `${options.extraParams[0].key}=${encodeURIComponent(options.extraParams[0].value)}`,
-            'The extra parameter was not added to the authorization request URL')
+            'The claims parameter was not correctly added to the authorization request URL')
     })
 })
