@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import {config} from '../../src/config';
 import {performLogin} from './testUtils'
 
+// Tests to focus on returning ID token details
 describe('ClaimsControllerTests', () => {
 
     const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`

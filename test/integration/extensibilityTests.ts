@@ -2,6 +2,7 @@ import {assert, expect} from 'chai'
 import fetch from 'node-fetch'
 import {config} from '../../src/config'
 
+// Tests to focus on extra details the SPA may need to supply at runtime
 describe('ExtensibilityTests', () => {
 
     const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`

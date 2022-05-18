@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-import {LoginOptions} from './loginOptions'
+import {ClientOptions} from './clientOptions'
 import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import {generateHash, generateRandomString} from './pkce'
 
-function getAuthorizationURL(config: OAuthAgentConfiguration, options?: LoginOptions): AuthorizationRequestData {
+function getAuthorizationURL(config: OAuthAgentConfiguration, options?: ClientOptions): AuthorizationRequestData {
     const codeVerifier = generateRandomString()
     const state = generateRandomString()
 

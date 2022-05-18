@@ -3,6 +3,7 @@ import fetch from 'node-fetch'
 import {config} from '../../src/config'
 import {performLogin} from './testUtils'
 
+// Tests to focus on the login endpoint
 describe('LoginControllerTests', () => {
 
     const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`
