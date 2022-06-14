@@ -32,6 +32,24 @@ Response:
 }
 ```
 
+If required, the SPA can POST an object with an extra params field containing runtime OpenID Connect parameters.\
+They key and value of each item must be strings and they will then be appended to the request URL.
+
+```json
+{
+  "extraParams": [
+      {
+          "key": "max-age",
+          "value": "3600",
+      },
+      {
+          "key": "ui_locales",
+          "value": "fr",
+      },
+  ]
+}
+```
+
 ### POST `/login/end`
 
 This endpoint should be be called by the SPA on any page load. The SPA sends the current URL to the API, which can either finish the authorization flow (if it was a response from the Authorization Server), or inform the SPA whether the user is logged in or not (based on the presence of secure cookies).

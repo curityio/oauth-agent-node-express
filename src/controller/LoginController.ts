@@ -47,7 +47,7 @@ class LoginController {
         options.requireCsrfHeader = false;
         validateExpressRequest(req, options)
 
-        const authorizationRequestData = getAuthorizationURL(config)
+        const authorizationRequestData = getAuthorizationURL(config, req.body)
 
         res.setHeader('Set-Cookie',
             getTempLoginDataCookie(authorizationRequestData.codeVerifier, authorizationRequestData.state, config.cookieOptions, config.cookieNamePrefix, config.encKey))

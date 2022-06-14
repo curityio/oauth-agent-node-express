@@ -3,6 +3,7 @@ import fetch, {RequestInit} from 'node-fetch'
 import {config} from '../../src/config'
 import {performLogin} from './testUtils'
 
+// Tests to focus on the logout endpoint
 describe('LogoutControllerTests', () => {
 
     const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`

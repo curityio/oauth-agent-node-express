@@ -3,6 +3,7 @@ import fetch, {RequestInit, Response} from 'node-fetch'
 import {config} from '../../src/config'
 import {fetchStubbedResponse, getCookieString, performLogin} from './testUtils'
 
+// Tests to focus on token refresh when access tokens expire
 describe('RefreshTokenControllerTests', () => {
 
     const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`

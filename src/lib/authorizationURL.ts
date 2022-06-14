@@ -14,10 +14,11 @@
  *  limitations under the License.
  */
 
+import {ClientOptions} from './clientOptions'
 import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import {generateHash, generateRandomString} from './pkce'
 
-function getAuthorizationURL(config: OAuthAgentConfiguration): AuthorizationRequestData {
+function getAuthorizationURL(config: OAuthAgentConfiguration, options?: ClientOptions): AuthorizationRequestData {
     const codeVerifier = generateRandomString()
     const state = generateRandomString()
 
@@ -28,6 +29,14 @@ function getAuthorizationURL(config: OAuthAgentConfiguration): AuthorizationRequ
         "&redirect_uri=" + encodeURIComponent(config.redirectUri) +
         "&code_challenge=" + generateHash(codeVerifier) +
         "&code_challenge_method=S256"
+
+    if (options && options.extraParams) {
+        options.extraParams.forEach((p) => {
+            if (p.key && p.value) {
+                authorizationRequestUrl += `&${p.key}=${encodeURIComponent(p.value)}`
+            }
+        });
+    }
 
     if (config.scope) {
         authorizationRequestUrl += "&scope=" + encodeURIComponent(config.scope)
