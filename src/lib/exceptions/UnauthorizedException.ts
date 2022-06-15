@@ -7,7 +7,6 @@ export default class UnauthorizedException extends OAuthAgentException {
 
     constructor(cause?: Error) {
         super("Access denied due to invalid request details")
-
         this.cause = cause
     }
 }
