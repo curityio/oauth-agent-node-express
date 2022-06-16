@@ -70,14 +70,25 @@ class LoginController {
         options.requireCsrfHeader = false
         validateExpressRequest(req, options)
         
-        // See if this is an OAuth response to the browser
+        // First see if the SPA is reporting an OAuth front channel response to the browser
         const data = this.getUrlParts(req.body?.pageUrl)
-        const isOAuthResponse = !!(data.state && data.code)
+        const isSuccessOAuthResponse = !!(data.state && data.code)
+        const isFailedOAuthResponse = !!(data.state && data.error)
+
+        // First report OAuth failures
+        if (isFailedOAuthResponse) {
+
+            res.status(400).json({
+                code: data.error,
+                message: data.error_description || 'Login failed at the Authorization Server'
+            })
+            return
+        }
 
         let isLoggedIn: boolean
         let csrfToken: string = ''
 
-        if (isOAuthResponse) {
+        if (isSuccessOAuthResponse) {
             
             // Main OAuth response handling
             const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
@@ -123,7 +134,7 @@ class LoginController {
         // isLoggedIn enables the SPA to know it does not need to present a login option
         // handled enables the SPA to know a login has just completed
         const responseBody = {
-            handled: isOAuthResponse,
+            handled: isSuccessOAuthResponse,
             isLoggedIn,
         } as any
 

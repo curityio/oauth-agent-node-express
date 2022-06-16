@@ -205,4 +205,30 @@ describe('LoginControllerTests', () => {
         const body = await response.json()
         assert.equal(body.code, 'authorization_error', 'Incorrect error code')
     })
+
+    it('An incorrectly configured SPA should report front channel errors correctly', async () => {
+
+        const [state, cookieString] = await startLogin()
+        const code = '4a4246d6-b4bd-11ec-b909-0242ac120002'
+
+        const payload = {
+            pageUrl: `http://www.example.com?error=invalid_client&state=${state}`,
+        }
+        const options = {
+            method: 'POST',
+            headers: {
+                origin: config.trustedWebOrigins[0],
+                'Content-Type': 'application/json',
+                cookie: cookieString,
+            },
+            body: JSON.stringify(payload),
+        } as RequestInit
+
+        const response = await fetch(`${oauthAgentBaseUrl}/login/end`, options)
+
+        // The SPA will trigger token refresh when the OAuth Agent reports an expired access token
+        assert.equal(response.status, 400, 'Incorrect HTTP status')
+        const body = await response.json()
+        assert.equal(body.code, 'invalid_client', 'Incorrect error code')
+    })
 })
