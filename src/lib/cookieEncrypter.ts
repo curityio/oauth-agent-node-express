@@ -17,14 +17,12 @@
 import * as crypto from 'crypto'
 import base64url from 'base64url';
 import {CookieSerializeOptions, serialize} from 'cookie'
-import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName'
 import {CookieDecryptionException, InvalidCookieException} from '../lib/exceptions'
 
 const VERSION_SIZE = 1;
 const GCM_IV_SIZE = 12;
 const GCM_TAG_SIZE = 16;
 const CURRENT_VERSION = 1;
-const DAY_MILLISECONDS = 1000 * 60 * 60 * 24
 
 function encryptCookie(encKeyHex: string, plaintext: string): string {
     
@@ -92,18 +90,4 @@ function getEncryptedCookie(options: CookieSerializeOptions, value: string, name
     return serialize(name, encryptCookie(encKey, value), options)
 }
 
-function getCookiesForUnset(options: CookieSerializeOptions, cookieNamePrefix: string): string[] {
-    const cookieOptions = {
-        ...options,
-        expires: new Date(Date.now() - DAY_MILLISECONDS),
-    }
-
-    return [
-        serialize(getAuthCookieName(cookieNamePrefix), "", cookieOptions),
-        serialize(getATCookieName(cookieNamePrefix), "", cookieOptions),
-        serialize(getIDCookieName(cookieNamePrefix), "", cookieOptions),
-        serialize(getCSRFCookieName(cookieNamePrefix), "", cookieOptions)
-    ]
-}
-
-export { getEncryptedCookie, decryptCookie, getCookiesForUnset, encryptCookie };
+export { getEncryptedCookie, decryptCookie, encryptCookie };

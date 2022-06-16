@@ -15,11 +15,9 @@
  */
 
 import fetch from 'node-fetch'
-import {decryptCookie, getEncryptedCookie} from './cookieEncrypter'
+import {decryptCookie} from './cookieEncrypter'
 import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import {OAuthAgentException, InvalidStateException, MissingTempLoginDataException, AuthorizationClientException, AuthorizationServerException} from './exceptions'
-import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName'
-import {getTempLoginDataCookieForUnset} from './pkce'
 
 async function getTokenEndpointResponse(config: OAuthAgentConfiguration, code: string, state: string, tempLoginData: string | undefined | null, ): Promise<any> {
     if (!tempLoginData) {
@@ -119,37 +117,4 @@ async function refreshAccessToken(refreshToken: string, config: OAuthAgentConfig
     }
 }
 
-function getCookiesForTokenResponse(tokenResponse: any, config: OAuthAgentConfiguration, unsetTempLoginDataCookie: boolean = false, csrfCookieValue?: string): string[] {
-    
-    const cookies = [
-        getEncryptedCookie(config.cookieOptions, tokenResponse.access_token, getATCookieName(config.cookieNamePrefix), config.encKey)
-    ]
-
-    if (csrfCookieValue) {
-        cookies.push(getEncryptedCookie(config.cookieOptions, csrfCookieValue, getCSRFCookieName(config.cookieNamePrefix), config.encKey))
-    }
-
-    if (unsetTempLoginDataCookie) {
-        cookies.push(getTempLoginDataCookieForUnset(config.cookieOptions, config.cookieNamePrefix))
-    }
-
-    if (tokenResponse.refresh_token) {
-        const refreshTokenCookieOptions = {
-            ...config.cookieOptions,
-            path: config.endpointsPrefix + '/refresh'
-        }
-        cookies.push(getEncryptedCookie(refreshTokenCookieOptions, tokenResponse.refresh_token, getAuthCookieName(config.cookieNamePrefix), config.encKey))
-    }
-
-    if (tokenResponse.id_token) {
-        const idTokenCookieOptions = {
-            ...config.cookieOptions,
-            path: config.endpointsPrefix + '/claims'
-        }
-        cookies.push(getEncryptedCookie(idTokenCookieOptions, tokenResponse.id_token, getIDCookieName(config.cookieNamePrefix), config.encKey))
-    }
-
-    return cookies
-}
-
-export { getTokenEndpointResponse, getCookiesForTokenResponse, refreshAccessToken }
+export { getTokenEndpointResponse, refreshAccessToken }

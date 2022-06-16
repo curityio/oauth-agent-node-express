@@ -27,7 +27,9 @@ import {
     getATCookieName,
     generateRandomString,
     ValidateRequestOptions,
+    getCookiesForFailedLoginResponse,
 } from '../lib'
+import {AuthorizationResponseException} from '../lib/exceptions'
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
 import {asyncCatch} from '../supportability/exceptionMiddleware';
@@ -75,14 +77,13 @@ class LoginController {
         const isSuccessOAuthResponse = !!(data.state && data.code)
         const isFailedOAuthResponse = !!(data.state && data.error)
 
-        // First report OAuth failures
+        // First handle reporting front channel errors back to the SPA
         if (isFailedOAuthResponse) {
 
-            res.status(400).json({
-                code: data.error,
-                message: data.error_description || 'Login failed at the Authorization Server'
-            })
-            return
+            res.set('Set-Cookie', getCookiesForFailedLoginResponse(config))
+            throw new AuthorizationResponseException(
+                data.error,
+                data.error_description || 'Login failed at the Authorization Server')
         }
 
         let isLoggedIn: boolean
