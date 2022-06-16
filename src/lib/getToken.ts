@@ -53,7 +53,6 @@ async function getTokenEndpointResponse(config: OAuthAgentConfiguration, code: s
         }
 
         if (res.status >= 400) {
-            
             const error = new AuthorizationClientException()
             error.logInfo = `Authorization Code Grant request was rejected: ${text}`
             throw error

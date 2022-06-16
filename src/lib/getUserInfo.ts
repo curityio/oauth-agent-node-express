@@ -43,7 +43,7 @@ async function getUserInfo(config: OAuthAgentConfiguration, encKey: string, encr
 
         // Read text if it exists
         const text = await res.text()
-        
+
         if (res.status >= 500) {
             const error = new AuthorizationServerException()
             error.logInfo = `Server error response in a User Info request: ${text}`

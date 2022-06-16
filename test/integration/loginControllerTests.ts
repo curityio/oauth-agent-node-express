@@ -1,7 +1,7 @@
 import {assert, expect} from 'chai'
-import fetch from 'node-fetch'
+import fetch, {RequestInit} from 'node-fetch';
 import {config} from '../../src/config'
-import {performLogin} from './testUtils'
+import {fetchStubbedResponse, performLogin, startLogin} from './testUtils'
 
 // Tests to focus on the login endpoint
 describe('LoginControllerTests', () => {
@@ -161,5 +161,48 @@ describe('LoginControllerTests', () => {
         assert.equal(body.isLoggedIn, true, 'Incorrect isLoggedIn value')
         assert.equal(body.handled, false, 'Incorrect handled value')
         expect(body.csrf, 'Missing csrfToken value').length.above(0)
+    })
+
+    it('An incorrectly configured client secret should not cause a redirect loop in the SPA', async () => {
+
+        const [state, cookieString] = await startLogin()
+        const code = '4a4246d6-b4bd-11ec-b909-0242ac120002'
+
+        const payload = {
+            pageUrl: `http://www.example.com?code=${code}&state=${state}`,
+        }
+        const options = {
+            method: 'POST',
+            headers: {
+                origin: config.trustedWebOrigins[0],
+                'Content-Type': 'application/json',
+                cookie: cookieString,
+            },
+            body: JSON.stringify(payload),
+        } as RequestInit
+
+        const stubbedResponse = {
+            id: '1527eaa0-6af2-45c2-a2b2-e433eaf7cf04',
+            priority: 1,
+            request: {
+                method: 'POST',
+                url: '/oauth/v2/oauth-token'
+            },
+            response: {
+
+                // Simulate the response for an incorrect client secret to complete the OIDC flow
+                status: 400,
+                body: "{\"error\":\"invalid_client\"}"
+            }
+        }
+
+        const response = await fetchStubbedResponse(stubbedResponse, async () => {
+            return await fetch(`${oauthAgentBaseUrl}/login/end`, options)
+        })
+
+        // The SPA will trigger token refresh when the OAuth Agent reports an expired access token
+        assert.equal(response.status, 400, 'Incorrect HTTP status')
+        const body = await response.json()
+        assert.equal(body.code, 'authorization_error', 'Incorrect error code')
     })
 })

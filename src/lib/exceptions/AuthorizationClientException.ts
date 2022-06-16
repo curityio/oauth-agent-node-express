@@ -4,11 +4,11 @@ export default class AuthorizationClientException extends OAuthAgentException {
     
     // By default the SPA will present an error when the Authorization Server returns an
     public statusCode = 400
-    public code = 'authorization_client_error'
+    public code = 'authorization_error'
     public description = ''
 
     constructor() {
-        super('A request was sent to the Authorization Server was rejected')
+        super('A request sent to the Authorization Server was rejected')
     }
 
     // User info requests can fail, in which case inform the SPA so that it can avoid an error display

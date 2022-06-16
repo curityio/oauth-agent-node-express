@@ -70,7 +70,7 @@ class LoginController {
         options.requireCsrfHeader = false
         validateExpressRequest(req, options)
         
-        // Early logic to check for an OAuth response
+        // See if this is an OAuth response to the browser
         const data = this.getUrlParts(req.body?.pageUrl)
         const isOAuthResponse = !!(data.state && data.code)
 
