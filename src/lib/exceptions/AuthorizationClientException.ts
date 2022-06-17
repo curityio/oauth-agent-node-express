@@ -40,26 +40,10 @@ export default class AuthorizationClientException extends OAuthAgentException {
     // Token refresh will fail eventually, in which case inform the SPA so that it can avoid an error display
     public onTokenRefreshFailed(text: string) {
 
-        const data = this.parseAuthorizationServerErrorResponse(text)
-        if (data.error === 'invalid_grant') {
+        if (text.indexOf('invalid_grant') !== -1) {
 
             this.code = 'session_expired'
             this.statusCode = 401
         }
-    }
-
-    // The error contains an error field and an optional error_description field
-    private parseAuthorizationServerErrorResponse(text: string): any {
-
-        try {
-            const data = JSON.parse(text)
-            if (data && typeof data === 'object') {
-                return data
-            }
-        }
-        catch (e) {
-        }
-
-        return null
     }
 }
