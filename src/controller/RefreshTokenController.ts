@@ -39,7 +39,8 @@ class RefreshTokenController {
             
             let refreshToken = decryptCookie(config.encKey, req.cookies[authCookieName])
             
-            // TODO: debug code to cause an invalid grant response and test retry logic
+            // TODO: remove after review
+            // debug code to cause an invalid grant response from the Identity Server, for testing retry logic
             if (req.header('x-attempt') === '1') {
                 refreshToken = `xxx${refreshToken}`
             }
