@@ -38,7 +38,14 @@ class UserInfoController {
         const atCookieName = getATCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[atCookieName]) {
 
-            const userData = await getUserInfo(config, config.encKey, req.cookies[atCookieName])
+            let accessToken = req.cookies[atCookieName]
+
+            // TODO: debug code to cause a 401 response and test retry logic
+            if (req.header('x-attempt') === '1') {
+                accessToken = `xxx${accessToken}`
+            }
+
+            const userData = await getUserInfo(config, config.encKey, accessToken)
             res.status(200).json(userData)
 
         } else {

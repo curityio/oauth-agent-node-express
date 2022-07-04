@@ -37,7 +37,13 @@ class RefreshTokenController {
         const authCookieName = getAuthCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[authCookieName]) {
             
-            const refreshToken = decryptCookie(config.encKey, req.cookies[authCookieName])
+            let refreshToken = decryptCookie(config.encKey, req.cookies[authCookieName])
+            
+            // TODO: debug code to cause an invalid grant response and test retry logic
+            if (req.header('x-attempt') === '1') {
+                refreshToken = `xxx${refreshToken}`
+            }
+            
             const tokenResponse = await refreshAccessToken(refreshToken, config)
             
             const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config)
