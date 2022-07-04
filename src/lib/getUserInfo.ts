@@ -20,7 +20,7 @@ import {Grant} from './grant'
 import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import {OAuthAgentException, InvalidCookieException, AuthorizationClientException, AuthorizationServerException} from './exceptions'
 
-async function getUserInfo(config: OAuthAgentConfiguration, encKey: string, encryptedCookie: string): Promise<Object> {
+async function getUserInfo(config: OAuthAgentConfiguration, encKey: string, encryptedCookie: string, attempt: string | undefined): Promise<Object> {
 
     try {
         let accessToken = null
@@ -30,6 +30,11 @@ async function getUserInfo(config: OAuthAgentConfiguration, encKey: string, encr
             const error = new InvalidCookieException(err)
             error.logInfo = 'Unable to decrypt the access token cookie to get user info'
             throw error
+        }
+
+        // TODO: debug: remove after expiry testing
+        if (attempt === '1') {
+            accessToken = `xxx${accessToken}`
         }
 
         const res = await fetch(
