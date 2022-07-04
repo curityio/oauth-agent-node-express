@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Curity AB
+ *  Copyright 2022 Curity AB
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,35 +15,29 @@
  */
 
 import OAuthAgentException from './OAuthAgentException'
+import {Grant} from '../grant'
 
 export default class AuthorizationClientException extends OAuthAgentException {
     
-    // By default the SPA will present an error when the Authorization Server returns an
+    // By default assume a configuration error
     public statusCode = 400
     public code = 'authorization_error'
-    public description = ''
 
-    constructor() {
+    constructor(grant: Grant, status: number, responseText: string) {
         super('A request sent to the Authorization Server was rejected')
-    }
 
-    // User info requests can fail, in which case inform the SPA so that it can avoid an error display
-    public onUserInfoFailed(status: number) {
-
-        if (status == 401) {
-
+        // User info requests can be caused by expiry, in which case inform the SPA so that it can avoid an error display
+        if (grant === Grant.UserInfo && status == 401) {
             this.code = 'token_expired'
             this.statusCode = 401
         }
-    }
 
-    // Token refresh will fail eventually, in which case inform the SPA so that it can avoid an error display
-    public onTokenRefreshFailed(text: string) {
-
-        if (text.indexOf('invalid_grant') !== -1) {
-
+        // Refresh tokens will expire eventually, in which case inform the SPA so that it can avoid an error display
+        if (grant === Grant.RefreshToken && responseText.indexOf('invalid_grant') !== -1) {
             this.code = 'session_expired'
             this.statusCode = 401
         }
+
+        this.logInfo = `${Grant[grant]} request failed with status: ${status} and response: ${responseText}`
     }
 }

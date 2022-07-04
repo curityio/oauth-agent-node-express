@@ -16,6 +16,7 @@
 
 import fetch from 'node-fetch'
 import {decryptCookie} from './cookieEncrypter'
+import {Grant} from './grant'
 import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import {OAuthAgentException, InvalidCookieException, AuthorizationClientException, AuthorizationServerException} from './exceptions'
 
@@ -51,10 +52,7 @@ async function getUserInfo(config: OAuthAgentConfiguration, encKey: string, encr
         }
 
         if (res.status >= 400) {
-            const error = new AuthorizationClientException()
-            error.onUserInfoFailed(res.status)
-            error.logInfo = `User Info request was rejected: ${text}`
-            throw error
+            throw new AuthorizationClientException(Grant.UserInfo, res.status, text)
         }
 
         return JSON.parse(text)

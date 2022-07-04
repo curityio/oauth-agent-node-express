@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Curity AB
+ *  Copyright 2022 Curity AB
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,12 +20,7 @@ import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName'
 import {getTempLoginDataCookieForUnset} from './pkce'
 
-function getCookiesForFailedLoginResponse(config: OAuthAgentConfiguration): string[] {
-
-    return [
-        getTempLoginDataCookieForUnset(config.cookieOptions, config.cookieNamePrefix)
-    ]
-}
+const DAY_MILLISECONDS = 1000 * 60 * 60 * 24
 
 function getCookiesForTokenResponse(tokenResponse: any, config: OAuthAgentConfiguration, unsetTempLoginDataCookie: boolean = false, csrfCookieValue?: string): string[] {
     
@@ -62,7 +57,6 @@ function getCookiesForTokenResponse(tokenResponse: any, config: OAuthAgentConfig
 
 function getCookiesForUnset(options: CookieSerializeOptions, cookieNamePrefix: string): string[] {
 
-    const DAY_MILLISECONDS = 1000 * 60 * 60 * 24
     const cookieOptions = {
         ...options,
         expires: new Date(Date.now() - DAY_MILLISECONDS),
@@ -76,4 +70,4 @@ function getCookiesForUnset(options: CookieSerializeOptions, cookieNamePrefix: s
     ]
 }
 
-export { getCookiesForFailedLoginResponse, getCookiesForTokenResponse, getCookiesForUnset };
+export { getCookiesForTokenResponse, getCookiesForUnset };

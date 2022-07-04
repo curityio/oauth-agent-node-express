@@ -27,7 +27,6 @@ import {
     getATCookieName,
     generateRandomString,
     ValidateRequestOptions,
-    getCookiesForFailedLoginResponse,
 } from '../lib'
 import {AuthorizationResponseException} from '../lib/exceptions'
 import {config} from '../config'
@@ -80,7 +79,6 @@ class LoginController {
         // First handle reporting front channel errors back to the SPA
         if (isFailedOAuthResponse) {
 
-            res.set('Set-Cookie', getCookiesForFailedLoginResponse(config))
             throw new AuthorizationResponseException(
                 data.error,
                 data.error_description || 'Login failed at the Authorization Server')

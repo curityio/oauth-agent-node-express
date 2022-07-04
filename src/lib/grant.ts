@@ -1,5 +1,5 @@
 /*
- *  Copyright 2022 Curity AB
+ *  Copyright 2021 Curity AB
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import {ExtraParam} from './extraParams';
-
-export interface ClientOptions {
-    extraParams: ExtraParam[];
+export enum Grant {
+    AuthorizationCode,
+    UserInfo,
+    RefreshToken,
 }

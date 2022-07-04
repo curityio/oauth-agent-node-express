@@ -16,6 +16,7 @@
 
 import fetch from 'node-fetch'
 import {decryptCookie} from './cookieEncrypter'
+import {Grant} from './grant'
 import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import {OAuthAgentException, InvalidStateException, MissingTempLoginDataException, AuthorizationClientException, AuthorizationServerException} from './exceptions'
 
@@ -51,9 +52,7 @@ async function getTokenEndpointResponse(config: OAuthAgentConfiguration, code: s
         }
 
         if (res.status >= 400) {
-            const error = new AuthorizationClientException()
-            error.logInfo = `Authorization Code Grant request was rejected: ${text}`
-            throw error
+            throw new AuthorizationClientException(Grant.AuthorizationCode, res.status, text)
         }
 
         return JSON.parse(text)
@@ -95,10 +94,7 @@ async function refreshAccessToken(refreshToken: string, config: OAuthAgentConfig
         }
 
         if (res.status >= 400) {
-            const error = new AuthorizationClientException()
-            error.onTokenRefreshFailed(text)
-            error.logInfo = `Refresh Token Grant request was rejected: ${text}`
-            throw error
+            throw new AuthorizationClientException(Grant.RefreshToken, res.status, text)
         }
 
         return JSON.parse(text)

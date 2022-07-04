@@ -164,7 +164,7 @@ describe('LoginControllerTests', () => {
         expect(body.csrf, 'Missing csrfToken value').length.above(0)
     })
 
-    it('An incorrectly configured client secret should not cause a redirect loop in the SPA', async () => {
+    it('An incorrectly configured client secret should return a 400', async () => {
 
         const [state, cookieString] = await startLogin()
         const code = '4a4246d6-b4bd-11ec-b909-0242ac120002'
@@ -201,6 +201,7 @@ describe('LoginControllerTests', () => {
             return await fetch(`${oauthAgentBaseUrl}/login/end`, options)
         })
 
+        // Return a 400 to the SPA, as opposed to a 401, which could cause a redirect loop
         assert.equal(response.status, 400, 'Incorrect HTTP status')
         const body = await response.json()
         assert.equal(body.code, 'authorization_error', 'Incorrect error code')

@@ -87,7 +87,7 @@ describe('RefreshTokenControllerTests', () => {
         assert.notEqual(rewrittenCookieString, cookieString)
     })
 
-    it("A configuration error rejected by the Authorization Server when refreshing tokens should result in a 401 status code", async () => {
+    it("A configuration error rejected by the Authorization Server when refreshing tokens should result in a 400 status code", async () => {
 
         const [, loginBody, cookieString] = await performLogin()
 

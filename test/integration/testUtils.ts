@@ -69,7 +69,7 @@ export async function fetchStubbedResponse(stubbedResponse: any, fetchAction: ()
 /*
  * Do the work to start a login and get the temp cookie
  */
-export async function startLogin(clientOptions: ClientOptions | null = null): Promise<[string, string]> {
+export async function startLogin(requestBody: ClientOptions | null = null): Promise<[string, string]> {
 
     const requestOptions = {
         method: 'POST',
@@ -78,14 +78,14 @@ export async function startLogin(clientOptions: ClientOptions | null = null): Pr
         },
     } as RequestInit
 
-    if (clientOptions) {
-        requestOptions.body = JSON.stringify(clientOptions)
+    if (requestBody) {
+        requestOptions.body = JSON.stringify(requestBody)
     }
 
     const response = await fetch(`${oauthAgentBaseUrl}/login/start`, requestOptions)
 
-    const body = await response.json();
-    const parsedUrl = urlParse(body.authorizationRequestUrl, true)
+    const responseBody = await response.json();
+    const parsedUrl = urlParse(responseBody.authorizationRequestUrl, true)
     const state = parsedUrl.query.state
     
     const cookieString = getCookieString(response)

@@ -16,7 +16,7 @@
 
 import { getAuthorizationURL } from './authorizationURL'
 import { getEncryptedCookie, decryptCookie } from './cookieEncrypter'
-import { getCookiesForTokenResponse, getCookiesForFailedLoginResponse, getCookiesForUnset } from './cookieBuilder'
+import { getCookiesForTokenResponse, getCookiesForUnset } from './cookieBuilder'
 import { getTokenEndpointResponse, refreshAccessToken } from './getToken'
 import getUserInfo from './getUserInfo'
 import getIDTokenClaims from './getIDTokenClaims'
@@ -41,7 +41,6 @@ export {
     getCookiesForUnset,
     getTempLoginDataCookieForUnset,
     getTempLoginDataCookie,
-    getCookiesForFailedLoginResponse,
     getCookiesForTokenResponse,
     getATCookieName,
     getTempLoginDataCookieName,
