@@ -3,6 +3,7 @@ import fetch, {RequestInit, Response} from 'node-fetch';
 import * as setCookie from 'set-cookie-parser';
 import * as urlParse from 'url-parse';
 import {config} from '../../src/config';
+import { ClientOptions } from '../../src/lib/clientOptions';
 
 const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`
 const wiremockAdminBaseUrl = `http://localhost:8443/__admin/mappings`
@@ -68,20 +69,23 @@ export async function fetchStubbedResponse(stubbedResponse: any, fetchAction: ()
 /*
  * Do the work to start a login and get the temp cookie
  */
-async function startLogin(): Promise<[string, string]> {
+export async function startLogin(requestBody: ClientOptions | null = null): Promise<[string, string]> {
 
-    const response = await fetch(
-        `${oauthAgentBaseUrl}/login/start`,
-        {
-            method: 'POST',
-            headers: {
-                origin: config.trustedWebOrigins[0],
-            },
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            origin: config.trustedWebOrigins[0],
         },
-    )
+    } as RequestInit
 
-    const body = await response.json();
-    const parsedUrl = urlParse(body.authorizationRequestUrl, true)
+    if (requestBody) {
+        requestOptions.body = JSON.stringify(requestBody)
+    }
+
+    const response = await fetch(`${oauthAgentBaseUrl}/login/start`, requestOptions)
+
+    const responseBody = await response.json();
+    const parsedUrl = urlParse(responseBody.authorizationRequestUrl, true)
     const state = parsedUrl.query.state
     
     const cookieString = getCookieString(response)

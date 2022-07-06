@@ -21,6 +21,8 @@ import InvalidIDTokenException from './InvalidIDTokenException'
 import MissingTempLoginDataException from './MissingCodeVerifierException'
 import InvalidStateException from './InvalidStateException'
 import UnauthorizedException from './UnauthorizedException'
+import AuthorizationClientException from './AuthorizationClientException'
+import AuthorizationResponseException from './AuthorizationResponseException'
 import AuthorizationServerException from './AuthorizationServerException'
 import UnhandledException from './UnhandledException'
 
@@ -32,6 +34,8 @@ export {
     MissingTempLoginDataException,
     InvalidStateException,
     UnauthorizedException,
+    AuthorizationClientException,
+    AuthorizationResponseException,
     AuthorizationServerException,
     UnhandledException,
 }

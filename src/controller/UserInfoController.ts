@@ -38,7 +38,8 @@ class UserInfoController {
         const atCookieName = getATCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[atCookieName]) {
 
-            const userData = await getUserInfo(config, config.encKey, req.cookies[atCookieName])
+            const accessToken = req.cookies[atCookieName]
+            const userData = await getUserInfo(config, config.encKey, accessToken)
             res.status(200).json(userData)
 
         } else {

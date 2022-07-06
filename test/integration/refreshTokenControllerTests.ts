@@ -1,5 +1,5 @@
 import {assert, expect} from 'chai'
-import fetch, {RequestInit, Response} from 'node-fetch'
+import fetch, {RequestInit} from 'node-fetch'
 import {config} from '../../src/config'
 import {fetchStubbedResponse, getCookieString, performLogin} from './testUtils'
 
@@ -87,7 +87,45 @@ describe('RefreshTokenControllerTests', () => {
         assert.notEqual(rewrittenCookieString, cookieString)
     })
 
-    it("A 4xx response from the Identity Server when refreshing tokens should result in a 401 response", async () => {
+    it("A configuration error rejected by the Authorization Server when refreshing tokens should result in a 400 status code", async () => {
+
+        const [, loginBody, cookieString] = await performLogin()
+
+        const options = {
+            method: 'POST',
+            headers: {
+                origin: config.trustedWebOrigins[0],
+                'Content-Type': 'application/json',
+                cookie: cookieString,
+            },
+        } as RequestInit
+        
+        const customHeaders = options.headers as any
+        customHeaders[`x-${config.cookieNamePrefix}-csrf`] = loginBody.csrf
+
+        const stubbedResponse = {
+            id: '1527eaa0-6af2-45c2-a2b2-e433eaf7cf04',
+            priority: 1,
+            request: {
+                method: 'POST',
+                url: '/oauth/v2/oauth-token'
+            },
+            response: {
+                status: 400,
+                body: "{\"error\":\"invalid_client\"}"
+            }
+        }
+        const response = await fetchStubbedResponse(stubbedResponse, async () => {
+            return await fetch(`${oauthAgentBaseUrl}/refresh`, options)
+        })
+
+        // The SPA cannot recover from this error so would need to present an error display
+        assert.equal(response.status, 400, 'Incorrect HTTP status')
+        const body = await response.json()
+        assert.equal(body.code, 'authorization_error', 'Incorrect error code')
+    })
+
+    it("An expired refresh token should result in a 401 response so that the SPA can trigger re-authentication", async () => {
 
         const [, loginBody, cookieString] = await performLogin()
 
@@ -111,16 +149,19 @@ describe('RefreshTokenControllerTests', () => {
                 'url': '/oauth/v2/oauth-token'
             },
             response: {
-                status: 400,
-                body: "{\"error\":\"invalid_client\"}"
+                status: 401,
+                
+                // In a correct setup this will be returned from the Authorization Server when the refresh token expires
+                body: "{\"error\":\"invalid_grant\"}"
             }
         }
         const response = await fetchStubbedResponse(stubbedResponse, async () => {
             return await fetch(`${oauthAgentBaseUrl}/refresh`, options)
         })
 
+        // The SPA will trigger re-authentication when it gets a 401 during token refresh
         assert.equal(response.status, 401, 'Incorrect HTTP status')
         const body = await response.json()
-        assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
+        assert.equal(body.code, 'session_expired', 'Incorrect error code')
     })
 })

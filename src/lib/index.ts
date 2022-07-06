@@ -15,8 +15,9 @@
  */
 
 import { getAuthorizationURL } from './authorizationURL'
-import { getEncryptedCookie, decryptCookie, getCookiesForUnset } from './cookieEncrypter'
-import { getTokenEndpointResponse, refreshAccessToken, getCookiesForTokenResponse } from './getToken'
+import { getEncryptedCookie, decryptCookie } from './cookieEncrypter'
+import { getCookiesForTokenResponse, getCookiesForUnset } from './cookieBuilder'
+import { getTokenEndpointResponse, refreshAccessToken } from './getToken'
 import getUserInfo from './getUserInfo'
 import getIDTokenClaims from './getIDTokenClaims'
 import getRedirectUri from './redirectUri'
@@ -24,6 +25,7 @@ import getLogoutURL from './getLogoutURL'
 import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import { getTempLoginDataCookie, getTempLoginDataCookieForUnset, generateRandomString } from './pkce'
 import { getAuthCookieName, getIDCookieName, getCSRFCookieName, getATCookieName, getTempLoginDataCookieName } from './cookieName'
+import { ClientOptions } from './clientOptions'
 import { ValidateRequestOptions } from './validateRequest'
 
 export {
@@ -46,6 +48,7 @@ export {
     getIDCookieName,
     getAuthCookieName,
     generateRandomString,
+    ClientOptions,
     OAuthAgentConfiguration,
     ValidateRequestOptions,
 }
