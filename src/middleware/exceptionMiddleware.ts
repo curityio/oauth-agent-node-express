@@ -15,7 +15,6 @@
  */
 
 import {NextFunction, Request, Response} from 'express';
-import e = require('express');
 import {config} from '../config'
 import {getCookiesForUnset } from'../lib';
 import {OAuthAgentException} from '../lib/exceptions'

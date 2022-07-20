@@ -10,7 +10,7 @@ RESPONSE_FILE=data/response.txt
 MAIN_COOKIES_FILE=data/main_cookies.txt
 LOGIN_COOKIES_FILE=data/login_cookies.txt
 CURITY_COOKIES_FILE=data/curity_cookies.txt
-export http_proxy='http://127.0.0.1:8888'
+#export http_proxy='http://127.0.0.1:8888'
 
 #
 # Ensure that we are in the folder containing this script
