@@ -19,7 +19,7 @@ import {config} from '../config'
 import {InvalidCookieException} from '../lib/exceptions'
 import {decryptCookie, getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken, ValidateRequestOptions} from '../lib'
 import validateExpressRequest from '../validateExpressRequest'
-import {asyncCatch} from '../supportability/exceptionMiddleware';
+import {asyncCatch} from '../middleware/exceptionMiddleware';
 
 class RefreshTokenController {
     public router = express.Router()

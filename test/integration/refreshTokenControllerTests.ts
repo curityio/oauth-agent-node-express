@@ -125,7 +125,7 @@ describe('RefreshTokenControllerTests', () => {
         assert.equal(body.code, 'authorization_error', 'Incorrect error code')
     })
 
-    it("An expired refresh token should result in a 401 response so that the SPA can trigger re-authentication", async () => {
+    it("An expired refresh token should result in a 401 response and cleared cookies", async () => {
 
         const [, loginBody, cookieString] = await performLogin()
 
@@ -163,5 +163,9 @@ describe('RefreshTokenControllerTests', () => {
         assert.equal(response.status, 401, 'Incorrect HTTP status')
         const body = await response.json()
         assert.equal(body.code, 'session_expired', 'Incorrect error code')
+
+        // Clear cookies so that the next call to /login/end, eg a page reload, indicates not logged in
+        const clearedCookies = getCookieString(response);
+        assert.equal(clearedCookies, "example-auth=;example-at=;example-id=;example-csrf=;", 'Incorrect cleared cookies string')
     })
 })

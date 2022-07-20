@@ -31,7 +31,7 @@ import {
 import {AuthorizationResponseException} from '../lib/exceptions'
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
-import {asyncCatch} from '../supportability/exceptionMiddleware';
+import {asyncCatch} from '../middleware/exceptionMiddleware';
 
 class LoginController {
     public router = express.Router()

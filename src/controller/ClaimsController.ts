@@ -19,7 +19,7 @@ import {getIDCookieName, getIDTokenClaims, ValidateRequestOptions} from '../lib'
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
 import {InvalidCookieException} from '../lib/exceptions'
-import {asyncCatch} from '../supportability/exceptionMiddleware';
+import {asyncCatch} from '../middleware/exceptionMiddleware';
 
 class ClaimsController {
     public router = express.Router()

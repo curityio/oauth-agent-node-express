@@ -27,8 +27,8 @@ import {
     RefreshTokenController
 } from './controller'
 import {config} from './config'
-import loggingMiddleware from './supportability/loggingMiddleware'
-import exceptionMiddleware from './supportability/exceptionMiddleware'
+import loggingMiddleware from './middleware/loggingMiddleware'
+import exceptionMiddleware from './middleware/exceptionMiddleware'
 
 const app = express()
 const corsConfiguration = {

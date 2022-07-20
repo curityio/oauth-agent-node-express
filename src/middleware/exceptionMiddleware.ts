@@ -15,6 +15,9 @@
  */
 
 import {NextFunction, Request, Response} from 'express';
+import e = require('express');
+import {config} from '../config'
+import {getCookiesForUnset } from'../lib';
 import {OAuthAgentException} from '../lib/exceptions'
 import {UnhandledException} from '../lib/exceptions'
 import {RequestLog} from './requestLog';
@@ -41,10 +44,15 @@ export default function exceptionMiddleware(
         response.locals.log.addError(exception)
     }
     
-    // Send the response to the client
     const statusCode = exception.statusCode
     const data = { code: exception.code, message: exception.message}
-    response.status(statusCode).send(data)
+    
+    // Send the error response to the client and remove cookies when the session expires
+    response.status(statusCode)
+    if (data.code === 'session_expired') {
+        response.setHeader('Set-Cookie', getCookiesForUnset(config.cookieOptions, config.cookieNamePrefix))
+    }
+    response.send(data)
 }
 
 /*
