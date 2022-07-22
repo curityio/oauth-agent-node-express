@@ -19,7 +19,7 @@ import {config} from '../config'
 import {getATCookieName, getCookiesForUnset, getLogoutURL, ValidateRequestOptions} from '../lib'
 import {InvalidCookieException} from '../lib/exceptions'
 import validateExpressRequest from '../validateExpressRequest'
-import {asyncCatch} from '../supportability/exceptionMiddleware';
+import {asyncCatch} from '../middleware/exceptionMiddleware';
 
 class LogoutController {
     public router = express.Router()

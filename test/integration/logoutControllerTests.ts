@@ -1,7 +1,7 @@
 import {assert, expect} from 'chai'
 import fetch, {RequestInit} from 'node-fetch'
 import {config} from '../../src/config'
-import {performLogin} from './testUtils'
+import {getCookieString, performLogin} from './testUtils'
 
 // Tests to focus on the logout endpoint
 describe('LogoutControllerTests', () => {
@@ -82,5 +82,8 @@ describe('LogoutControllerTests', () => {
         const body = await response.json()
         const endSessionRequestUrl = body.url as string
         expect(endSessionRequestUrl).contains(`client_id=${config.clientID}`, 'Invalid end session request URL')
+
+        const clearedCookies = getCookieString(response);
+        assert.equal(clearedCookies, "example-auth=;example-at=;example-id=;example-csrf=;", 'Incorrect cleared cookies string')
     })
 })
