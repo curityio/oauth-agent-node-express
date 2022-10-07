@@ -33,6 +33,7 @@ class ClaimsController {
         // Verify the web origin
         const options = new ValidateRequestOptions()
         options.requireCsrfHeader = false;
+        options.requireTrustedOrigin = config.corsEnabled;
         validateExpressRequest(req, options)
 
         const idTokenCookieName = getIDCookieName(config.cookieNamePrefix)
