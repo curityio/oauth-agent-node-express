@@ -41,6 +41,7 @@ export default class OAuthAgentConfiguration {
     public cookieNamePrefix: string
     public encKey: string
     public trustedWebOrigins: string[]
+    public corsEnabled: boolean
     public cookieOptions: CookieSerializeOptions
 
     constructor(
@@ -60,6 +61,7 @@ export default class OAuthAgentConfiguration {
         cookieNamePrefix: string,
         encKey: string,
         trustedWebOrigins: string[],
+        corsEnabled: boolean,
         cookieOptions?: CookieSerializeOptions) {
 
         this.port = port
@@ -76,6 +78,7 @@ export default class OAuthAgentConfiguration {
         this.cookieNamePrefix = cookieNamePrefix ? cookieNamePrefix : "oauthagent"
         this.encKey = encKey
         this.trustedWebOrigins = trustedWebOrigins
+        this.corsEnabled = corsEnabled
         this.cookieOptions = cookieOptions ? cookieOptions : {
             httpOnly: true,
             secure: true,

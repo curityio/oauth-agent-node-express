@@ -37,7 +37,10 @@ const corsConfiguration = {
     methods: ['POST']
 }
 
-app.use(cors(corsConfiguration))
+if (config.corsEnabled) {
+    app.use(cors(corsConfiguration))
+}
+
 app.use(cookieParser())
 app.use('*', express.json())
 app.use('*', loggingMiddleware)
