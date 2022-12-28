@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Curity AB
+ *  Copyright 2022 Curity AB
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,16 +14,14 @@
  *  limitations under the License.
  */
 
-import {LoginController} from './LoginController'
-import LogoutController from './LogoutController'
-import UserInfoController from './UserInfoController'
-import ClaimsController from './ClaimsController'
-import RefreshTokenController from './RefreshTokenController'
+export class AuthorizationRequestData {
+    public readonly authorizationRequestURL: string
+    public readonly codeVerifier: string
+    public readonly state: string
 
-export {
-    LoginController,
-    LogoutController,
-    UserInfoController,
-    ClaimsController,
-    RefreshTokenController
+    constructor(authorizationRequestURL: string, codeVerifier: string, state: string) {
+        this.authorizationRequestURL = authorizationRequestURL
+        this.codeVerifier = codeVerifier
+        this.state = state
+    }
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Curity AB
+ *  Copyright 2022 Curity AB
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,16 +14,12 @@
  *  limitations under the License.
  */
 
-import {LoginController} from './LoginController'
-import LogoutController from './LogoutController'
-import UserInfoController from './UserInfoController'
-import ClaimsController from './ClaimsController'
-import RefreshTokenController from './RefreshTokenController'
+import {ClientOptions} from '../../clientOptions';
+import {AuthorizationRequestData} from './authorizationRequestData';
 
-export {
-    LoginController,
-    LogoutController,
-    UserInfoController,
-    ClaimsController,
-    RefreshTokenController
+/*
+ * An abstraction for returning the authentication request URL to the SPA
+ */
+export interface AuthorizationRequestHandler {
+    createRequest(options?: ClientOptions): Promise<AuthorizationRequestData>;
 }

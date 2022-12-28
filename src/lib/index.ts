@@ -14,7 +14,8 @@
  *  limitations under the License.
  */
 
-import { getAuthorizationURL } from './authorizationURL'
+import { OAuthFactory } from './behaviors/oauthFactory'
+import { AuthorizationRequestHandler } from './behaviors/authorizationRequest/authorizationRequestHandler'
 import { getEncryptedCookie, decryptCookie } from './cookieEncrypter'
 import { getCookiesForTokenResponse, getCookiesForUnset } from './cookieBuilder'
 import { getTokenEndpointResponse, refreshAccessToken } from './getToken'
@@ -29,7 +30,6 @@ import { ClientOptions } from './clientOptions'
 import { ValidateRequestOptions } from './validateRequest'
 
 export {
-    getAuthorizationURL,
     getEncryptedCookie,
     decryptCookie,
     getTokenEndpointResponse,
@@ -48,7 +48,9 @@ export {
     getIDCookieName,
     getAuthCookieName,
     generateRandomString,
-    ClientOptions,
     OAuthAgentConfiguration,
+    OAuthFactory,
+    AuthorizationRequestHandler,
+    ClientOptions,
     ValidateRequestOptions,
 }

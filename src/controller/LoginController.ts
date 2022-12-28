@@ -17,8 +17,9 @@
 import * as express from 'express'
 import * as urlparse from 'url-parse'
 import {
+    OAuthFactory,
+    AuthorizationRequestHandler,
     decryptCookie,
-    getAuthorizationURL,
     getCSRFCookieName,
     getTokenEndpointResponse,
     getTempLoginDataCookie,
@@ -33,22 +34,23 @@ import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
 import {asyncCatch} from '../middleware/exceptionMiddleware';
 
-class LoginController {
+export class LoginController {
     public router = express.Router()
+    private authorizationRequestHandler: AuthorizationRequestHandler
 
-    constructor() {
+    constructor(factory: OAuthFactory) {
+        this.authorizationRequestHandler = factory.createAuthorizationRequestHandler()
         this.router.post('/start', asyncCatch(this.startLogin))
         this.router.post('/end', asyncCatch(this.handlePageLoad))
     }
 
     startLogin = async (req: express.Request, res: express.Response) => {
 
-        // Verify the web origin
         const options = new ValidateRequestOptions()
-        options.requireCsrfHeader = false;
+        options.requireCsrfHeader = false
         validateExpressRequest(req, options)
 
-        const authorizationRequestData = getAuthorizationURL(config, req.body)
+        const authorizationRequestData = await this.authorizationRequestHandler.createRequest(req.body)
 
         res.setHeader('Set-Cookie',
             getTempLoginDataCookie(authorizationRequestData.codeVerifier, authorizationRequestData.state, config.cookieOptions, config.cookieNamePrefix, config.encKey))
@@ -136,7 +138,7 @@ class LoginController {
             handled: isSuccessOAuthResponse,
             isLoggedIn,
         } as any
-
+        
         // The CSRF token is required for subsequent operations and calling APIs
         if (csrfToken) {
             responseBody.csrf = csrfToken
@@ -157,5 +159,3 @@ class LoginController {
         return {}
     }
 }
-
-export default LoginController
