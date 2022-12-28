@@ -63,18 +63,16 @@ npm test
 ## Run End-to-End Tests
 
 Run some tests that also use the Curity Identity Server.\
-First copy a license file into the `test/idsvr` folder and then run the following commands:
+First copy a license file into the `test/idsvr` folder and then run the following command:
 
 ```bash
-cd test/end-to-end/idsvr
-./deploy.sh
+./test/end-to-end/idsvr/deploy.sh
 ```
 
 Then run a test script that uses curl requests to verify the OAuth Agent's operations:
 
 ```bash
-cd ..
-./test-oauth-agent.sh
+./test/end-to-end/test-oauth-agent.sh
 ```
 
 ![API Tests](api-tests.png)

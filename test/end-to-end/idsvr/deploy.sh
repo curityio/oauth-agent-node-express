@@ -19,7 +19,7 @@ cp ./pre-commit ../../../.git/hooks
 # Check for a license file
 #
 if [ ! -f './license.json' ]; then
-  echo "Please provide a license.json file in the test/idsvr folder"
+  echo "Please provide a license.json file in the test/end-to-end/idsvr folder"
   exit 1
 fi
 
