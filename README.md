@@ -61,7 +61,7 @@ oauth-agent:
     COOKIE_NAME_PREFIX: 'example'
     COOKIE_ENCRYPTION_KEY: 'fda91643fce9af565bdc34cd965b48da75d1f5bd8846bf0910dd6d7b10f06dfe'
     CORS_ENABLED: 'true'
-    SERVER_CERT_P12_PATH: '/certs/mytlscert.p12'
+    SERVER_CERT_P12_PATH: '/certs/my.p12'
     SERVER_CERT_P12_PASSWORD: 'Password1'
 ```
 
