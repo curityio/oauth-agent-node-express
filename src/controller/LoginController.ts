@@ -111,7 +111,6 @@ export class LoginController {
 
         } else {
             
-            // See if there are existing cookies
             isLoggedIn = !!(req.cookies && req.cookies[getATCookieName(config.cookieNamePrefix)])
             if (isLoggedIn) {
 
