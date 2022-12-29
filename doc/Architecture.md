@@ -40,12 +40,12 @@ They key and value of each item must be strings and they will then be appended t
   "extraParams": [
       {
           "key": "max-age",
-          "value": "3600",
-      },
+          "value": "3600"
+      }
       {
           "key": "ui_locales",
-          "value": "fr",
-      },
+          "value": "fr"
+      }
   ]
 }
 ```

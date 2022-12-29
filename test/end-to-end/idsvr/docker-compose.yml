@@ -26,6 +26,5 @@ services:
     volumes:
      - ./license.json:/opt/idsvr/etc/init/license/license.json
      - ./config-backup.xml:/opt/idsvr/etc/init/config.xml
-     - ./log4j2.xml:/opt/idsvr/etc/log4j2.xml
     environment:
       PASSWORD: 'Password1'

@@ -29,7 +29,6 @@ import {
 import {config} from './config'
 import loggingMiddleware from './middleware/loggingMiddleware'
 import exceptionMiddleware from './middleware/exceptionMiddleware'
-import {OAuthFactory} from './lib'
 
 const app = express()
 const corsConfiguration = {
@@ -48,9 +47,8 @@ app.use('*', loggingMiddleware)
 app.use('*', exceptionMiddleware)
 app.set('etag', false)
 
-const factory = new OAuthFactory(config);
 const controllers = {
-    '/login': new LoginController(factory),
+    '/login': new LoginController(),
     '/userInfo': new UserInfoController(),
     '/claims': new ClaimsController(),
     '/logout': new LogoutController(),

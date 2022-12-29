@@ -15,9 +15,7 @@
  */
 
 import OAuthAgentConfiguration from './oauthAgentConfiguration'
-import { OAuthFactory } from './handlers/oauthFactory'
-import { AuthorizationRequestHandler } from './handlers/authorizationRequest/authorizationRequestHandler'
-import { AuthorizationResponseHandler } from './handlers/authorizationResponse/authorizationResponseHandler'
+import { LoginHandler } from './loginHandler'
 import { ClientOptions } from './clientOptions'
 import { ValidateRequestOptions } from './validateRequest'
 import { getEncryptedCookie, decryptCookie } from './cookieEncrypter'
@@ -32,9 +30,7 @@ import { getAuthCookieName, getIDCookieName, getCSRFCookieName, getATCookieName,
 
 export {
     OAuthAgentConfiguration,
-    OAuthFactory,
-    AuthorizationRequestHandler,
-    AuthorizationResponseHandler,
+    LoginHandler,
     ClientOptions,
     ValidateRequestOptions,
     getEncryptedCookie,

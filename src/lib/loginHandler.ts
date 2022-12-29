@@ -14,16 +14,14 @@
  *  limitations under the License.
  */
 
-import {ClientOptions} from '../../clientOptions';
-import OAuthAgentConfiguration from '../../oauthAgentConfiguration';
-import {generateHash, generateRandomString} from '../../pkce';
-import {AuthorizationRequestHandler} from './authorizationRequestHandler';
+import * as urlparse from 'url-parse'
+import {ClientOptions} from './clientOptions';
+import OAuthAgentConfiguration from './oauthAgentConfiguration';
+import {generateHash, generateRandomString} from './pkce';
 import {AuthorizationRequestData} from './authorizationRequestData';
+import {AuthorizationResponseException} from './exceptions'
 
-/*
- * Creates the details for a plain OpenID Connect code flow
- */
-export class DefaultAuthorizationRequestHandler implements AuthorizationRequestHandler {
+export class LoginHandler {
 
     private readonly config: OAuthAgentConfiguration;
 
@@ -57,5 +55,42 @@ export class DefaultAuthorizationRequestHandler implements AuthorizationRequestH
         }
 
         return new AuthorizationRequestData(authorizationRequestUrl, codeVerifier, state)
+    }
+
+    public async handleResponse(pageUrl?: string): Promise<any> {
+
+        const data = this.getUrlParts(pageUrl)
+
+        if (data.state && data.code) {
+
+            return {
+                code: data.code,
+                state: data.state,
+            }
+        }
+
+        if (data.state && data.error) {
+
+            throw new AuthorizationResponseException(
+                data.error,
+                data.error_description || 'Login failed at the Authorization Server')
+        }
+
+        return {
+            code: null,
+            state: null,
+        }
+    }
+
+    getUrlParts(url?: string): any {
+        
+        if (url) {
+            const urlData = urlparse(url, true)
+            if (urlData.query) {
+                return urlData.query
+            }
+        }
+
+        return {}
     }
 }

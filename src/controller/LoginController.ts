@@ -16,9 +16,7 @@
 
 import * as express from 'express'
 import {
-    OAuthFactory,
-    AuthorizationRequestHandler,
-    AuthorizationResponseHandler,
+    LoginHandler,
     ValidateRequestOptions,
     decryptCookie,
     getCSRFCookieName,
@@ -35,12 +33,10 @@ import {asyncCatch} from '../middleware/exceptionMiddleware';
 
 export class LoginController {
     public router = express.Router()
-    private authorizationRequestHandler: AuthorizationRequestHandler
-    private authorizationResponseHandler: AuthorizationResponseHandler
+    private loginHandler: LoginHandler
 
-    constructor(factory: OAuthFactory) {
-        this.authorizationRequestHandler = factory.createAuthorizationRequestHandler()
-        this.authorizationResponseHandler = factory.createAuthorizationResponseHandler()
+    constructor() {
+        this.loginHandler = new LoginHandler(config)
         this.router.post('/start', asyncCatch(this.startLogin))
         this.router.post('/end', asyncCatch(this.handlePageLoad))
     }
@@ -54,7 +50,7 @@ export class LoginController {
         options.requireCsrfHeader = false
         validateExpressRequest(req, options)
 
-        const authorizationRequestData = await this.authorizationRequestHandler.createRequest(req.body)
+        const authorizationRequestData = await this.loginHandler.createRequest(req.body)
 
         res.setHeader('Set-Cookie',
             getTempLoginDataCookie(authorizationRequestData.codeVerifier, authorizationRequestData.state, config.cookieOptions, config.cookieNamePrefix, config.encKey))
@@ -73,7 +69,7 @@ export class LoginController {
         options.requireCsrfHeader = false
         validateExpressRequest(req, options)
         
-        const data = await this.authorizationResponseHandler.handleResponse(req.body?.pageUrl)
+        const data = await this.loginHandler.handleResponse(req.body?.pageUrl)
         
         let isLoggedIn = false
         let handled = false
@@ -111,10 +107,10 @@ export class LoginController {
 
         } else {
             
+            // During a page reload, return the existing anti forgery token
             isLoggedIn = !!(req.cookies && req.cookies[getATCookieName(config.cookieNamePrefix)])
             if (isLoggedIn) {
 
-                // During a page reload, return the anti forgery token
                 csrfToken = decryptCookie(config.encKey, req.cookies[getCSRFCookieName(config.cookieNamePrefix)])
             }
         }
