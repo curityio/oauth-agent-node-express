@@ -15,10 +15,11 @@
  */
 
 import * as express from 'express'
-import * as urlparse from 'url-parse'
 import {
     OAuthFactory,
     AuthorizationRequestHandler,
+    AuthorizationResponseHandler,
+    ValidateRequestOptions,
     decryptCookie,
     getCSRFCookieName,
     getTokenEndpointResponse,
@@ -27,9 +28,7 @@ import {
     getCookiesForTokenResponse,
     getATCookieName,
     generateRandomString,
-    ValidateRequestOptions,
 } from '../lib'
-import {AuthorizationResponseException} from '../lib/exceptions'
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
 import {asyncCatch} from '../middleware/exceptionMiddleware';
@@ -37,13 +36,18 @@ import {asyncCatch} from '../middleware/exceptionMiddleware';
 export class LoginController {
     public router = express.Router()
     private authorizationRequestHandler: AuthorizationRequestHandler
+    private authorizationResponseHandler: AuthorizationResponseHandler
 
     constructor(factory: OAuthFactory) {
         this.authorizationRequestHandler = factory.createAuthorizationRequestHandler()
+        this.authorizationResponseHandler = factory.createAuthorizationResponseHandler()
         this.router.post('/start', asyncCatch(this.startLogin))
         this.router.post('/end', asyncCatch(this.handlePageLoad))
     }
 
+    /*
+     * The SPA calls this endpoint to ask the OAuth Agent for the authorization request URL
+     */
     startLogin = async (req: express.Request, res: express.Response) => {
 
         const options = new ValidateRequestOptions()
@@ -60,38 +64,23 @@ export class LoginController {
     }
 
     /*
-     * The SPA posts its URL here on every page load, and this operation ends a login when required
-     * The API works out whether it is an OAuth response, eg:
-     * - code + state query parameters
-     * - code + error query parameters
-     * - JARM response parameters
+     * The SPA posts its URL here on every page load, to get its authenticated state
+     * When an OAuth response is received it is handled and cookies are written
      */
     handlePageLoad = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        // Verify the web origin
         const options = new ValidateRequestOptions()
         options.requireCsrfHeader = false
         validateExpressRequest(req, options)
         
-        // First see if the SPA is reporting an OAuth front channel response to the browser
-        const data = this.getUrlParts(req.body?.pageUrl)
-        const isSuccessOAuthResponse = !!(data.state && data.code)
-        const isFailedOAuthResponse = !!(data.state && data.error)
-
-        // First handle reporting front channel errors back to the SPA
-        if (isFailedOAuthResponse) {
-
-            throw new AuthorizationResponseException(
-                data.error,
-                data.error_description || 'Login failed at the Authorization Server')
-        }
-
-        let isLoggedIn: boolean
+        const data = await this.authorizationResponseHandler.handleResponse(req.body?.pageUrl)
+        
+        let isLoggedIn = false
+        let handled = false
         let csrfToken: string = ''
 
-        if (isSuccessOAuthResponse) {
+        if (data.code && data.state) {
             
-            // Main OAuth response handling
             const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
             const tokenResponse = await getTokenEndpointResponse(config, data.code, data.state, tempLoginData)
 
@@ -111,51 +100,35 @@ export class LoginController {
                 }
             } else {
 
-                // By default generate a new token
+                // Generate a new value otherwise
                 csrfToken = generateRandomString()
             }
 
-            // Write the SameSite cookies
             const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config, true, csrfToken)
             res.set('Set-Cookie', cookiesToSet)
+            handled = true
             isLoggedIn = true
 
         } else {
             
-            // See if we have a session cookie
+            // See if there are existing cookies
             isLoggedIn = !!(req.cookies && req.cookies[getATCookieName(config.cookieNamePrefix)])
             if (isLoggedIn) {
 
-                // During an authenticated page refresh or opening a new browser tab, we must return the anti forgery token
-                // This enables an XSS attack to get the value, but this is standard for CSRF tokens
+                // During a page reload, return the anti forgery token
                 csrfToken = decryptCookie(config.encKey, req.cookies[getCSRFCookieName(config.cookieNamePrefix)])
             }
         }
 
-        // isLoggedIn enables the SPA to know it does not need to present a login option
-        // handled enables the SPA to know a login has just completed
         const responseBody = {
-            handled: isSuccessOAuthResponse,
+            handled,
             isLoggedIn,
         } as any
         
-        // The CSRF token is required for subsequent operations and calling APIs
         if (csrfToken) {
             responseBody.csrf = csrfToken
         }
 
         res.status(200).json(responseBody)
-    }
-
-    getUrlParts(url?: string): any {
-        
-        if (url) {
-            const urlData = urlparse(url, true)
-            if (urlData.query) {
-                return urlData.query
-            }
-        }
-
-        return {}
     }
 }

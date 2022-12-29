@@ -1,4 +1,4 @@
-FROM node:15.11.0-alpine
+FROM node:18.1.0-bullseye
 
 WORKDIR /usr/oauth-agent
 COPY dist                /usr/oauth-agent/dist
@@ -6,8 +6,7 @@ COPY package*.json       /usr/oauth-agent/
 
 RUN npm install --production
 
-RUN addgroup -g 1001 apigroup
-RUN adduser -u 1001 -G apigroup -h /home/apiuser -D apiuser
-
+RUN adduser --disabled-password --home /home/apiuser --gecos '' apiuser
 USER apiuser
+
 CMD ["node", "dist/server.js"]

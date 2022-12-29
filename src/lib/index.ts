@@ -14,8 +14,12 @@
  *  limitations under the License.
  */
 
-import { OAuthFactory } from './behaviors/oauthFactory'
-import { AuthorizationRequestHandler } from './behaviors/authorizationRequest/authorizationRequestHandler'
+import OAuthAgentConfiguration from './oauthAgentConfiguration'
+import { OAuthFactory } from './handlers/oauthFactory'
+import { AuthorizationRequestHandler } from './handlers/authorizationRequest/authorizationRequestHandler'
+import { AuthorizationResponseHandler } from './handlers/authorizationResponse/authorizationResponseHandler'
+import { ClientOptions } from './clientOptions'
+import { ValidateRequestOptions } from './validateRequest'
 import { getEncryptedCookie, decryptCookie } from './cookieEncrypter'
 import { getCookiesForTokenResponse, getCookiesForUnset } from './cookieBuilder'
 import { getTokenEndpointResponse, refreshAccessToken } from './getToken'
@@ -23,13 +27,16 @@ import getUserInfo from './getUserInfo'
 import getIDTokenClaims from './getIDTokenClaims'
 import getRedirectUri from './redirectUri'
 import getLogoutURL from './getLogoutURL'
-import OAuthAgentConfiguration from './oauthAgentConfiguration'
 import { getTempLoginDataCookie, getTempLoginDataCookieForUnset, generateRandomString } from './pkce'
 import { getAuthCookieName, getIDCookieName, getCSRFCookieName, getATCookieName, getTempLoginDataCookieName } from './cookieName'
-import { ClientOptions } from './clientOptions'
-import { ValidateRequestOptions } from './validateRequest'
 
 export {
+    OAuthAgentConfiguration,
+    OAuthFactory,
+    AuthorizationRequestHandler,
+    AuthorizationResponseHandler,
+    ClientOptions,
+    ValidateRequestOptions,
     getEncryptedCookie,
     decryptCookie,
     getTokenEndpointResponse,
@@ -48,9 +55,4 @@ export {
     getIDCookieName,
     getAuthCookieName,
     generateRandomString,
-    OAuthAgentConfiguration,
-    OAuthFactory,
-    AuthorizationRequestHandler,
-    ClientOptions,
-    ValidateRequestOptions,
 }

@@ -14,9 +14,11 @@
  *  limitations under the License.
  */
 
-import OAuthAgentConfiguration from '../oauthAgentConfiguration';
-import {AuthorizationRequestHandler} from './authorizationRequest/authorizationRequestHandler';
-import {DefaultAuthorizationRequestHandler} from './authorizationRequest/defaultAuthorizationRequestHandler';
+import OAuthAgentConfiguration from '../oauthAgentConfiguration'
+import {AuthorizationRequestHandler} from './authorizationRequest/authorizationRequestHandler'
+import {AuthorizationResponseHandler} from './authorizationResponse/authorizationResponseHandler'
+import {DefaultAuthorizationRequestHandler} from './authorizationRequest/defaultAuthorizationRequestHandler'
+import {DefaultAuthorizationResponseHandler} from './authorizationResponse/defaultAuthorizationResponseHandler'
 
 /*
  * The factory could create different implementations based on configuration
@@ -30,6 +32,10 @@ export class OAuthFactory {
     }
 
     public createAuthorizationRequestHandler(): AuthorizationRequestHandler {
-        return new DefaultAuthorizationRequestHandler(this.config);
+        return new DefaultAuthorizationRequestHandler(this.config)
+    }
+
+    public createAuthorizationResponseHandler() : AuthorizationResponseHandler {
+        return new DefaultAuthorizationResponseHandler()
     }
 }

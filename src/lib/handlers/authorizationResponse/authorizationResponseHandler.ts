@@ -14,12 +14,9 @@
  *  limitations under the License.
  */
 
-import {ClientOptions} from '../../clientOptions';
-import {AuthorizationRequestData} from './authorizationRequestData';
-
 /*
- * An abstraction for returning the authentication request URL to the SPA
+ * Handles an authorization response to receive the code and state
  */
-export interface AuthorizationRequestHandler {
-    createRequest(options?: ClientOptions): Promise<AuthorizationRequestData>;
+export interface AuthorizationResponseHandler {
+    handleResponse(pageUrl?: string): Promise<any>;
 }

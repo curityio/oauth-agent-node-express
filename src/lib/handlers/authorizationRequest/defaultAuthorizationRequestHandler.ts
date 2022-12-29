@@ -21,7 +21,7 @@ import {AuthorizationRequestHandler} from './authorizationRequestHandler';
 import {AuthorizationRequestData} from './authorizationRequestData';
 
 /*
- * Return a standard PKCE URL for an OpenID Connect code flow 
+ * Creates the details for a plain OpenID Connect code flow
  */
 export class DefaultAuthorizationRequestHandler implements AuthorizationRequestHandler {
 
