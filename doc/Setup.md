@@ -33,8 +33,6 @@ For local development of the OAuth Agent the following URLs are used, with HTTP 
 | OAuth Agent | http://api.example.local:8080/oauth-agent | This acts as a Back End for Front End for SPAs |
 | Curity Identity Server | http://login.example.local:8443 | This will receive a string client secret from the OAuth Agent |
 
-If you want to update to an HTTPS setup, see the use of OpenSSL certificates in the [Financial-grade OAuth Agent](https://github.com/curityio/oauth-agent-kotlin-spring-fapi).
-
 ## Build and Run the OAuth Agent
 
 Run these commands from the root folder and the API will then listen on HTTP over port 8080:
@@ -82,6 +80,5 @@ Then run a test script that uses curl requests to verify the OAuth Agent's opera
 When finished with your development session, free Docker resources like this:
 
 ```bash
-cd test/idsvr
-./teardown.sh
+./test/idsvr/teardown.sh
 ```
