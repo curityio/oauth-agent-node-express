@@ -21,76 +21,67 @@ import {generateHash, generateRandomString} from './pkce';
 import {AuthorizationRequestData} from './authorizationRequestData';
 import {AuthorizationResponseException} from './exceptions'
 
-export class LoginHandler {
+export async function createAuthorizationRequest(config: OAuthAgentConfiguration, options?: ClientOptions): Promise<AuthorizationRequestData> {
 
-    private readonly config: OAuthAgentConfiguration;
+    const codeVerifier = generateRandomString()
+    const state = generateRandomString()
 
-    constructor(config: OAuthAgentConfiguration) {
-        this.config = config;
-    }
-    
-    public async createRequest(options?: ClientOptions): Promise<AuthorizationRequestData> {
+    let authorizationRequestUrl = config.authorizeEndpoint + "?" +
+        "client_id=" + encodeURIComponent(config.clientID) +
+        "&redirect_uri=" + encodeURIComponent(config.redirectUri) +
+        "&response_type=code" +
+        "&state=" + encodeURIComponent(state) +
+        "&code_challenge=" + generateHash(codeVerifier) +
+        "&code_challenge_method=S256"
 
-        const codeVerifier = generateRandomString()
-        const state = generateRandomString()
-
-        let authorizationRequestUrl = this.config.authorizeEndpoint + "?" +
-            "client_id=" + encodeURIComponent(this.config.clientID) +
-            "&redirect_uri=" + encodeURIComponent(this.config.redirectUri) +
-            "&response_type=code" +
-            "&state=" + encodeURIComponent(state) +
-            "&code_challenge=" + generateHash(codeVerifier) +
-            "&code_challenge_method=S256"
-
-        if (options && options.extraParams) {
-            options.extraParams.forEach((p) => {
-                if (p.key && p.value) {
-                    authorizationRequestUrl += `&${p.key}=${encodeURIComponent(p.value)}`
-                }
-            });
-        }
-
-        if (this.config.scope) {
-            authorizationRequestUrl += "&scope=" + encodeURIComponent(this.config.scope)
-        }
-
-        return new AuthorizationRequestData(authorizationRequestUrl, codeVerifier, state)
-    }
-
-    public async handleResponse(pageUrl?: string): Promise<any> {
-
-        const data = this.getUrlParts(pageUrl)
-
-        if (data.state && data.code) {
-
-            return {
-                code: data.code,
-                state: data.state,
+    if (options && options.extraParams) {
+        options.extraParams.forEach((p) => {
+            if (p.key && p.value) {
+                authorizationRequestUrl += `&${p.key}=${encodeURIComponent(p.value)}`
             }
-        }
+        });
+    }
 
-        if (data.state && data.error) {
+    if (config.scope) {
+        authorizationRequestUrl += "&scope=" + encodeURIComponent(config.scope)
+    }
 
-            throw new AuthorizationResponseException(
-                data.error,
-                data.error_description || 'Login failed at the Authorization Server')
-        }
+    return new AuthorizationRequestData(authorizationRequestUrl, codeVerifier, state)
+}
+
+export async function handleAuthorizationResponse(pageUrl?: string): Promise<any> {
+
+    const data = getUrlParts(pageUrl)
+
+    if (data.state && data.code) {
 
         return {
-            code: null,
-            state: null,
+            code: data.code,
+            state: data.state,
         }
     }
 
-    getUrlParts(url?: string): any {
-        
-        if (url) {
-            const urlData = urlparse(url, true)
-            if (urlData.query) {
-                return urlData.query
-            }
-        }
+    if (data.state && data.error) {
 
-        return {}
+        throw new AuthorizationResponseException(
+            data.error,
+            data.error_description || 'Login failed at the Authorization Server')
     }
+
+    return {
+        code: null,
+        state: null,
+    }
+}
+
+function getUrlParts(url?: string): any {
+    
+    if (url) {
+        const urlData = urlparse(url, true)
+        if (urlData.query) {
+            return urlData.query
+        }
+    }
+
+    return {}
 }

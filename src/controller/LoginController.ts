@@ -16,8 +16,10 @@
 
 import * as express from 'express'
 import {
-    LoginHandler,
     ValidateRequestOptions,
+    createAuthorizationRequest,
+    handleAuthorizationResponse,
+    validateIDtoken,
     decryptCookie,
     getCSRFCookieName,
     getTokenEndpointResponse,
@@ -33,10 +35,8 @@ import {asyncCatch} from '../middleware/exceptionMiddleware';
 
 export class LoginController {
     public router = express.Router()
-    private loginHandler: LoginHandler
 
     constructor() {
-        this.loginHandler = new LoginHandler(config)
         this.router.post('/start', asyncCatch(this.startLogin))
         this.router.post('/end', asyncCatch(this.handlePageLoad))
     }
@@ -50,7 +50,7 @@ export class LoginController {
         options.requireCsrfHeader = false
         validateExpressRequest(req, options)
 
-        const authorizationRequestData = await this.loginHandler.createRequest(req.body)
+        const authorizationRequestData = await createAuthorizationRequest(config, req.body)
 
         res.setHeader('Set-Cookie',
             getTempLoginDataCookie(authorizationRequestData.codeVerifier, authorizationRequestData.state, config.cookieOptions, config.cookieNamePrefix, config.encKey))
@@ -69,7 +69,7 @@ export class LoginController {
         options.requireCsrfHeader = false
         validateExpressRequest(req, options)
         
-        const data = await this.loginHandler.handleResponse(req.body?.pageUrl)
+        const data = await handleAuthorizationResponse(req.body?.pageUrl)
         
         let isLoggedIn = false
         let handled = false
@@ -78,7 +78,9 @@ export class LoginController {
         if (data.code && data.state) {
             
             const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
+            
             const tokenResponse = await getTokenEndpointResponse(config, data.code, data.state, tempLoginData)
+            validateIDtoken(config, tokenResponse.idToken)
 
             csrfToken = generateRandomString()
             const csrfCookie = req.cookies[getCSRFCookieName(config.cookieNamePrefix)]

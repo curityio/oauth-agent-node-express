@@ -16,8 +16,11 @@
 
 import * as express from 'express'
 import {config} from '../config'
+
+import {
+    decryptCookie, getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken, validateIDtoken, ValidateRequestOptions
+} from '../lib'
 import {InvalidCookieException} from '../lib/exceptions'
-import {decryptCookie, getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken, ValidateRequestOptions} from '../lib'
 import validateExpressRequest from '../validateExpressRequest'
 import {asyncCatch} from '../middleware/exceptionMiddleware';
 
@@ -38,7 +41,11 @@ class RefreshTokenController {
         if (req.cookies && req.cookies[authCookieName]) {
             
             const refreshToken = decryptCookie(config.encKey, req.cookies[authCookieName])
+
             const tokenResponse = await refreshAccessToken(refreshToken, config)
+            if (tokenResponse.id_token) {
+                validateIDtoken(config, tokenResponse.id_token)
+            }
 
             const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config)
             res.setHeader('Set-Cookie', cookiesToSet)
