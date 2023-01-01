@@ -48,6 +48,7 @@ export const config: OAuthAgentConfiguration = {
     } as CookieSerializeOptions,
 
     // Authorization Server settings
+    issuer: process.env.ISSUER || 'http://login.example.local:8443/oauth/v2/oauth-anonymous',
     authorizeEndpoint: process.env.AUTHORIZE_ENDPOINT || 'http://login.example.local:8443/oauth/v2/oauth-authorize',
     logoutEndpoint: process.env.LOGOUT_ENDPOINT || 'http://login.example.local:8443/oauth/v2/oauth-session/logout',
     tokenEndpoint: process.env.TOKEN_ENDPOINT || 'http://login.example.local:8443/oauth/v2/oauth-token',

@@ -48,6 +48,7 @@ oauth-agent:
   environment:
     PORT: 3001
     TRUSTED_WEB_ORIGIN: 'https://www.example.com'
+    ISSUER: 'https://login.example.com/oauth/v2/oauth-anonymous'
     AUTHORIZE_ENDPOINT: 'https://login.example.com/oauth/v2/oauth-authorize'
     TOKEN_ENDPOINT: 'https://login-internal/oauth/v2/oauth-token'
     USERINFO_ENDPOINT: 'https://login-internal/oauth/v2/oauth-userinfo'
