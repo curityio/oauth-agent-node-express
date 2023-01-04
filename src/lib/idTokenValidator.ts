@@ -15,14 +15,21 @@ export function validateIDtoken(config: OAuthAgentConfiguration, idToken: string
         throw new InvalidIDTokenException(new Error('Unexpected iss claim'))
     }
 
-    const audience = typeof payload.aud === 'string' ? [payload.aud] : payload.aud as string[]
+    const audience = getAudienceClaim(payload.aud)
     if (audience.indexOf(config.clientID) === -1) {
         throw new InvalidIDTokenException(new Error('Unexpected aud claim'))
     }
+}
 
-    if (audience.length > 1 || payload.azp) {
-        if (payload.azp !== config.clientID) {
-            throw new InvalidIDTokenException(new Error('Unexpected azp claim'));
-        }
+function getAudienceClaim(aud: any): string[] {
+
+    if (typeof aud === 'string') {
+        return [aud]
     }
+
+    if (Array.isArray(aud)) {
+        return aud
+    }
+
+    return []
 }

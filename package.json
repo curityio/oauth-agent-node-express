@@ -10,6 +10,9 @@
     },
     "author": "Curity AB",
     "license": "Apache-2.0",
+    "engines": {
+        "node": ">=18"
+    },
     "dependencies": {
         "base64url": "^3.0.1",
         "cookie": "^0.4.1",

@@ -423,6 +423,7 @@ HTTP_STATUS=$(curl -i -s -X POST "$TOKEN_HANDLER_BASE_URL/refresh" \
 -H 'accept: application/json' \
 -H "x-example-csrf: $CSRF" \
 -b $MAIN_COOKIES_FILE \
+-c $MAIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '204' ]; then
   echo "*** Refresh request failed with status $HTTP_STATUS"
@@ -438,13 +439,12 @@ echo '19. POST to /refresh with correct secure details completed successfully'
 echo '20. Testing POST to /refresh with rotated refresh token ...'
 HTTP_STATUS=$(curl -i -s -X POST "$TOKEN_HANDLER_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
--H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
 -H "x-example-csrf: $CSRF" \
 -b $MAIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
-if [ "$HTTP_STATUS" != '401' ]; then
+if [ "$HTTP_STATUS" != '204' ]; then
   echo "*** Refresh request failed with status $HTTP_STATUS"
   JSON=$(tail -n 1 $RESPONSE_FILE) 
   echo $JSON | jq
