@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import {LoginController} from './LoginController'
+import LoginController from './LoginController'
 import LogoutController from './LogoutController'
 import UserInfoController from './UserInfoController'
 import ClaimsController from './ClaimsController'

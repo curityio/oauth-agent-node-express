@@ -33,7 +33,7 @@ import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'
 import {asyncCatch} from '../middleware/exceptionMiddleware';
 
-export class LoginController {
+class LoginController {
     public router = express.Router()
 
     constructor() {
@@ -129,3 +129,5 @@ export class LoginController {
         res.status(200).json(responseBody)
     }
 }
+
+export default LoginController
