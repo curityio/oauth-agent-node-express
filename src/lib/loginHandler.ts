@@ -21,7 +21,7 @@ import {generateHash, generateRandomString} from './pkce';
 import {AuthorizationRequestData} from './authorizationRequestData';
 import {AuthorizationResponseException} from './exceptions'
 
-export async function createAuthorizationRequest(config: OAuthAgentConfiguration, options?: ClientOptions): Promise<AuthorizationRequestData> {
+export function createAuthorizationRequest(config: OAuthAgentConfiguration, options?: ClientOptions): AuthorizationRequestData {
 
     const codeVerifier = generateRandomString()
     const state = generateRandomString()
