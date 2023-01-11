@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Curity AB
+ *  Copyright 2022 Curity AB
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,19 +14,23 @@
  *  limitations under the License.
  */
 
-import {ClientOptions} from './clientOptions'
-import OAuthAgentConfiguration from './oauthAgentConfiguration'
-import {generateHash, generateRandomString} from './pkce'
+import * as urlparse from 'url-parse'
+import {ClientOptions} from './clientOptions';
+import OAuthAgentConfiguration from './oauthAgentConfiguration';
+import {generateHash, generateRandomString} from './pkce';
+import {AuthorizationRequestData} from './authorizationRequestData';
+import {AuthorizationResponseException} from './exceptions'
 
-function getAuthorizationURL(config: OAuthAgentConfiguration, options?: ClientOptions): AuthorizationRequestData {
+export function createAuthorizationRequest(config: OAuthAgentConfiguration, options?: ClientOptions): AuthorizationRequestData {
+
     const codeVerifier = generateRandomString()
     const state = generateRandomString()
 
     let authorizationRequestUrl = config.authorizeEndpoint + "?" +
         "client_id=" + encodeURIComponent(config.clientID) +
-        "&state=" + encodeURIComponent(state) +
-        "&response_type=code" +
         "&redirect_uri=" + encodeURIComponent(config.redirectUri) +
+        "&response_type=code" +
+        "&state=" + encodeURIComponent(state) +
         "&code_challenge=" + generateHash(codeVerifier) +
         "&code_challenge_method=S256"
 
@@ -45,16 +49,39 @@ function getAuthorizationURL(config: OAuthAgentConfiguration, options?: ClientOp
     return new AuthorizationRequestData(authorizationRequestUrl, codeVerifier, state)
 }
 
-class AuthorizationRequestData {
-    public readonly authorizationRequestURL: string
-    public readonly codeVerifier: string
-    public readonly state: string
+export async function handleAuthorizationResponse(pageUrl?: string): Promise<any> {
 
-    constructor(authorizationRequestURL: string, codeVerifier: string, state: string) {
-        this.authorizationRequestURL = authorizationRequestURL
-        this.codeVerifier = codeVerifier
-        this.state = state
+    const data = getUrlParts(pageUrl)
+
+    if (data.state && data.code) {
+
+        return {
+            code: data.code,
+            state: data.state,
+        }
+    }
+
+    if (data.state && data.error) {
+
+        throw new AuthorizationResponseException(
+            data.error,
+            data.error_description || 'Login failed at the Authorization Server')
+    }
+
+    return {
+        code: null,
+        state: null,
     }
 }
 
-export { getAuthorizationURL }
+function getUrlParts(url?: string): any {
+    
+    if (url) {
+        const urlData = urlparse(url, true)
+        if (urlData.query) {
+            return urlData.query
+        }
+    }
+
+    return {}
+}

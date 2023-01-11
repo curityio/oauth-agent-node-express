@@ -1,7 +1,6 @@
 import {assert, expect} from 'chai'
 import fetch, {RequestInit} from 'node-fetch';
 import {config} from '../../src/config'
-import { ClientOptions } from '../../src/lib';
 import {fetchStubbedResponse, performLogin, startLogin} from './testUtils'
 
 // Tests to focus on the login endpoint

@@ -32,6 +32,7 @@ export default class OAuthAgentConfiguration {
     public scope: string
 
     // Authorization Server settings
+    public issuer: string;
     public authorizeEndpoint: string
     public logoutEndpoint: string
     public tokenEndpoint: string
@@ -54,6 +55,7 @@ export default class OAuthAgentConfiguration {
         redirectUri: string,
         postLogoutRedirectURI: string,
         scope: string,
+        issuer: string,
         authorizeEndpoint: string,
         logoutEndpoint: string,
         tokenEndpoint: string,
@@ -85,6 +87,7 @@ export default class OAuthAgentConfiguration {
             sameSite: true
         } as CookieSerializeOptions
 
+        this.issuer = issuer
         this.authorizeEndpoint = authorizeEndpoint
         this.logoutEndpoint = logoutEndpoint
         this.tokenEndpoint = tokenEndpoint

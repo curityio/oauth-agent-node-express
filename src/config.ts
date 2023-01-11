@@ -17,6 +17,8 @@
 import {OAuthAgentConfiguration} from './lib'
 import {CookieSerializeOptions} from 'cookie'
 
+const useSsl = !!process.env.SERVER_CERT_P12_PATH;
+
 export const config: OAuthAgentConfiguration = {
     
     // Host settings
@@ -40,12 +42,13 @@ export const config: OAuthAgentConfiguration = {
     cookieOptions: {
         httpOnly: true,
         sameSite: true,
-        secure: false,
+        secure: useSsl,
         domain: process.env.COOKIE_DOMAIN || 'api.example.local',
         path: '/',
     } as CookieSerializeOptions,
 
     // Authorization Server settings
+    issuer: process.env.ISSUER || 'http://login.example.local:8443/oauth/v2/oauth-anonymous',
     authorizeEndpoint: process.env.AUTHORIZE_ENDPOINT || 'http://login.example.local:8443/oauth/v2/oauth-authorize',
     logoutEndpoint: process.env.LOGOUT_ENDPOINT || 'http://login.example.local:8443/oauth/v2/oauth-session/logout',
     tokenEndpoint: process.env.TOKEN_ENDPOINT || 'http://login.example.local:8443/oauth/v2/oauth-token',
