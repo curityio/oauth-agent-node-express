@@ -1,4 +1,4 @@
-FROM node:18-bullseye
+FROM node:18-alpine
 
 WORKDIR /usr/oauth-agent
 COPY dist                /usr/oauth-agent/dist
