@@ -289,6 +289,8 @@
                 <description>SPA using an OAuth Agent</description>
                 <secret>$5$TCfYst/ysngW7RbV$rMLasvlJpnQ0wmFoeTrdIHPjVdnsqOVelkqawZ.fZ17</secret>
                 <redirect-uris>http://www.example.local/</redirect-uris>
+                <audience>spa-client</audience>
+                <audience>api.example.local</audience>
                 <scope>openid</scope>
                 <scope>profile</scope>
                 <user-authentication>

@@ -5,7 +5,7 @@ services:
   # A SQL database used by the Curity Identity Server
   #
   curity-data:
-    image: postgres:13.2
+    image: postgres:15.3
     hostname: dbserver
     volumes:
       - ./data-backup.sql:/docker-entrypoint-initdb.d/data-backup.sql
@@ -18,7 +18,7 @@ services:
   # A standalone instance of the Curity Identity Server
   #
   curity-idsvr:
-    image: curity.azurecr.io/curity/idsvr:7.6.0
+    image: curity.azurecr.io/curity/idsvr:latest
     hostname: idsvr
     ports:
      - 6749:6749
