@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import * as crypto from 'crypto'
+import crypto from 'crypto'
 import {CookieSerializeOptions, serialize} from 'cookie'
 import {getTempLoginDataCookieName} from './cookieName'
 import {encryptCookie} from './cookieEncrypter'

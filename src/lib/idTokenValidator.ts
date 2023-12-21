@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import * as jose from 'jose';
+import jose from 'jose';
 import {InvalidIDTokenException} from './exceptions';
 import OAuthAgentConfiguration from './oauthAgentConfiguration';
 

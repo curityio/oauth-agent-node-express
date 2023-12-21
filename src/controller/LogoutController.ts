@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import * as express from 'express'
+import express from 'express'
 import {config} from '../config'
 import {getATCookieName, getCookiesForUnset, getLogoutURL, ValidateRequestOptions} from '../lib'
 import {InvalidCookieException} from '../lib/exceptions'
