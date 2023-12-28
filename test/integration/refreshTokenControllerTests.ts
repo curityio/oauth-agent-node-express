@@ -1,7 +1,7 @@
 import {assert, expect} from 'chai'
 import fetch, {RequestInit} from 'node-fetch'
-import {config} from '../../src/config'
-import {fetchStubbedResponse, getCookieString, performLogin} from './testUtils'
+import {config} from '../../src/config.js'
+import {fetchStubbedResponse, getCookieString, performLogin} from './testUtils.js'
 
 // Tests to focus on token refresh when access tokens expire
 describe('RefreshTokenControllerTests', () => {

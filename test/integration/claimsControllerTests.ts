@@ -1,6 +1,6 @@
 import {assert, expect} from 'chai';
 import fetch from 'node-fetch';
-import {config} from '../../src/config';
+import {config} from '../../src/config.js';
 import {performLogin} from './testUtils'
 
 // Tests to focus on returning ID token details

@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import OAuthAgentException from './OAuthAgentException'
-import {Grant} from '../grant'
+import OAuthAgentException from './OAuthAgentException.js'
+import {Grant} from '../grant.js'
 
 export default class AuthorizationClientException extends OAuthAgentException {
     

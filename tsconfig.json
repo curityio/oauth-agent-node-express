@@ -2,11 +2,11 @@
     "compilerOptions": {
         "strict": true,
         "sourceMap": true,
-        "target": "es2017",
+        "target": "ES2022",
         "outDir": "./dist",
         "baseUrl": "./src",
-        "module": "commonjs",
-        "moduleResolution": "node",
+        "module": "ES2022",
+        "moduleResolution": "Node",
         "allowSyntheticDefaultImports": true
     },
     "include": [

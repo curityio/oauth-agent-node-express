@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import {UnauthorizedException} from './exceptions'
-import {decryptCookie} from './cookieEncrypter'
+import {UnauthorizedException} from './exceptions/index.js'
+import {decryptCookie} from './cookieEncrypter.js'
 
 export default function validateRequest(data: ValidateRequestData, options: ValidateRequestOptions) {
 

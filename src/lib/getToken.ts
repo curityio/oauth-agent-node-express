@@ -15,10 +15,16 @@
  */
 
 import fetch from 'node-fetch'
-import {decryptCookie} from './cookieEncrypter'
-import {Grant} from './grant'
-import OAuthAgentConfiguration from './oauthAgentConfiguration'
-import {OAuthAgentException, InvalidStateException, MissingTempLoginDataException, AuthorizationClientException, AuthorizationServerException} from './exceptions'
+import {decryptCookie} from './cookieEncrypter.js'
+import {Grant} from './grant.js'
+import OAuthAgentConfiguration from './oauthAgentConfiguration.js'
+import {
+    OAuthAgentException,
+    InvalidStateException,
+    MissingTempLoginDataException,
+    AuthorizationClientException,
+    AuthorizationServerException
+} from './exceptions/index.js'
 
 async function getTokenEndpointResponse(config: OAuthAgentConfiguration, code: string, state: string, tempLoginData: string | undefined | null, ): Promise<any> {
     if (!tempLoginData) {

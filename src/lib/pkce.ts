@@ -16,8 +16,8 @@
 
 import crypto from 'crypto'
 import {CookieSerializeOptions, serialize} from 'cookie'
-import {getTempLoginDataCookieName} from './cookieName'
-import {encryptCookie} from './cookieEncrypter'
+import {getTempLoginDataCookieName} from './cookieName.js'
+import {encryptCookie} from './cookieEncrypter.js'
 
 const VALID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 const DAY_MILLISECONDS = 1000 * 60 * 60 * 24

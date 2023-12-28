@@ -1,7 +1,7 @@
 import {assert, expect} from 'chai'
 import fetch, {RequestInit} from 'node-fetch'
-import {config} from '../../src/config'
-import {getCookieString, performLogin} from './testUtils'
+import {config} from '../../src/config.js'
+import {getCookieString, performLogin} from './testUtils.js'
 
 // Tests to focus on the logout endpoint
 describe('LogoutControllerTests', () => {

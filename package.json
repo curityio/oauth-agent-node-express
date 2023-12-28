@@ -3,15 +3,14 @@
     "version": "1.0.0",
     "description": "An OAuth Agent that runs on the Express web server",
     "scripts": {
-        "start": "tsx src/server.ts",
+        "start": "node --loader ts-node/esm --no-warnings src/server.ts",
         "wiremock": "wiremock --root-dir test/integration --port 8443",
         "test": "mocha -r tsx test/integration/**/*.ts",
-        "build": "rimraf dist && tsc",
-        "docker": "docker build -t oauth-agent:v1 . && docker run -it oauth-agent:v1"
-        
+        "build": "rimraf dist && tsc"
     },
     "author": "Curity AB",
     "license": "Apache-2.0",
+    "type": "module",
     "engines": {
         "node": ">=18"
     },

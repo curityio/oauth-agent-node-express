@@ -17,7 +17,7 @@
 import crypto from 'crypto'
 import base64url from 'base64url';
 import {CookieSerializeOptions, serialize} from 'cookie'
-import {CookieDecryptionException, InvalidCookieException} from '../lib/exceptions'
+import {CookieDecryptionException, InvalidCookieException} from '../lib/exceptions/index.js'
 
 const VERSION_SIZE = 1;
 const GCM_IV_SIZE = 12;

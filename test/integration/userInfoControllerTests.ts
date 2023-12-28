@@ -1,7 +1,7 @@
 import {assert} from 'chai';
 import fetch, {RequestInit} from 'node-fetch';
-import {config} from '../../src/config';
-import {fetchStubbedResponse, performLogin} from './testUtils'
+import {config} from '../../src/config.js';
+import {fetchStubbedResponse, performLogin} from './testUtils.js'
 
 // Tests to focus on returning user information to the SPA via the user info endpoint
 describe('UserInfoControllerTests', () => {

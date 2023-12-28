@@ -15,11 +15,10 @@
  */
 
 import {NextFunction, Request, Response} from 'express';
-import {config} from '../config'
-import {getCookiesForUnset } from'../lib';
-import {OAuthAgentException} from '../lib/exceptions'
-import {UnhandledException} from '../lib/exceptions'
-import {RequestLog} from './requestLog';
+import {config} from '../config.js'
+import {getCookiesForUnset } from'../lib/index.js';
+import {OAuthAgentException, UnhandledException} from '../lib/exceptions/index.js'
+import {RequestLog} from './requestLog.js';
 
 export default function exceptionMiddleware(
     caught: any,

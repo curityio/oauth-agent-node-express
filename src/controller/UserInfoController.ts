@@ -15,11 +15,11 @@
  */
 
 import express from 'express'
-import {getATCookieName, getUserInfo, ValidateRequestOptions} from '../lib'
-import {config} from '../config'
-import validateExpressRequest from '../validateExpressRequest'
-import {InvalidCookieException} from '../lib/exceptions'
-import {asyncCatch} from '../middleware/exceptionMiddleware';
+import {getATCookieName, getUserInfo, ValidateRequestOptions} from '../lib/index.js'
+import {config} from '../config.js'
+import validateExpressRequest from '../validateExpressRequest.js'
+import {InvalidCookieException} from '../lib/exceptions/index.js'
+import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class UserInfoController {
     public router = express.Router()

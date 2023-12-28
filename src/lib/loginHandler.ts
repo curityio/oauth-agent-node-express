@@ -15,11 +15,11 @@
  */
 
 import urlparse from 'url-parse'
-import {ClientOptions} from './clientOptions';
-import OAuthAgentConfiguration from './oauthAgentConfiguration';
-import {generateHash, generateRandomString} from './pkce';
-import {AuthorizationRequestData} from './authorizationRequestData';
-import {AuthorizationResponseException} from './exceptions'
+import {ClientOptions} from './clientOptions.js';
+import OAuthAgentConfiguration from './oauthAgentConfiguration.js';
+import {generateHash, generateRandomString} from './pkce.js';
+import {AuthorizationRequestData} from './authorizationRequestData.js';
+import {AuthorizationResponseException} from './exceptions/index.js'
 
 export function createAuthorizationRequest(config: OAuthAgentConfiguration, options?: ClientOptions): AuthorizationRequestData {
 

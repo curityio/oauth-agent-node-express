@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import OAuthAgentConfiguration from './oauthAgentConfiguration'
+import OAuthAgentConfiguration from './oauthAgentConfiguration.js'
 
 function getLogoutURL(config: OAuthAgentConfiguration): string {
     const postLogoutRedirectUriParam = config.postLogoutRedirectURI ? "&post_logout_redirect_uri=" + encodeURIComponent(config.postLogoutRedirectURI) : ""

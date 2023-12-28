@@ -1,7 +1,7 @@
 import {assert, expect} from 'chai'
 import fetch, {RequestInit} from 'node-fetch';
-import {config} from '../../src/config'
-import {fetchStubbedResponse, performLogin, startLogin} from './testUtils'
+import {config} from '../../src/config.js'
+import {fetchStubbedResponse, performLogin, startLogin} from './testUtils.js'
 
 // Tests to focus on the login endpoint
 describe('LoginControllerTests', () => {

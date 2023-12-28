@@ -2,8 +2,8 @@
 import fetch, {RequestInit, Response} from 'node-fetch';
 import setCookie from 'set-cookie-parser';
 import urlParse from 'url-parse';
-import {config} from '../../src/config';
-import { ClientOptions } from '../../src/lib/clientOptions';
+import {config} from '../../src/config.js';
+import { ClientOptions } from '../../src/lib/clientOptions.js';
 
 const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`
 const wiremockAdminBaseUrl = `http://localhost:8443/__admin/mappings`

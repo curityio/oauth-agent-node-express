@@ -14,17 +14,17 @@
  *  limitations under the License.
  */
 
-import OAuthAgentException from './OAuthAgentException'
-import InvalidCookieException from './InvalidCookieException'
-import CookieDecryptionException from './CookieDecryptionException'
-import InvalidIDTokenException from './InvalidIDTokenException'
-import MissingTempLoginDataException from './MissingCodeVerifierException'
-import InvalidStateException from './InvalidStateException'
-import UnauthorizedException from './UnauthorizedException'
-import AuthorizationClientException from './AuthorizationClientException'
-import AuthorizationResponseException from './AuthorizationResponseException'
-import AuthorizationServerException from './AuthorizationServerException'
-import UnhandledException from './UnhandledException'
+import OAuthAgentException from './OAuthAgentException.js'
+import InvalidCookieException from './InvalidCookieException.js'
+import CookieDecryptionException from './CookieDecryptionException.js'
+import InvalidIDTokenException from './InvalidIDTokenException.js'
+import MissingTempLoginDataException from './MissingCodeVerifierException.js'
+import InvalidStateException from './InvalidStateException.js'
+import UnauthorizedException from './UnauthorizedException.js'
+import AuthorizationClientException from './AuthorizationClientException.js'
+import AuthorizationResponseException from './AuthorizationResponseException.js'
+import AuthorizationServerException from './AuthorizationServerException.js'
+import UnhandledException from './UnhandledException.js'
 
 export {
     OAuthAgentException,

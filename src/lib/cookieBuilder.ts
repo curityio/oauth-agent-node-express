@@ -15,10 +15,10 @@
  */
 
 import {CookieSerializeOptions, serialize} from 'cookie'
-import {getEncryptedCookie} from './cookieEncrypter'
-import OAuthAgentConfiguration from './oauthAgentConfiguration'
-import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName'
-import {getTempLoginDataCookieForUnset} from './pkce'
+import {getEncryptedCookie} from './cookieEncrypter.js'
+import OAuthAgentConfiguration from './oauthAgentConfiguration.js'
+import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName.js'
+import {getTempLoginDataCookieForUnset} from './pkce.js'
 
 const DAY_MILLISECONDS = 1000 * 60 * 60 * 24
 
