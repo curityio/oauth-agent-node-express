@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import express from 'express'
+import * as express from 'express'
 import {getIDCookieName, getIDTokenClaims, ValidateRequestOptions} from '../lib'
 import {config} from '../config'
 import validateExpressRequest from '../validateExpressRequest'

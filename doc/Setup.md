@@ -61,7 +61,7 @@ npm test
 ## Run End-to-End Tests
 
 Run some tests that also use the Curity Identity Server.\
-First copy a license file into the `test/end-to-end/idsvr` folder and then run the following command:
+First copy a license file into the `test/idsvr` folder and then run the following command:
 
 ```bash
 ./test/end-to-end/idsvr/deploy.sh

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import crypto from 'crypto'
+import * as crypto from 'crypto'
 import base64url from 'base64url';
 import {CookieSerializeOptions, serialize} from 'cookie'
 import {CookieDecryptionException, InvalidCookieException} from '../lib/exceptions'
