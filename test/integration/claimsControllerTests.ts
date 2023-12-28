@@ -21,7 +21,7 @@ describe('ClaimsControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as ClaimsErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -38,7 +38,7 @@ describe('ClaimsControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as ClaimsErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -57,7 +57,15 @@ describe('ClaimsControllerTests', () => {
         )
 
         assert.equal(response.status, 200, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as ClaimsResponse
         expect(body.auth_time.toString(), 'Missing auth_time claim').length.above(0)
     })
 })
+
+interface ClaimsErrorResponse {
+    code: string
+}
+
+interface ClaimsResponse {
+    auth_time: number
+}

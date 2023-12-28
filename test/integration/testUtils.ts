@@ -1,7 +1,7 @@
 
 import fetch, {RequestInit, Response} from 'node-fetch';
-import * as setCookie from 'set-cookie-parser';
-import * as urlParse from 'url-parse';
+import setCookie from 'set-cookie-parser';
+import urlParse from 'url-parse';
 import {config} from '../../src/config';
 import { ClientOptions } from '../../src/lib/clientOptions';
 

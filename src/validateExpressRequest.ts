@@ -17,7 +17,7 @@
 import validateRequest, {ValidateRequestData, ValidateRequestOptions} from './lib/validateRequest'
 import {config} from './config'
 import {getCSRFCookieName} from './lib'
-import * as express from 'express'
+import express from 'express'
 
 export default function validateExpressRequest(req: express.Request, options: ValidateRequestOptions) {
 
