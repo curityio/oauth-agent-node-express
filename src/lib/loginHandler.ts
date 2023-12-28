@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import urlparse from 'url-parse'
+import * as urlparse from 'url-parse'
 import {ClientOptions} from './clientOptions';
 import OAuthAgentConfiguration from './oauthAgentConfiguration';
 import {generateHash, generateRandomString} from './pkce';

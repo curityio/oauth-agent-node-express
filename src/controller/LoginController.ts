@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import express from 'express'
+import * as express from 'express'
 import {
     ValidateRequestOptions,
     createAuthorizationRequest,
