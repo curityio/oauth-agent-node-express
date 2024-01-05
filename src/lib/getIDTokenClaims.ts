@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-import {decryptCookie} from './cookieEncrypter'
-import {InvalidCookieException, InvalidIDTokenException} from './exceptions'
+import {decryptCookie} from './cookieEncrypter.js'
+import {InvalidCookieException, InvalidIDTokenException} from './exceptions/index.js'
 
 function getIDTokenClaims(encKey: string, encryptedCookie: string): Object {
 

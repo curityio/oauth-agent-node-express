@@ -25,10 +25,10 @@ import {
     ClaimsController,
     LogoutController,
     RefreshTokenController
-} from './controller'
-import {config} from './config'
-import loggingMiddleware from './middleware/loggingMiddleware'
-import exceptionMiddleware from './middleware/exceptionMiddleware'
+} from './controller/index.js'
+import {config} from './config.js'
+import loggingMiddleware from './middleware/loggingMiddleware.js'
+import exceptionMiddleware from './middleware/exceptionMiddleware.js'
 
 const app = express()
 const corsConfiguration = {

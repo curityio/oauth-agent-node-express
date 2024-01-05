@@ -15,11 +15,11 @@
  */
 
 import express from 'express'
-import {getIDCookieName, getIDTokenClaims, ValidateRequestOptions} from '../lib'
-import {config} from '../config'
-import validateExpressRequest from '../validateExpressRequest'
-import {InvalidCookieException} from '../lib/exceptions'
-import {asyncCatch} from '../middleware/exceptionMiddleware';
+import {getIDCookieName, getIDTokenClaims, ValidateRequestOptions} from '../lib/index.js'
+import {config} from '../config.js'
+import validateExpressRequest from '../validateExpressRequest.js'
+import {InvalidCookieException} from '../lib/exceptions/index.js'
+import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class ClaimsController {
     public router = express.Router()

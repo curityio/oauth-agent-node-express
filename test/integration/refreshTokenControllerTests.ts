@@ -1,7 +1,8 @@
 import {assert, expect} from 'chai'
 import fetch, {RequestInit} from 'node-fetch'
-import {config} from '../../src/config'
-import {fetchStubbedResponse, getCookieString, performLogin} from './testUtils'
+import {config} from '../../src/config.js'
+import {fetchStubbedResponse, getCookieString, performLogin} from './testUtils.js'
+import {OAuthAgentErrorResponse} from "./responses.js";
 
 // Tests to focus on token refresh when access tokens expire
 describe('RefreshTokenControllerTests', () => {
@@ -21,7 +22,7 @@ describe('RefreshTokenControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -38,7 +39,7 @@ describe('RefreshTokenControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -59,7 +60,7 @@ describe('RefreshTokenControllerTests', () => {
         const response = await fetch(`${oauthAgentBaseUrl}/refresh`, options)
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -121,7 +122,7 @@ describe('RefreshTokenControllerTests', () => {
 
         // The SPA cannot recover from this error so would need to present an error display
         assert.equal(response.status, 400, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'authorization_error', 'Incorrect error code')
     })
 
@@ -161,7 +162,7 @@ describe('RefreshTokenControllerTests', () => {
 
         // The SPA will trigger re-authentication when it gets a 401 during token refresh
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'session_expired', 'Incorrect error code')
 
         // Clear cookies so that the next call to /login/end, eg a page reload, indicates not logged in

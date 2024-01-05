@@ -1,7 +1,8 @@
 import {assert, expect} from 'chai'
 import fetch, {RequestInit} from 'node-fetch';
-import {config} from '../../src/config'
-import {fetchStubbedResponse, performLogin, startLogin} from './testUtils'
+import {config} from '../../src/config.js'
+import {fetchStubbedResponse, performLogin, startLogin} from './testUtils.js'
+import {OAuthAgentEndResponse, OAuthAgentErrorResponse, OauthAgentStartResponse} from "./responses.js";
 
 // Tests to focus on the login endpoint
 describe('LoginControllerTests', () => {
@@ -57,7 +58,7 @@ describe('LoginControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -78,7 +79,7 @@ describe('LoginControllerTests', () => {
         )
 
         assert.equal(response.status, 200, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentEndResponse
         assert.equal(body.isLoggedIn, false, 'Incorrect isLoggedIn value')
         assert.equal(body.handled, false, 'Incorrect handled value')
     })
@@ -96,7 +97,7 @@ describe('LoginControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -113,7 +114,7 @@ describe('LoginControllerTests', () => {
         )
 
         assert.equal(response.status, 200, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OauthAgentStartResponse
         const authorizationRequestUrl = body.authorizationRequestUrl as string
         expect(authorizationRequestUrl).contains(`client_id=${config.clientID}`, 'Invalid authorization request URL')
     })
@@ -157,7 +158,7 @@ describe('LoginControllerTests', () => {
         )
 
         assert.equal(response.status, 200, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentEndResponse
         assert.equal(body.isLoggedIn, true, 'Incorrect isLoggedIn value')
         assert.equal(body.handled, false, 'Incorrect handled value')
         expect(body.csrf, 'Missing csrfToken value').length.above(0)
@@ -202,7 +203,7 @@ describe('LoginControllerTests', () => {
 
         // Return a 400 to the SPA, as opposed to a 401, which could cause a redirect loop
         assert.equal(response.status, 400, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'authorization_error', 'Incorrect error code')
     })
 
@@ -226,7 +227,7 @@ describe('LoginControllerTests', () => {
         const response = await fetch(`${oauthAgentBaseUrl}/login/end`, options)
 
         assert.equal(response.status, 400, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'invalid_scope', 'Incorrect error code')
     })
 
@@ -258,7 +259,7 @@ describe('LoginControllerTests', () => {
         const response = await fetch(`${oauthAgentBaseUrl}/login/end`, options)
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'login_required', 'Incorrect error code')
     })
 })

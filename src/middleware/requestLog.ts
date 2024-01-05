@@ -15,7 +15,7 @@
  */
 
 import {Request, Response} from 'express'
-import {OAuthAgentException} from '../lib/exceptions';
+import {OAuthAgentException} from '../lib/exceptions/index.js';
 
 export class RequestLog {
 

@@ -28,10 +28,10 @@ import {
     getCookiesForTokenResponse,
     getATCookieName,
     generateRandomString,
-} from '../lib'
-import {config} from '../config'
-import validateExpressRequest from '../validateExpressRequest'
-import {asyncCatch} from '../middleware/exceptionMiddleware';
+} from '../lib/index.js'
+import {config} from '../config.js'
+import validateExpressRequest from '../validateExpressRequest.js'
+import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class LoginController {
     public router = express.Router()

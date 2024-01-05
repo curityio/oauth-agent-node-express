@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import {ExtraParam} from './extraParams';
+import {ExtraParam} from './extraParams.js';
 
 export interface ClientOptions {
     extraParams: ExtraParam[];

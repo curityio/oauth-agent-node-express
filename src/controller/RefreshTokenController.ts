@@ -15,14 +15,13 @@
  */
 
 import express from 'express'
-import {config} from '../config'
-
+import {config} from '../config.js'
 import {
     decryptCookie, getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken, validateIDtoken, ValidateRequestOptions
-} from '../lib'
-import {InvalidCookieException} from '../lib/exceptions'
-import validateExpressRequest from '../validateExpressRequest'
-import {asyncCatch} from '../middleware/exceptionMiddleware';
+} from '../lib/index.js'
+import {InvalidCookieException} from '../lib/exceptions/index.js'
+import validateExpressRequest from '../validateExpressRequest.js'
+import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class RefreshTokenController {
     public router = express.Router()

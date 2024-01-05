@@ -15,10 +15,15 @@
  */
 
 import fetch from 'node-fetch'
-import {decryptCookie} from './cookieEncrypter'
-import {Grant} from './grant'
-import OAuthAgentConfiguration from './oauthAgentConfiguration'
-import {OAuthAgentException, InvalidCookieException, AuthorizationClientException, AuthorizationServerException} from './exceptions'
+import {decryptCookie} from './cookieEncrypter.js'
+import {Grant} from './grant.js'
+import OAuthAgentConfiguration from './oauthAgentConfiguration.js'
+import {
+    OAuthAgentException,
+    InvalidCookieException,
+    AuthorizationClientException,
+    AuthorizationServerException
+} from './exceptions/index.js'
 
 async function getUserInfo(config: OAuthAgentConfiguration, encKey: string, encryptedCookie: string): Promise<Object> {
 

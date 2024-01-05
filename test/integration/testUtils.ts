@@ -2,8 +2,9 @@
 import fetch, {RequestInit, Response} from 'node-fetch';
 import setCookie from 'set-cookie-parser';
 import urlParse from 'url-parse';
-import {config} from '../../src/config';
-import { ClientOptions } from '../../src/lib/clientOptions';
+import {config} from '../../src/config.js';
+import { ClientOptions } from '../../src/lib/clientOptions.js';
+import {OauthAgentStartResponse} from "./responses.js";
 
 const oauthAgentBaseUrl = `http://localhost:${config.port}${config.endpointsPrefix}`
 const wiremockAdminBaseUrl = `http://localhost:8443/__admin/mappings`
@@ -84,7 +85,7 @@ export async function startLogin(requestBody: ClientOptions | null = null): Prom
 
     const response = await fetch(`${oauthAgentBaseUrl}/login/start`, requestOptions)
 
-    const responseBody = await response.json();
+    const responseBody = await response.json() as OauthAgentStartResponse;
     const parsedUrl = urlParse(responseBody.authorizationRequestUrl, true)
     const state = parsedUrl.query.state
     
