@@ -1,6 +1,6 @@
 {
     "name": "oauth-agent-node-express",
-    "version": "1.0.0",
+    "version": "1.5.0",
     "description": "An OAuth Agent that runs on the Express web server",
     "scripts": {
         "start": "node --loader ts-node/esm --no-warnings src/server.ts",
