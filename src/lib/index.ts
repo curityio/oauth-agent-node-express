@@ -14,24 +14,24 @@
  *  limitations under the License.
  */
 
-import OAuthAgentConfiguration from './oauthAgentConfiguration'
-import { createAuthorizationRequest, handleAuthorizationResponse } from './loginHandler'
-import { validateIDtoken } from './idTokenValidator'
-import { ClientOptions } from './clientOptions'
-import { ValidateRequestOptions } from './validateRequest'
-import { getEncryptedCookie, decryptCookie } from './cookieEncrypter'
-import { getCookiesForTokenResponse, getCookiesForUnset } from './cookieBuilder'
-import { getTokenEndpointResponse, refreshAccessToken } from './getToken'
-import getUserInfo from './getUserInfo'
-import getIDTokenClaims from './getIDTokenClaims'
-import getRedirectUri from './redirectUri'
-import getLogoutURL from './getLogoutURL'
-import { getTempLoginDataCookie, getTempLoginDataCookieForUnset, generateRandomString } from './pkce'
-import { getAuthCookieName, getIDCookieName, getCSRFCookieName, getATCookieName, getTempLoginDataCookieName } from './cookieName'
+import { ClientOptions } from './clientOptions.js'
+import OAuthAgentConfiguration from './oauthAgentConfiguration.js'
+import { createAuthorizationRequest, handleAuthorizationResponse } from './loginHandler.js'
+import { validateIDtoken } from './idTokenValidator.js'
+import { ValidateRequestOptions } from './validateRequest.js'
+import { getEncryptedCookie, decryptCookie } from './cookieEncrypter.js'
+import { getCookiesForTokenResponse, getCookiesForUnset } from './cookieBuilder.js'
+import { getTokenEndpointResponse, refreshAccessToken } from './getToken.js'
+import getUserInfo from './getUserInfo.js'
+import getIDTokenClaims from './getIDTokenClaims.js'
+import getRedirectUri from './redirectUri.js'
+import getLogoutURL from './getLogoutURL.js'
+import { getTempLoginDataCookie, getTempLoginDataCookieForUnset, generateRandomString } from './pkce.js'
+import { getAuthCookieName, getIDCookieName, getCSRFCookieName, getATCookieName, getTempLoginDataCookieName } from './cookieName.js'
 
 export {
-    OAuthAgentConfiguration,
     ClientOptions,
+    OAuthAgentConfiguration,
     ValidateRequestOptions,
     createAuthorizationRequest,
     handleAuthorizationResponse,

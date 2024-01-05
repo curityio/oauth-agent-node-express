@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import OAuthAgentException from './OAuthAgentException'
+import OAuthAgentException from './OAuthAgentException.js'
 
 export default class CookieDecryptionException extends OAuthAgentException {
     public statusCode = 401

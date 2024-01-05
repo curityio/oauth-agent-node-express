@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-import * as jose from 'jose';
-import {InvalidIDTokenException} from './exceptions';
-import OAuthAgentConfiguration from './oauthAgentConfiguration';
+import {decodeJwt} from 'jose';
+import {InvalidIDTokenException} from './exceptions/index.js';
+import OAuthAgentConfiguration from './oauthAgentConfiguration.js';
 
 /*
  * Make some sanity checks to ensure that the issuer and audience are configured correctly
@@ -28,7 +28,7 @@ export function validateIDtoken(config: OAuthAgentConfiguration, idToken: string
     // For backwards compatibility, only validate the issuer when one is configured
     if (process.env.ISSUER) {
     
-        const payload = jose.decodeJwt(idToken)
+        const payload = decodeJwt(idToken)
         
         if (payload.iss !== config.issuer) {
             throw new InvalidIDTokenException(new Error('Unexpected iss claim'))

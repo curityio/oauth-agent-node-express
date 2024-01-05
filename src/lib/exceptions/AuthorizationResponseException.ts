@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import OAuthAgentException from './OAuthAgentException'
+import OAuthAgentException from './OAuthAgentException.js'
 
 // Thrown when the OpenId Connect response returns a URL like this:
 // https://www.example.com?state=state=nu2febouwefbjfewbj&error=invalid_scope&error_description=

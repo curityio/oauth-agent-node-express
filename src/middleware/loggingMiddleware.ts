@@ -15,7 +15,7 @@
  */
 
 import {NextFunction, Request, Response} from 'express'
-import {RequestLog} from './requestLog'
+import {RequestLog} from './requestLog.js'
 
 export default function loggingMiddleware(
     request: Request,

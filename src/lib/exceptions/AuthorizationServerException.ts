@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import OAuthAgentException from './OAuthAgentException'
+import OAuthAgentException from './OAuthAgentException.js'
 
 export default class AuthorizationServerException extends OAuthAgentException {
     public statusCode = 502

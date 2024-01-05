@@ -1,7 +1,8 @@
 import {assert, expect} from 'chai'
 import fetch, {RequestInit} from 'node-fetch'
-import {config} from '../../src/config'
-import {getCookieString, performLogin} from './testUtils'
+import {config} from '../../src/config.js'
+import {getCookieString, performLogin} from './testUtils.js'
+import {OAuthAgentErrorResponse, OAuthAgentLogoutResponse} from "./responses.js";
 
 // Tests to focus on the logout endpoint
 describe('LogoutControllerTests', () => {
@@ -21,7 +22,7 @@ describe('LogoutControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -38,7 +39,7 @@ describe('LogoutControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -59,7 +60,7 @@ describe('LogoutControllerTests', () => {
         const response = await fetch(`${oauthAgentBaseUrl}/logout`, options)
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -79,7 +80,7 @@ describe('LogoutControllerTests', () => {
         const response = await fetch(`${oauthAgentBaseUrl}/logout`, options)
 
         assert.equal(response.status, 200, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentLogoutResponse
         const endSessionRequestUrl = body.url as string
         expect(endSessionRequestUrl).contains(`client_id=${config.clientID}`, 'Invalid end session request URL')
 

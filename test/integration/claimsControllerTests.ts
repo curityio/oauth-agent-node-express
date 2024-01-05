@@ -1,7 +1,8 @@
 import {assert, expect} from 'chai';
 import fetch from 'node-fetch';
-import {config} from '../../src/config';
-import {performLogin} from './testUtils'
+import {config} from '../../src/config.js';
+import {performLogin} from './testUtils.js'
+import {OAuthAgentClaimsResponse, OAuthAgentErrorResponse} from "./responses.js";
 
 // Tests to focus on returning ID token details
 describe('ClaimsControllerTests', () => {
@@ -21,7 +22,7 @@ describe('ClaimsControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -38,7 +39,7 @@ describe('ClaimsControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -57,7 +58,7 @@ describe('ClaimsControllerTests', () => {
         )
 
         assert.equal(response.status, 200, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentClaimsResponse
         expect(body.auth_time.toString(), 'Missing auth_time claim').length.above(0)
     })
 })

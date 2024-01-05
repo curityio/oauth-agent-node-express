@@ -14,21 +14,21 @@
  *  limitations under the License.
  */
 
-import * as express from 'express'
-import * as cors from 'cors'
-import * as cookieParser from 'cookie-parser'
-import * as fs from 'fs'
-import * as https from 'https'
+import express from 'express'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
+import fs from 'fs'
+import https from 'https'
 import {
     LoginController,
     UserInfoController,
     ClaimsController,
     LogoutController,
     RefreshTokenController
-} from './controller'
-import {config} from './config'
-import loggingMiddleware from './middleware/loggingMiddleware'
-import exceptionMiddleware from './middleware/exceptionMiddleware'
+} from './controller/index.js'
+import {config} from './config.js'
+import loggingMiddleware from './middleware/loggingMiddleware.js'
+import exceptionMiddleware from './middleware/exceptionMiddleware.js'
 
 const app = express()
 const corsConfiguration = {
