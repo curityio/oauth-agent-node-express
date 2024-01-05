@@ -5,7 +5,7 @@
     "scripts": {
         "start": "node --loader ts-node/esm --no-warnings src/server.ts",
         "wiremock": "wiremock --root-dir test/integration --port 8443",
-        "test": "mocha -r tsx test/integration/**/*.ts",
+        "test": "mocha --loader=ts-node/esm --no-warnings test/integration/**/*.ts",
         "build": "rimraf dist && tsc"
     },
     "author": "Curity AB",
@@ -39,7 +39,6 @@
         "rimraf": "^5.0.5",
         "set-cookie-parser": "^2.6.0",
         "ts-node": "^10.9.2",
-        "tsx": "^4.7.0",
         "typescript": "^5.3.3",
         "wiremock": "^3.3.1"
     }

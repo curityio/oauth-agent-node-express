@@ -2,6 +2,7 @@ import {assert} from 'chai';
 import fetch, {RequestInit} from 'node-fetch';
 import {config} from '../../src/config.js';
 import {fetchStubbedResponse, performLogin} from './testUtils.js'
+import {OAuthAgentErrorResponse, OAuthAgentUserinfoResponse} from "./responses.js";
 
 // Tests to focus on returning user information to the SPA via the user info endpoint
 describe('UserInfoControllerTests', () => {
@@ -21,7 +22,7 @@ describe('UserInfoControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -38,7 +39,7 @@ describe('UserInfoControllerTests', () => {
         )
 
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'unauthorized_request', 'Incorrect error code')
     })
 
@@ -57,7 +58,7 @@ describe('UserInfoControllerTests', () => {
         )
 
         assert.equal(response.status, 200, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentUserinfoResponse
         assert.equal(body.given_name, 'Demo')
         assert.equal(body.family_name, 'User')
     })
@@ -95,7 +96,7 @@ describe('UserInfoControllerTests', () => {
 
         // The SPA will trigger token refresh when the OAuth Agent reports an expired access token
         assert.equal(response.status, 401, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OAuthAgentErrorResponse
         assert.equal(body.code, 'token_expired', 'Incorrect error code')
     })
 })

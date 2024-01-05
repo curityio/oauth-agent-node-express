@@ -1,6 +1,7 @@
 import {assert, expect} from 'chai'
 import fetch from 'node-fetch'
 import {config} from '../../src/config.js'
+import {OauthAgentStartResponse} from "./responses.js";
 
 // Tests to focus on extra details the SPA may need to supply at runtime
 describe('ExtensibilityTests', () => {
@@ -31,7 +32,7 @@ describe('ExtensibilityTests', () => {
         )
 
         assert.equal(response.status, 200, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OauthAgentStartResponse
         const authorizationRequestUrl = body.authorizationRequestUrl as string
 
         expect(authorizationRequestUrl).contains(
@@ -79,7 +80,7 @@ describe('ExtensibilityTests', () => {
         )
 
         assert.equal(response.status, 200, 'Incorrect HTTP status')
-        const body = await response.json()
+        const body = await response.json() as OauthAgentStartResponse
         const authorizationRequestUrl = body.authorizationRequestUrl as string
 
         options.extraParams.forEach((p: any) => {
