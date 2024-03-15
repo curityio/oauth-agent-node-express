@@ -4,17 +4,10 @@
 # Basic automation to get tokens from the Authorization Server
 ##############################################################
 
-TOKEN_HANDLER_BASE_URL='http://api.example.local:8080/oauth-agent'
-WEB_BASE_URL='http://www.example.local'
-AUTHORIZATION_SERVER_BASE_URL='http://login.example.local:8443'
-RESPONSE_FILE=data/response.txt
-LOGIN_COOKIES_FILE=data/login_cookies.txt
-CURITY_COOKIES_FILE=data/curity_cookies.txt
-MAIN_COOKIES_FILE=data/main_cookies.txt
-TEST_USERNAME=demouser
-TEST_PASSWORD=Password1
-CLIENT_ID=spa-client
-#export http_proxy='http://127.0.0.1:8888'
+AUTHORIZATION_SERVER_BASE_URL='https://login.authsamples.com'
+TEST_USERNAME=guestuser@mycompany.com
+TEST_PASSWORD=GuestPassword1
+#export https_proxy='http://127.0.0.1:8888'
 
 #
 # Ensure that we are in the folder containing this script
@@ -32,13 +25,13 @@ function getHeaderValue(){
 }
 
 #
-# Pattern matching to dig out a field value from an auto submit HTML form, via the second pattern match
+# Get a cookie value in a similar way
 #
-function getHtmlFormValue(){
-  local _FIELD_NAME=$1
-  local _FIELD_LINE=$(cat $RESPONSE_FILE | grep -i "name=\"$_FIELD_NAME\"")
-  local _FIELD_VALUE=$(echo $_FIELD_LINE | sed -r "s/^(.*)name=\"$_FIELD_NAME\" value=\"(.*)\"(.*)$/\2/i")
-  echo $_FIELD_VALUE
+function getCookieValue(){
+  local _COOKIE_NAME=$1
+  local _COOKIE_VALUE=$(cat $RESPONSE_FILE | grep -i "set-cookie: $_COOKIE_NAME" | sed -r "s/^set-cookie: $_COOKIE_NAME=(.[^;]*)(.*)$/\1/i")
+  local _COOKIE_VALUE=${_COOKIE_VALUE%$'\r'}
+  echo $_COOKIE_VALUE
 }
 
 #
@@ -71,42 +64,29 @@ AUTHORIZATION_REQUEST_URL=$(jq -r .authorizationRequestUrl <<< "$JSON")
 # Follow redirects until the login HTML form is returned and save cookies
 #
 HTTP_STATUS=$(curl -i -L -s -X GET "$AUTHORIZATION_REQUEST_URL" \
--c $CURITY_COOKIES_FILE \
+-c $AUTHORIZATION_SERVER_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ $HTTP_STATUS != '200' ]; then
   echo "*** Problem encountered during an OpenID Connect authorization redirect, status: $HTTP_STATUS"
   exit 1
 fi
 
+LOGIN_POST_LOCATION=$(getHeaderValue 'location')
+COGNITO_XSRF_TOKEN=$(getCookieValue 'XSRF-TOKEN' | cut -d ' ' -f 2)
+
 #
 # Post up the test credentials, sending then regetting cookies
 #
-HTTP_STATUS=$(curl -i -s -X POST "$AUTHORIZATION_SERVER_BASE_URL/authn/authentication/Username-Password" \
+HTTP_STATUS=$(curl -k -i -s -X POST "$LOGIN_POST_LOCATION" \
 -H 'Content-Type: application/x-www-form-urlencoded' \
--b $CURITY_COOKIES_FILE \
--c $CURITY_COOKIES_FILE \
---data-urlencode "userName=$TEST_USERNAME" \
+-b $AUTHORIZATION_SERVER_COOKIES_FILE \
+-c $AUTHORIZATION_SERVER_COOKIES_FILE \
+--data-urlencode "_csrf=$COGNITO_XSRF_TOKEN" \
+--data-urlencode "username=$TEST_USERNAME" \
 --data-urlencode "password=$TEST_PASSWORD" \
 -o $RESPONSE_FILE -w '%{http_code}')
-if [ $HTTP_STATUS != '200' ]; then
+if [ $HTTP_STATUS != '302' ]; then
   echo "*** Problem encountered submitting test user credentials, status: $HTTP_STATUS"
-  exit 1
-fi
-
-#
-# Do the auto form post, providing Identity Server cookies
-#
-TOKEN=$(getHtmlFormValue 'token')
-STATE=$(getHtmlFormValue 'state')
-HTTP_STATUS=$(curl -i -s -X POST "$AUTHORIZATION_SERVER_BASE_URL/oauth/v2/oauth-authorize?client_id=$CLIENT_ID" \
--H 'Content-Type: application/x-www-form-urlencoded' \
--b $CURITY_COOKIES_FILE \
--c $CURITY_COOKIES_FILE \
---data-urlencode "token=$TOKEN" \
---data-urlencode "state=$STATE" \
--o $RESPONSE_FILE -w '%{http_code}')
-if [ $HTTP_STATUS != '303' ]; then
-  echo "*** Problem encountered auto posting form, status: $HTTP_STATUS"
   exit 1
 fi
 

@@ -4,12 +4,13 @@
 # Tests to run against OAuth Agent endpoints outside the browser
 ################################################################
 
-TOKEN_HANDLER_BASE_URL='http://api.example.local:8080/oauth-agent'
-WEB_BASE_URL='http://www.example.local'
-RESPONSE_FILE=data/response.txt
-MAIN_COOKIES_FILE=data/main_cookies.txt
-LOGIN_COOKIES_FILE=data/login_cookies.txt
-CURITY_COOKIES_FILE=data/curity_cookies.txt
+export TOKEN_HANDLER_BASE_URL='https://apilocal.authsamples-dev.com:444/oauth-agent'
+export WEB_BASE_URL='https://web.authsamples-dev.com'
+export CURL_CA_BUNDLE='../certs/authsamples-dev.ca.pem'
+export RESPONSE_FILE=data/response.txt
+export MAIN_COOKIES_FILE=data/main_cookies.txt
+export LOGIN_COOKIES_FILE=data/login_cookies.txt
+export AUTHORIZATION_SERVER_COOKIES_FILE=data/as_cookies.txt
 #export http_proxy='http://127.0.0.1:8888'
 
 #
@@ -547,7 +548,7 @@ echo $JSON | jq
 echo '25. Testing following the end session redirect redirect ...'
 END_SESSION_REQUEST_URL=$(jq -r .url <<< "$JSON")
 HTTP_STATUS=$(curl -i -s -X GET $END_SESSION_REQUEST_URL \
--c $CURITY_COOKIES_FILE \
+-c $AUTHORIZATION_SERVER_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ $HTTP_STATUS != '303' ]; then
   echo "*** Problem encountered during an OpenID Connect end session redirect, status: $HTTP_STATUS"
