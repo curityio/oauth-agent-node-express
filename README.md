@@ -3,7 +3,7 @@
 The OAuth agent is an API that issues cookies for Single Page Applications.\
 See the original Curity solution for documentation and concepts:
 
-- [https://github.com/curityio/oauth-agent-node-express](Curity Version)
+- [Curity master version](https://github.com/curityio/oauth-agent-node-express)
 
 ## This Fork
 
