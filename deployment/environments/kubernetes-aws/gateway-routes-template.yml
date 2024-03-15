@@ -1,0 +1,50 @@
+#
+# A setup where an SPA calls the Kong gateway deployed to an AWS Kubernetes cluster
+# This configuration uses a cloud native authorization server
+#
+
+_format_version: '3.0'
+_transform: true
+
+services:
+
+  #
+  # The SPA calls https://api.authsamples-k8s.com/oauth-agent to make OAuth calls
+  # The Istio ingress routes here to http://kong-svc.kong.svc:8000/oauth-agent
+  # This gateway then routes to http://oauthagent-svc.applications.svc:8000/oauth-agent
+  # The OAuth agent then calls the authorization server
+  #
+- name: oauth-agent
+  url: http://oauthagent-svc.applications.svc:8000/oauth-agent
+  routes:
+  - name: oauth-agent-api-route
+    paths:
+    - /oauth-agent
+
+  #
+  # Apps https://api.authsamples-k8s.com/investments to make API calls
+  # The Istio ingress routes here to http://kong-svc.kong.svc:8000/investments
+  # This gateway then uses plugins to decrypt secure cookies and convert to JWT access tokens when required
+  # It then routes to http://finalapi-svc.applications.svc:8000/investments
+  #
+- name: finalapi
+  url: http://finalapi-svc.applications.svc:8000/investments
+  routes:
+  - name: finalapi-route
+    paths:
+    - /investments
+  plugins:
+  - name: oauth-proxy
+    config:
+      encryption_key: $COOKIE_ENCRYPTION_KEY
+      cookie_name_prefix: mycompany
+      trusted_web_origins:
+      - https://web.authsamples-k8s.com
+      cors_enabled: true
+      allow_tokens: true
+  - name: phantom-token
+    config:
+      introspection_endpoint: http://curity-idsvr-runtime-svc.curity.svc:8443/oauth/v2/oauth-introspect
+      client_id: api_gateway_client
+      client_secret: Password1
+      token_cache_seconds: 900

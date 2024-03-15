@@ -1,0 +1,29 @@
+{
+    "host": {
+        "port": 8000,
+        "sslCertificateFileName": "",
+        "sslCertificatePassword": "",
+        "useHttpProxy": false,
+        "httpProxyUrl": ""
+    },
+    "api": {
+        "authorizeEndpoint": "https://login.authsamples-k8s.com/oauth/v2/oauth-authorize",
+        "tokenEndpoint": "http://curity-idsvr-runtime-svc.curity.svc:8443/oauth/v2/oauth-token",
+        "userInfoEndpoint": "http://curity-idsvr-runtime-svc.curity.svc:8443/oauth/v2/oauth-userinfo",
+        "endSessionEndpoint": "https://login.authsamples-k8s.com/oauth/v2/oauth-session/logout",
+        "cookiePrefix": "mycompany",
+        "cookieEncryptionKey": "$COOKIE_ENCRYPTION_KEY",
+        "trustedWebOrigin": "https://web.authsamples-k8s.com",
+        "provider": "standard"
+    },
+    "client": {
+        "clientId": "spa_client",
+        "clientSecret": "Password1",
+        "redirectUri": "https://web.authsamples-k8s.com/spa/",
+        "postLogoutRedirectUri": "https://web.authsamples-k8s.com/spa/loggedout",
+        "scope": "openid profile investments"
+    },
+    "logging": {
+        "prettyPrint": false
+    }
+}

@@ -1,0 +1,92 @@
+#
+# The Kubernetes resources for the API gateway placed in front of APIs
+#
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kong
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kong
+  labels:
+    app: kong
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kong
+  template:
+    metadata:
+      labels:
+        app: kong
+        spire-managed-identity: 'true'
+      annotations:
+        inject.istio.io/templates: 'sidecar,spire'
+    spec:
+      serviceAccountName: kong
+      containers:
+      - name: kong
+        image: $DOCKER_IMAGE
+        env:
+          - name: 'KONG_DATABASE'
+            value: 'off'
+          - name: 'KONG_DECLARATIVE_CONFIG'
+            value: '/usr/local/kong/declarative/kong.yml'
+          - name: 'KONG_PROXY_LISTEN'
+            value: '0.0.0.0:8000'
+          - name: 'KONG_LOG_LEVEL'
+            value: 'info'
+          - name: 'KONG_PLUGINS'
+            value: 'bundled,oauth-proxy,phantom-token'
+          - name: 'KONG_NGINX_HTTP_LUA_SHARED_DICT'
+            value: 'phantom-token 10m'
+        volumeMounts:
+          - name: gateway-routes-config
+            mountPath: /usr/local/kong/declarative/kong.yml
+            subPath: kong.yml
+            readOnly: true
+      volumes:
+        - name: gateway-routes-config
+          configMap:
+            name: gateway-routes-config
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kong-svc
+spec:
+  selector:
+    app: kong
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8000
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: kong
+spec:
+  selector:
+    matchLabels:
+      role: kong
+  mtls:
+    mode: STRICT
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: api-virtual-service
+spec:
+  hosts:
+  - api.$BASE_DOMAIN
+  gateways:
+  - istio-system/istio-ingress-gateway
+  http:
+  - route:
+    - destination:
+        host: kong-svc
+        port:
+          number: 8000

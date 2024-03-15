@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+
+  #
+  # The API gateway routes to the OAuth Agent and APIs, and translates cookies to tokens during API calls
+  #
+  apigateway:
+    image: custom_kong:latest
+    hostname: apigateway-internal.authsamples-dev.com
+    extra_hosts:
+     - apilocal.authsamples-dev.com:host-gateway
+    ports:
+      - 444:8000
+    volumes:
+      - ../environments/docker-local/gateway-routes.yml:/usr/local/kong/declarative/kong.yml
+      - ../../certs/authsamples-dev.ssl.pem:/usr/local/share/certs/authsamples-dev.ssl.pem
+      - ../../certs/authsamples-dev.ssl.key:/usr/local/share/certs/authsamples-dev.ssl.key
+      - ../../certs/authsamples-dev.ca.pem:/usr/local/share/certs/authsamples-dev.ca.pem
+    environment:
+      KONG_DATABASE: 'off'
+      KONG_DECLARATIVE_CONFIG: '/usr/local/kong/declarative/kong.yml'
+      KONG_PROXY_LISTEN: '0.0.0.0:8000 ssl'
+      KONG_SSL_CERT: '/usr/local/share/certs/authsamples-dev.ssl.pem'
+      KONG_SSL_CERT_KEY: './usr/local/share/certs/authsamples-dev.ssl.key'
+      KONG_LUA_SSL_TRUSTED_CERTIFICATE: './usr/local/share/certs/authsamples-dev.ca.pem'
+      KONG_LOG_LEVEL: 'info'
+      KONG_PLUGINS: 'bundled,oauth-proxy'
+      KONG_NGINX_HTTP_LUA_SHARED_DICT: 'phantom-token 10m'
+      KONG_NGINX_PROXY_PROXY_BUFFERS: '16 64k'
+      KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: '64k'
+      KONG_NGINX_PROXY_LARGE_CLIENT_HEADER_BUFFERS: '16 64k'
+
+  #
+  # The OAuth Agent is a utility API that runs behind the API gateway
+  #
+  oauthagent:
+    image: oauthagent:latest
+    hostname: oauthagent-internal.authsamples-dev.com
+    volumes:
+      - ../environments/docker-local/oauthagent.config.json:/usr/api/oauthagent.config.json
+      - ../../certs/authsamples-dev.ssl.p12:/usr/api/certs/authsamples-dev.ssl.p12

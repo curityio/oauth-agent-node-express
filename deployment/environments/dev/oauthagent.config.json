@@ -1,0 +1,29 @@
+{
+    "host": {
+        "port": 444,
+        "sslCertificateFileName": "./certs/authsamples-dev.ssl.p12",
+        "sslCertificatePassword": "Password1",
+        "useHttpProxy": false,
+        "httpProxyUrl": "http://127.0.0.1:8888"
+    },
+    "api": {
+        "authorizeEndpoint": "https://login.authsamples.com/oauth2/authorize",
+        "tokenEndpoint": "https://login.authsamples.com/oauth2/token",
+        "userInfoEndpoint": "https://login.authsamples.com/oauth2/userInfo",
+        "endSessionEndpoint": "https://login.authsamples.com/logout",
+        "cookiePrefix": "mycompany",
+        "cookieEncryptionKey": "d26d160214a85a2aa9dc80487e0c24b33d1594bda7b0e1954e99fde54f6486df",
+        "trustedWebOrigin": "https://web.authsamples-dev.com",
+        "provider": "cognito"
+    },
+    "client": {
+        "clientId": "7q5pope8rki7okarj2u8l4in7o",
+        "clientSecret": "1d18g4v05sesjkv161borl012j009l7ooktnfs10ph9p6nkbbfl9",
+        "redirectUri": "https://web.authsamples-dev.com/spa/",
+        "postLogoutRedirectUri": "https://web.authsamples-dev.com/spa/loggedout",
+        "scope": "openid profile https://api.authsamples.com/investments"
+    },
+    "logging": {
+        "prettyPrint": true
+    }
+}

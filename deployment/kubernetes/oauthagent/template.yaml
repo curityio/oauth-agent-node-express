@@ -1,0 +1,52 @@
+#
+# The Kubernetes resources for the OAuth Agent, which implements OAuth security for the SPA
+#
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: oauthagent
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: oauthagent
+  labels:
+    app: oauthagent
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: oauthagent
+  template:
+    metadata:
+      labels:
+        app: oauthagent
+        spire-managed-identity: 'true'
+      annotations:
+        inject.istio.io/templates: 'sidecar,spire'
+    spec:
+      serviceAccountName: oauthagent
+      containers:
+      - name: oauthagent
+        image: $DOCKER_IMAGE
+        volumeMounts:
+          - name: oauth-agent-config
+            mountPath: /usr/api/oauthagent.config.json
+            subPath: oauthagent.config.json
+            readOnly: true
+      volumes:
+        - name: oauth-agent-config
+          configMap:
+            name: oauth-agent-config
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: oauthagent-svc
+spec:
+  selector:
+    app: oauthagent
+  ports:
+  - name: http
+    protocol: "TCP"
+    port: 8000
