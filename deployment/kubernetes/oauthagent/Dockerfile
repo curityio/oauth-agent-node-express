@@ -1,9 +1,9 @@
 FROM node:20-bookworm
 
 # Copy files into our docker image and install dependencies
-WORKDIR /usr/api
-COPY dist                /usr/api/dist
-COPY package*.json       /usr/api/
+WORKDIR /usr/oauth-agent
+COPY dist                /usr/oauth-agent/dist
+COPY package*.json       /usr/oauth-agent/
 RUN npm install --production
 
 # Run the app as a low privilege user

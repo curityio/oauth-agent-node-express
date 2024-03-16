@@ -37,5 +37,6 @@ services:
     image: oauthagent:latest
     hostname: oauthagent-internal.authsamples-dev.com
     volumes:
-      - ../environments/docker-local/oauthagent.config.json:/usr/api/oauthagent.config.json
-      - ../../certs/authsamples-dev.ssl.p12:/usr/api/certs/authsamples-dev.ssl.p12
+      - ../../certs/authsamples-dev.ssl.p12:/usr/oauth-agent/certs/authsamples-dev.ssl.p12
+    env_file:
+      - ../environments/docker-local/.env

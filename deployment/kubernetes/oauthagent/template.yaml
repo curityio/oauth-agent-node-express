@@ -31,7 +31,7 @@ spec:
         image: $DOCKER_IMAGE
         volumeMounts:
           - name: oauth-agent-config
-            mountPath: /usr/api/oauthagent.config.json
+            mountPath: /usr/oauth-agent/oauthagent.config.json
             subPath: oauthagent.config.json
             readOnly: true
       volumes:

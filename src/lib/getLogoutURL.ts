@@ -20,11 +20,6 @@ function getLogoutURL(config: OAuthAgentConfiguration): string {
     
     const postLogoutUriFieldName = config.issuer.indexOf('cognito') !== -1 ? 'logout_uri' : 'post_logout_redirect_uri';
     const postLogoutUrlPart = config.postLogoutRedirectURI ? `&${postLogoutUriFieldName}=` + encodeURIComponent(config.postLogoutRedirectURI) : ""
-    console.log('*** LOGOUT DEBUG')
-    console.log(postLogoutUriFieldName)
-    console.log(postLogoutUrlPart)
-    console.log('*** LOGOUT DEBUG')
-
     return config.logoutEndpoint + "?client_id=" + encodeURIComponent(config.clientID) + postLogoutUrlPart
 }
 

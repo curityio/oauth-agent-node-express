@@ -5,7 +5,7 @@
     "scripts": {
         "start": "./start.sh",
         "test": "./test/test-oauth-agent.sh",
-        "build": "rimraf dist && tsc"
+        "buildRelease": "rimraf dist && tsc"
     },
     "author": "Curity AB",
     "license": "Apache-2.0",
