@@ -10,5 +10,5 @@ cd ..
 #
 # Run the docker deployment
 #
-echo 'Freeing Token Handler docker resources ...'
+echo 'Freeing token handler docker resources ...'
 docker compose --project-name tokenhandler down

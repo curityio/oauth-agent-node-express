@@ -1,9 +1,9 @@
 
 #!/bin/bash
 
-############################################################################
-# Deploy the API gateway and token handler resources to a Kubernetes cluster
-############################################################################
+########################################=#############
+# Deploy OAuth agent resources to a Kubernetes cluster
+######################################################
 
 #
 # Ensure that we are in the folder containing this script

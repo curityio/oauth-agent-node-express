@@ -76,9 +76,8 @@ class LoginController {
         let csrfToken: string = ''
 
         if (data.code && data.state) {
-            
+
             const tempLoginData = req.cookies ? req.cookies[getTempLoginDataCookieName(config.cookieNamePrefix)] : undefined
-            
             const tokenResponse = await getTokenEndpointResponse(config, data.code, data.state, tempLoginData)
             if (tokenResponse.id_token) {
                 validateIDtoken(config, tokenResponse.id_token)
