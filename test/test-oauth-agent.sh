@@ -466,7 +466,7 @@ HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
--H 'x-example-csrf: abc123' \
+-H 'x-mycompany-csrf: abc123' \
 -b $MAIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '401' ]; then
@@ -490,7 +490,7 @@ HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
--H "x-example-csrf: $CSRF" \
+-H "x-mycompany-csrf: $CSRF" \
 -b $MAIN_COOKIES_FILE \
 -c $MAIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
@@ -510,7 +510,7 @@ HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
--H "x-example-csrf: $CSRF" \
+-H "x-mycompany-csrf: $CSRF" \
 -b $MAIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '204' ]; then
@@ -575,7 +575,7 @@ HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/logout" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
--H "x-example-csrf: abc123" \
+-H "x-mycompany-csrf: abc123" \
 -b $MAIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '401' ]; then
@@ -599,7 +599,7 @@ HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/logout" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
--H "x-example-csrf: $CSRF" \
+-H "x-mycompany-csrf: $CSRF" \
 -b $MAIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
@@ -618,7 +618,7 @@ END_SESSION_REQUEST_URL=$(jq -r .url <<< "$JSON")
 HTTP_STATUS=$(curl -i -s -X GET $END_SESSION_REQUEST_URL \
 -c $LOGIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
-if [ $HTTP_STATUS != '303' ]; then
+if [ $HTTP_STATUS != '302' ]; then
   echo "*** Problem encountered during an OpenID Connect end session redirect, status: $HTTP_STATUS"
   exit
 fi
