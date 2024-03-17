@@ -17,7 +17,14 @@
 import express from 'express'
 import {config} from '../config.js'
 import {
-    decryptCookie, getAuthCookieName, getCookiesForTokenResponse, refreshAccessToken, validateIDtoken, ValidateRequestOptions
+    decryptCookie,
+    getATCookieName,
+    getAuthCookieName,
+    getCookiesForTokenResponse,
+    getCookiesForRefreshTokenExpiry,
+    refreshAccessToken,
+    validateIDtoken,
+    ValidateRequestOptions
 } from '../lib/index.js'
 import {InvalidCookieException} from '../lib/exceptions/index.js'
 import validateExpressRequest from '../validateExpressRequest.js'
@@ -28,6 +35,7 @@ class RefreshTokenController {
 
     constructor() {
         this.router.post('/', asyncCatch(this.RefreshTokenFromCookie))
+        this.router.post('/expire', asyncCatch(this.ExpireRefreshToken))
     }
 
     RefreshTokenFromCookie = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -40,7 +48,6 @@ class RefreshTokenController {
         if (req.cookies && req.cookies[authCookieName]) {
             
             const refreshToken = decryptCookie(config.encKey, req.cookies[authCookieName])
-
             const tokenResponse = await refreshAccessToken(refreshToken, config)
             if (tokenResponse.id_token) {
                 validateIDtoken(config, tokenResponse.id_token)
@@ -53,6 +60,34 @@ class RefreshTokenController {
         } else {
             const error = new InvalidCookieException()
             error.logInfo = 'No auth cookie was supplied in a token refresh call'
+            throw error
+        }
+    }
+
+    // To simulate expiry for test purposes
+    ExpireRefreshToken = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+        const options = new ValidateRequestOptions()
+        options.requireCsrfHeader = true;
+        options.requireTrustedOrigin = true;
+        validateExpressRequest(req, options)
+
+        const atCookieName = getATCookieName(config.cookieNamePrefix)
+        const authCookieName = getAuthCookieName(config.cookieNamePrefix)
+        if (req.cookies && req.cookies[atCookieName] && req.cookies[authCookieName]) {
+
+            const accessToken = decryptCookie(config.encKey, req.cookies[atCookieName])
+            const refreshToken = decryptCookie(config.encKey, req.cookies[authCookieName])
+            const expiredAccessToken = `${accessToken}x`
+            const expiredRefreshToken = `${refreshToken}x`
+            const cookiesToSet = getCookiesForRefreshTokenExpiry(config, expiredAccessToken, expiredRefreshToken)
+            res.setHeader('Set-Cookie', cookiesToSet)
+
+            res.status(204).send()
+
+        } else {
+            const error = new InvalidCookieException()
+            error.logInfo = 'Valid cookies were not supplied in a call to ExpireRefreshToken'
             throw error
         }
     }

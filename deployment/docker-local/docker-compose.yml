@@ -25,7 +25,6 @@ services:
       KONG_LUA_SSL_TRUSTED_CERTIFICATE: './usr/local/share/certs/authsamples-dev.ca.pem'
       KONG_LOG_LEVEL: 'info'
       KONG_PLUGINS: 'bundled,oauth-proxy'
-      KONG_NGINX_HTTP_LUA_SHARED_DICT: 'phantom-token 10m'
       KONG_NGINX_PROXY_PROXY_BUFFERS: '16 64k'
       KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: '64k'
       KONG_NGINX_PROXY_LARGE_CLIENT_HEADER_BUFFERS: '16 64k'

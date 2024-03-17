@@ -20,7 +20,7 @@ import { createAuthorizationRequest, handleAuthorizationResponse } from './login
 import { validateIDtoken } from './idTokenValidator.js'
 import { ValidateRequestOptions } from './validateRequest.js'
 import { getEncryptedCookie, decryptCookie } from './cookieEncrypter.js'
-import { getCookiesForTokenResponse, getCookiesForUnset } from './cookieBuilder.js'
+import { getCookiesForTokenResponse, getCookiesForUnset, getCookiesForAccessTokenExpiry, getCookiesForRefreshTokenExpiry } from './cookieBuilder.js'
 import { getTokenEndpointResponse, refreshAccessToken } from './getToken.js'
 import getUserInfo from './getUserInfo.js'
 import getIDTokenClaims from './getIDTokenClaims.js'
@@ -45,6 +45,8 @@ export {
     getLogoutURL,
     refreshAccessToken,
     getCookiesForUnset,
+    getCookiesForAccessTokenExpiry,
+    getCookiesForRefreshTokenExpiry,
     getTempLoginDataCookieForUnset,
     getTempLoginDataCookie,
     getCookiesForTokenResponse,

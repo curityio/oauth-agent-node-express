@@ -24,6 +24,7 @@ import {
     UserInfoController,
     ClaimsController,
     LogoutController,
+    AccessTokenController,
     RefreshTokenController
 } from './controller/index.js'
 import {config} from './config.js'
@@ -52,7 +53,8 @@ const controllers = {
     '/userInfo': new UserInfoController(),
     '/claims': new ClaimsController(),
     '/logout': new LogoutController(),
-    '/refresh': new RefreshTokenController()
+    '/access' : new AccessTokenController(),
+    '/refresh': new RefreshTokenController(),
 }
 
 for (const [path, controller] of Object.entries(controllers)) {

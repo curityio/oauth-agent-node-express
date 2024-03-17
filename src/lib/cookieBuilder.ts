@@ -23,7 +23,7 @@ import {getTempLoginDataCookieForUnset} from './pkce.js'
 const DAY_MILLISECONDS = 1000 * 60 * 60 * 24
 
 function getCookiesForTokenResponse(tokenResponse: any, config: OAuthAgentConfiguration, unsetTempLoginDataCookie: boolean = false, csrfCookieValue?: string): string[] {
-    
+
     const cookies = [
         getEncryptedCookie(config.cookieOptions, tokenResponse.access_token, getATCookieName(config.cookieNamePrefix), config.encKey)
     ]
@@ -70,4 +70,24 @@ function getCookiesForUnset(options: CookieSerializeOptions, cookieNamePrefix: s
     ]
 }
 
-export { getCookiesForTokenResponse, getCookiesForUnset };
+function getCookiesForAccessTokenExpiry(config: OAuthAgentConfiguration, accessToken: string): string[] {
+
+    return [
+        getEncryptedCookie(config.cookieOptions, accessToken, getATCookieName(config.cookieNamePrefix), config.encKey)
+    ]
+}
+
+function getCookiesForRefreshTokenExpiry(config: OAuthAgentConfiguration, accessToken: string, refreshToken: string): string[] {
+
+    const refreshCookieOptions = {
+        ...config.cookieOptions,
+        path: config.endpointsPrefix + '/refresh'
+    }
+
+    return [
+        getEncryptedCookie(config.cookieOptions, accessToken, getATCookieName(config.cookieNamePrefix), config.encKey),
+        getEncryptedCookie(refreshCookieOptions, refreshToken, getAuthCookieName(config.cookieNamePrefix), config.encKey),
+    ]
+}
+
+export { getCookiesForTokenResponse, getCookiesForUnset, getCookiesForAccessTokenExpiry, getCookiesForRefreshTokenExpiry };
