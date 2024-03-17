@@ -2,7 +2,8 @@ version: '3.8'
 services:
 
   #
-  # The API gateway routes to the OAuth Agent and APIs, and translates cookies to tokens during API calls
+  # The API gateway routes to the OAuth Agent and runs an OAuth proxy plugin
+  # During API requests the OAuth proxy decrypts cookies and forwards JWT access tokens to APIs
   #
   apigateway:
     image: custom_kong:latest
