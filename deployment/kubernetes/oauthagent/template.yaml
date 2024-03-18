@@ -30,10 +30,10 @@ spec:
       - name: oauthagent
         image: $DOCKER_IMAGE
         env:
-          - name: 'PORT'
-            value: '8000'
-          - name: 'TRUSTED_WEB_ORIGIN'
-            value: '$TRUSTED_WEB_ORIGIN'
+          - name: PORT
+            value: 8000
+          - name: TRUSTED_WEB_ORIGIN
+            value: $TRUSTED_WEB_ORIGIN
           - name: ISSUER
             value: $ISSUER
           - name: AUTHORIZE_ENDPOINT
