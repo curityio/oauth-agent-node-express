@@ -39,4 +39,4 @@ services:
     volumes:
       - ../../certs/authsamples-dev.ssl.p12:/usr/oauth-agent/certs/authsamples-dev.ssl.p12
     env_file:
-      - ../environments/docker-local/.env
+      - ../environments/docker-local/oauthagent.env

@@ -5,7 +5,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 #
 # Set environment variables
 #
-. ./deployment/environments/dev/.env
+. ./deployment/environments/dev/oauthagent.env
 
 #
 # Then run the OAuth agent

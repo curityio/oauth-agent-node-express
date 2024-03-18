@@ -29,31 +29,13 @@ else
 fi
 
 #
-# Update configuration with the cookie encryption key
+# Create a new cookie encryption key and apply other environment variables
 #
 export COOKIE_ENCRYPTION_KEY=$(cat ./cookie-encryption.key)
+. ../environments/$ENVIRONMENT_FOLDER/oauthagent.env
 
 #
-# Update configuration from environment variables
-#
-envsubst < ../environments/$ENVIRONMENT_FOLDER/oauthagent.config-template.json > ../environments/$ENVIRONMENT_FOLDER/oauthagent.config.json
-if [ $? -ne 0 ]; then
-  echo 'Problem encountered running the envsubst tool to update OAuth Agent configuration'
-  exit 1
-fi
-
-#
-# Create a configmap for the OAuth Agent
-#
-kubectl -n applications delete configmap oauth-agent-config 2>/dev/null
-kubectl -n applications create configmap oauth-agent-config --from-file="../environments/$ENVIRONMENT_FOLDER/oauthagent.config.json"
-if [ $? -ne 0 ]; then
-  echo '*** Problem encountered creating the OAuth Agent configmap'
-  exit 1
-fi
-
-#
-# Produce the final component YAML with the correct Docker images
+# Produce the final component YAML with the correct Docker images and environment variables
 #
 envsubst < ./oauthagent/template.yaml > ./oauthagent/oauthagent.yaml
 if [ $? -ne 0 ]; then

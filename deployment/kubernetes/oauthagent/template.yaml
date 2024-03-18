@@ -29,15 +29,43 @@ spec:
       containers:
       - name: oauthagent
         image: $DOCKER_IMAGE
-        volumeMounts:
-          - name: oauth-agent-config
-            mountPath: /usr/oauth-agent/oauthagent.config.json
-            subPath: oauthagent.config.json
-            readOnly: true
-      volumes:
-        - name: oauth-agent-config
-          configMap:
-            name: oauth-agent-config
+        env:
+          - name: 'PORT'
+            value: '8000'
+          - name: 'TRUSTED_WEB_ORIGIN'
+            value: '$TRUSTED_WEB_ORIGIN'
+          - name: ISSUER
+            value: $ISSUER
+          - name: AUTHORIZE_ENDPOINT
+            value: $AUTHORIZE_ENDPOINT
+          - name: TOKEN_ENDPOINT
+            value: http://curity-idsvr-runtime-svc.curity.svc:8443/oauth/v2/oauth-token
+          - name: USERINFO_ENDPOINT
+            value: http://curity-idsvr-runtime-svc.curity.svc:8443/oauth/v2/oauth-userinfo
+          - name: LOGOUT_ENDPOINT
+            value: $LOGOUT_ENDPOINT
+          - name: CLIENT_ID
+            value: spa_client
+          - name: CLIENT_SECRET
+            value: Password1
+          - name: REDIRECT_URI
+            value: $REDIRECT_URI
+          - name: POST_LOGOUT_REDIRECT_URI
+            value: $POST_LOGOUT_REDIRECT_URI
+          - name: SCOPE
+            value: 'openid profile investments'
+          - name: COOKIE_DOMAIN
+            value: api.authsamples-k8s.com
+          - name: COOKIE_NAME_PREFIX
+            value: mycompany
+          - name: COOKIE_ENCRYPTION_KEY
+            value: $COOKIE_ENCRYPTION_KEY
+          - name: CORS_ENABLED
+            value: 'true'
+          - name: SERVER_CERT_P12_PATH
+            value: ''
+          - name: SERVER_CERT_P12_PASSWORD
+            value: ''
 ---
 kind: Service
 apiVersion: v1
