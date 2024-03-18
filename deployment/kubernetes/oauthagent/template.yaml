@@ -31,7 +31,7 @@ spec:
         image: $DOCKER_IMAGE
         env:
           - name: PORT
-            value: 8000
+            value: '8000'
           - name: TRUSTED_WEB_ORIGIN
             value: $TRUSTED_WEB_ORIGIN
           - name: ISSUER
