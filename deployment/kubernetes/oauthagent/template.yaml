@@ -55,9 +55,11 @@ spec:
           - name: SCOPE
             value: 'openid profile investments'
           - name: COOKIE_DOMAIN
-            value: api.authsamples-k8s.com
+            value: $COOKIE_DOMAIN
           - name: COOKIE_NAME_PREFIX
             value: mycompany
+          - name: COOKIE_SECURE
+            value: 'true'
           - name: COOKIE_ENCRYPTION_KEY
             value: $COOKIE_ENCRYPTION_KEY
           - name: CORS_ENABLED
