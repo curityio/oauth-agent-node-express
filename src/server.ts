@@ -35,7 +35,7 @@ const app = express()
 const corsConfiguration = {
     origin: config.trustedWebOrigins,
     credentials: true,
-    methods: ['POST']
+    maxAge: 86400,
 }
 
 if (config.corsEnabled) {
