@@ -476,7 +476,7 @@ echo "21. GET User Info returned 401 as expected"
 #
 # Test refreshing the access token now that it is expired
 #
-echo '22. Testing POST to /refresh with expired access token ...'
+echo '22. Testing POST to /refresh to refresh access token ...'
 HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
@@ -491,7 +491,7 @@ if [ "$HTTP_STATUS" != '204' ]; then
   echo $JSON | jq
   exit 1
 fi
-echo '22. POST to /refresh with expired access token completed successfully'
+echo '22. POST to /refresh completed successfully'
 
 #
 # Test that getting user info now works
