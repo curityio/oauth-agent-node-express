@@ -7,7 +7,7 @@ Follow the below steps to get set up for developing and testing the OAuth Agent 
 Ensure that these tools are installed locally:
 
 - [Node.js 20+](https://nodejs.org/en/download/)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- [Docker](https://www.docker.com/products/docker-desktop)
 - [jq](https://stedolan.github.io/jq/download/)
 
 Also get a license file for the Curity Identity Server:
