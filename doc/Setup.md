@@ -67,7 +67,7 @@ First copy a `license.json` file into the `test/end-to-end/idsvr` folder and the
 ./test/end-to-end/idsvr/deploy.sh
 ```
 
-Ensure that the SPA is running:
+Ensure that the OAuth Agent is running:
 
 ```bash
 npm start
