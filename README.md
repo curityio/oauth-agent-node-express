@@ -82,9 +82,9 @@ This enables a test driven approach to developing the OAuth Agent, without the n
 
 ## End-to-End SPA Flow
 
-See the below article for details on how to run the end-to-end solution in a browser:
+Run the below code example to use the OAuth Agent in an end-to-end SPA flow:
 
-- [SPA Code Example](https://curity.io/resources/learn/token-handler-spa-example/)
+- [SPA Code Example](https://github.com/curityio/spa-using-token-handler)
 
 ## Website Documentation
 
