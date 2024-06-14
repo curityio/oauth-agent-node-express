@@ -6,7 +6,7 @@ Follow the below steps to get set up for developing and testing the OAuth Agent 
 
 Ensure that these tools are installed locally:
 
-- [Node.js 18+](https://nodejs.org/en/download/)
+- [Node.js 20+](https://nodejs.org/en/download/)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [jq](https://stedolan.github.io/jq/download/)
 
@@ -61,10 +61,16 @@ npm test
 ## Run End-to-End Tests
 
 Run some tests that also use the Curity Identity Server.\
-First copy a license file into the `test/end-to-end/idsvr` folder and then run the following command:
+First copy a `license.json` file into the `test/end-to-end/idsvr` folder and then run the following command:
 
 ```bash
 ./test/end-to-end/idsvr/deploy.sh
+```
+
+Ensure that the SPA is running:
+
+```bash
+npm start
 ```
 
 Then run a test script that uses curl requests to verify the OAuth Agent's operations:
