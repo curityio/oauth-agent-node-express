@@ -56,4 +56,4 @@ export {
     getIDCookieName,
     getAuthCookieName,
     generateRandomString,
-}
+};

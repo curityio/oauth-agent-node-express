@@ -5,21 +5,21 @@
     "scripts": {
         "start": "./start.sh",
         "test": "./test/test-oauth-agent.sh",
-        "buildRelease": "rimraf dist && tsc"
+        "buildRelease": "rm -rf dist && tsc"
     },
     "author": "Curity AB",
     "license": "Apache-2.0",
     "type": "module",
     "engines": {
-        "node": ">=18"
+        "node": ">=20"
     },
     "dependencies": {
         "base64url": "^3.0.1",
         "cookie": "^0.6.0",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
-        "express": "^4.18.2",
-        "jose": "^5.1.3",
+        "express": "^4.19.2",
+        "jose": "^5.2.3",
         "node-fetch": "^3.3.2",
         "url-parse": "^1.5.10"
     },
@@ -31,9 +31,8 @@
         "@types/node-fetch": "^2.6.9",
         "@types/set-cookie-parser": "^2.4.7",
         "@types/url-parse": "^1.4.11",
-        "rimraf": "^5.0.5",
         "set-cookie-parser": "^2.6.0",
         "ts-node": "^10.9.2",
-        "typescript": "^5.3.3"
+        "typescript": "^5.4.3"
     }
 }
