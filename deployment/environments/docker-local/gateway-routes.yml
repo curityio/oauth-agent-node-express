@@ -21,10 +21,10 @@ services:
 
   #
   # The SPA calls https://bfflocal.authsamples-dev.com:444/investments to make API calls
-  # The gateway then uses a plugin to decrypt secure cookies, then calls back to an API running locally
+  # The gateway then uses a plugin to decrypt secure cookies, then calls back to the local API on port 446
   #
 - name: sample-api
-  url: https://bfflocal.authsamples-dev.com:446/investments
+  url: https://api.authsamples-dev.com:446/investments
   routes:
   - name: sample-api-route
     paths:

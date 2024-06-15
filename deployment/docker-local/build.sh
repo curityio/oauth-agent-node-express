@@ -49,7 +49,7 @@ fi
 #
 # Build the docker image for the Kong API Gateway
 #
-docker build -f deployment/docker-local/Dockerfile-api-gateway -t custom_kong:latest .
+docker build -f deployment/docker-local/Dockerfile-api-gateway -t apigateway:latest .
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building the API Gateway docker image'
   exit 1

@@ -15,9 +15,9 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 TAG=$(date +%Y%m%d%H%M%S)
 echo $TAG > ./gatewaydockertag.txt
 if [ "$DOCKER_REPOSITORY" == "" ]; then
-  DOCKER_IMAGE="custom_kong:$TAG"
+  DOCKER_IMAGE="apigateway:$TAG"
 else
-  DOCKER_IMAGE="$DOCKER_REPOSITORY/custom_kong:$TAG"
+  DOCKER_IMAGE="$DOCKER_REPOSITORY/apigateway:$TAG"
 fi
 
 #

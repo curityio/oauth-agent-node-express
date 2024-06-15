@@ -23,9 +23,9 @@ fi
 #
 TAG=$(cat ./gatewaydockertag.txt)
 if [ "$DOCKER_REPOSITORY" == "" ]; then
-  export DOCKER_IMAGE="custom_kong:$TAG"
+  export DOCKER_IMAGE="apigateway:$TAG"
 else
-  export DOCKER_IMAGE="$DOCKER_REPOSITORY/custom_kong:$TAG"
+  export DOCKER_IMAGE="$DOCKER_REPOSITORY/apigateway:$TAG"
 fi
 
 #
