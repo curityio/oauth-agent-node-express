@@ -9,7 +9,7 @@ _transform: true
 services:
 
   #
-  # The SPA calls https://api.mycluster.com/oauth-agent to make OAuth calls
+  # The SPA calls https://bff.mycluster.com/oauth-agent to make OAuth calls
   # The Istio ingress routes here to http://kong-svc.kong.svc:8000/oauth-agent
   # This gateway then routes to http://oauthagent-svc.applications.svc:8000/oauth-agent
   # The OAuth agent then calls the authorization server
@@ -22,7 +22,7 @@ services:
     - /oauth-agent
 
   #
-  # Apps calls https://api.mycluster.com/investments to make API calls
+  # Apps calls https://bff.mycluster.com/investments to make API calls
   # The Istio ingress routes here to http://kong-svc.kong.svc:8000/investments
   # This gateway then uses plugins to decrypt secure cookies and convert to JWT access tokens when required
   # It then routes to http://finalapi-svc.applications.svc:8000/investments

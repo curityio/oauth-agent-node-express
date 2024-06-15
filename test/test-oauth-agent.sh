@@ -4,8 +4,8 @@
 # Tests to run against OAuth Agent endpoints outside the browser
 ################################################################
 
-export OAUTH_AGENT_BASE_URL='https://apilocal.authsamples-dev.com:444/oauth-agent'
-export WEB_BASE_URL='https://web.authsamples-dev.com'
+export OAUTH_AGENT_BASE_URL='https://bff.authsamples-dev.com:444/oauth-agent'
+export WEB_BASE_URL='https://www.authsamples-dev.com'
 export RESPONSE_FILE=data/response.txt
 export MAIN_COOKIES_FILE=data/main_cookies.txt
 export LOGIN_COOKIES_FILE=data/login_cookies.txt
@@ -37,11 +37,11 @@ function getHeaderValue(){
 # The logic around CORS is configured, not coded, so ensure that it works as expected
 #
 echo '1. Testing OPTIONS request with an invalid web origin ...'
-HTTP_STATUS=$(curl -i -s -X OPTIONS "$OAUTH_AGENT_BASE_URL/login/start" \
+HTTP_STATUS=$(curl -i -s -k -X OPTIONS "$OAUTH_AGENT_BASE_URL/login/start" \
 -H "origin: http://malicious-site.com" \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" == '000' ]; then
-  echo '*** Connectivity problem encountered, please check endpoints and whether an HTTP proxy tool is running'
+  echo '*** Connectivity problem encountered'
   exit 1
 fi
 ORIGIN=$(getHeaderValue 'Access-Control-Allow-Origin')
@@ -55,7 +55,7 @@ echo '1. OPTIONS with invalid web origin was not granted access'
 # Test sending a valid web origin to the OAuth Agent in an OPTIONS request
 #
 echo '2. Testing OPTIONS request with a valid web origin ...'
-HTTP_STATUS=$(curl -i -s -X OPTIONS "$OAUTH_AGENT_BASE_URL/login/start" \
+HTTP_STATUS=$(curl -i -s -k -X OPTIONS "$OAUTH_AGENT_BASE_URL/login/start" \
 -H "origin: $WEB_BASE_URL" \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200'  ] && [ "$HTTP_STATUS" != '204' ]; then
@@ -74,7 +74,7 @@ echo '2. OPTIONS with valid web origin granted access successfully'
 # The logic around trusted origins is coded by us
 #
 echo '3. Testing end login POST with invalid web origin ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
 -H "origin: http://malicious-site.com" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -97,7 +97,7 @@ echo '3. POST to endLogin with an invalid web origin was successfully rejected'
 # Test sending an end login request to the API as part of an unauthenticated page load
 #
 echo '4. Testing end login POST for an unauthenticated page load ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -122,7 +122,7 @@ echo '4. POST to endLogin for an unauthenticated page load completed successfull
 # The logic around trusted origins is coded by us
 #
 echo '5. Testing POST to start login from invalid web origin ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/login/start" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/login/start" \
 -H "origin: http://malicious-site.com" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -156,7 +156,7 @@ echo '6. Login completed successfully'
 echo '7. Testing posting a malicious code and state into the browser ...'
 APP_URL="$WEB_BASE_URL?code=hi0f1340y843thy3480&state=nu2febouwefbjfewbj"
 PAGE_URL_JSON='{"pageUrl":"'$APP_URL'"}'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -180,7 +180,7 @@ echo '7. Posting a malicious code and state into the browser was handled correct
 # Test an authenticated page load by sending up the main cookies and get the CSRF value
 #
 echo '8. Testing an authenticated page load ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -206,7 +206,7 @@ echo '8. Authenticated page reload was successful'
 # Test getting user info with an invalid origin
 #
 echo '9. Testing GET User Info from an untrusted origin ...'
-HTTP_STATUS=$(curl -i -s -X GET "$OAUTH_AGENT_BASE_URL/userinfo" \
+HTTP_STATUS=$(curl -i -s -k -X GET "$OAUTH_AGENT_BASE_URL/userinfo" \
 -H "origin: http://malicious-site.com" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -228,7 +228,7 @@ echo '9. GET User Info request for an untrusted origin was handled correctly'
 # Test getting user info without a cookie
 #
 echo '10. Testing GET User Info without secure cookies ...'
-HTTP_STATUS=$(curl -i -s -X GET "$OAUTH_AGENT_BASE_URL/userinfo" \
+HTTP_STATUS=$(curl -i -s -k -X GET "$OAUTH_AGENT_BASE_URL/userinfo" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -250,7 +250,7 @@ echo '10. GET User Info request without secure cookies was handled correctly'
 # Test getting user info successfully
 #
 echo '11. Testing GET User Info with secure cookies ...'
-HTTP_STATUS=$(curl -i -s -X GET "$OAUTH_AGENT_BASE_URL/userinfo" \
+HTTP_STATUS=$(curl -i -s -k -X GET "$OAUTH_AGENT_BASE_URL/userinfo" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -268,7 +268,7 @@ echo "11. GET User Info was successful"
 # Test getting ID token claims without a cookie
 #
 echo '12. Testing GET claims without secure cookies ...'
-HTTP_STATUS=$(curl -i -s -X GET "$OAUTH_AGENT_BASE_URL/claims" \
+HTTP_STATUS=$(curl -i -s -k -X GET "$OAUTH_AGENT_BASE_URL/claims" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -290,7 +290,7 @@ echo '12. GET claims request without secure cookies was handled correctly'
 # Test getting ID token claims successfully
 #
 echo '13. Testing GET claims with secure cookies ...'
-HTTP_STATUS=$(curl -i -s -X GET "$OAUTH_AGENT_BASE_URL/claims" \
+HTTP_STATUS=$(curl -i -s -k -X GET "$OAUTH_AGENT_BASE_URL/claims" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -308,7 +308,7 @@ echo "13. GET claims request was successful"
 # Test refreshing a token with an invalid origin
 #
 echo '14. Testing POST to /refresh from an untrusted origin ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: http://malicious-site.com" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -330,7 +330,7 @@ echo '14. POST to /refresh for an untrusted origin was handled correctly'
 # Test refreshing a token without a cookie
 #
 echo '15. Testing POST to /refresh without secure cookies ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -352,7 +352,7 @@ echo '15. POST to /refresh without secure cookies was handled correctly'
 # Test refreshing a token with secure cookies but with a missing anti forgery token
 #
 echo '16. Testing POST to /refresh without CSRF token ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -375,7 +375,7 @@ echo '16. POST to /refresh without CSRF token was handled correctly'
 # Test refreshing a token with secure cookies but with an incorrect anti forgery token
 #
 echo '17. Testing POST to /refresh with incorrect CSRF token ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -399,7 +399,7 @@ echo '17. POST to /refresh with incorrect CSRF token was handled correctly'
 # Test refreshing a token, which will rewrite up to 3 cookies
 #
 echo '18. Testing POST to /refresh with correct secure details ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -419,7 +419,7 @@ echo '18. POST to /refresh with correct secure details completed successfully'
 # Test refreshing a token again, to ensure that the new refresh token is used for the refresh
 #
 echo '19. Testing POST to /refresh with rotated refresh token ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -438,7 +438,7 @@ echo '19. POST to /refresh with rotated refresh token completed successfully'
 # Next expire the access token in the secure cookie, for test purposes
 #
 echo '20. Expiring the access token ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/access/expire" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/access/expire" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -459,7 +459,7 @@ echo "20. Expire access token request was successful"
 # Test getting user info with an expired access token
 #
 echo '21. Testing GET User Info with an expired access token returns 401 ...'
-HTTP_STATUS=$(curl -i -s -X GET "$OAUTH_AGENT_BASE_URL/userinfo" \
+HTTP_STATUS=$(curl -i -s -k -X GET "$OAUTH_AGENT_BASE_URL/userinfo" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -477,7 +477,7 @@ echo "21. GET User Info returned 401 as expected"
 # Test refreshing the access token now that it is expired
 #
 echo '22. Testing POST to /refresh to refresh access token ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -497,7 +497,7 @@ echo '22. POST to /refresh completed successfully'
 # Test that getting user info now works
 #
 echo '23. Testing GET User Info with a fresh access token returns 200 ...'
-HTTP_STATUS=$(curl -i -s -X GET "$OAUTH_AGENT_BASE_URL/userinfo" \
+HTTP_STATUS=$(curl -i -s -k -X GET "$OAUTH_AGENT_BASE_URL/userinfo" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -515,7 +515,7 @@ echo "23. GET User Info succeeded with a fresh access token"
 # Next expire both the refresh token and the access token in secure cookies, for test purposes
 #
 echo '24. Expiring the refresh token ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh/expire" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/refresh/expire" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -536,7 +536,7 @@ echo "24. Expire refresh token request was successful"
 # Next try to refresh the token and we should get an invalid_grant error
 #
 echo '25. Trying to refresh the access token when the session is expired ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/refresh" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -570,7 +570,7 @@ echo '26. Login completed successfully'
 # Test logging out with an invalid origin
 #
 echo '27. Testing logout POST with invalid web origin ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/logout" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/logout" \
 -H "origin: http://malicious-site.com" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -593,7 +593,7 @@ echo '27. POST to logout with an invalid web origin was successfully rejected'
 # Test logging out without a cookie
 #
 echo '28. Testing logout POST without secure cookies ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/logout" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/logout" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -616,7 +616,7 @@ echo '28. POST to logout without secure cookies was successfully rejected'
 # Test logging out with an incorrect anti forgery token
 #
 echo '29. Testing logout POST with incorrect anti forgery token ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/logout" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/logout" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -640,7 +640,7 @@ echo '29. POST to logout with incorrect anti forgery token was successfully reje
 # Test getting the logout URL and clearing cookies successfully
 #
 echo '30. Testing logout POST with correct secure details ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/logout" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/logout" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -660,7 +660,7 @@ echo $JSON | jq
 #
 echo '31. Testing following the end session redirect redirect ...'
 END_SESSION_REQUEST_URL=$(jq -r .url <<< "$JSON")
-HTTP_STATUS=$(curl -i -s -X GET $END_SESSION_REQUEST_URL \
+HTTP_STATUS=$(curl -i -s -k -X GET $END_SESSION_REQUEST_URL \
 -c $LOGIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ $HTTP_STATUS != '302' ]; then
@@ -673,7 +673,7 @@ echo '31. End session redirect completed successfully'
 # Test sending malformed JSON which currently results in a 500 error
 #
 echo '32. Testing sending malformed JSON to the OAuth Agent ...'
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \

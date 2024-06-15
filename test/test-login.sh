@@ -29,7 +29,7 @@ function getCookieValue(){
 #
 # Test sending a valid start login request to the API
 #
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/login/start" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/login/start" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -49,7 +49,7 @@ JSON=$(tail -n 1 $RESPONSE_FILE)
 echo $JSON | jq
 AUTHORIZATION_REQUEST_URL=$(jq -r .authorizationRequestUrl <<< "$JSON")
 
-HTTP_STATUS=$(curl -i -L -s -X GET "$AUTHORIZATION_REQUEST_URL" \
+HTTP_STATUS=$(curl -i -L -s -k -X GET "$AUTHORIZATION_REQUEST_URL" \
 -c $LOGIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ $HTTP_STATUS != '200' ]; then
@@ -60,7 +60,7 @@ fi
 LOGIN_POST_LOCATION=$(getHeaderValue 'location')
 COGNITO_XSRF_TOKEN=$(getCookieValue 'XSRF-TOKEN' | cut -d ' ' -f 2)
 
-HTTP_STATUS=$(curl -k -i -s -X POST "$LOGIN_POST_LOCATION" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$LOGIN_POST_LOCATION" \
 -H 'Content-Type: application/x-www-form-urlencoded' \
 -b $LOGIN_COOKIES_FILE \
 -c $LOGIN_COOKIES_FILE \
@@ -84,7 +84,7 @@ fi
 PAGE_URL_JSON='{"pageUrl":"'$APP_URL'"}'
 echo $PAGE_URL_JSON | jq
 
-HTTP_STATUS=$(curl -i -s -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
+HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \

@@ -8,7 +8,7 @@ services:
     image: custom_kong:latest
     hostname: apigateway-internal.authsamples-dev.com
     extra_hosts:
-     - apilocal.authsamples-dev.com:host-gateway
+     - api.authsamples-dev.com:host-gateway
     ports:
       - 444:8000
     volumes:
