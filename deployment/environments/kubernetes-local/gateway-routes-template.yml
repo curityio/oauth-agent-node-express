@@ -41,7 +41,6 @@ services:
       trusted_web_origins:
       - https://www.mycluster.com
       cors_enabled: true
-      allow_tokens: true
   - name: phantom-token
     config:
       introspection_endpoint: http://curity-idsvr-runtime-svc.curity.svc:8443/oauth/v2/oauth-introspect

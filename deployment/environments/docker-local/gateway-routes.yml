@@ -16,6 +16,8 @@ services:
   url: https://oauthagent-internal.authsamples-dev.com:8000/oauth-agent
   routes:
   - name: oauth-agent-api-route
+    hosts:
+    - bfflocal.authsamples-dev.com
     paths:
     - /oauth-agent
 
@@ -27,6 +29,8 @@ services:
   url: https://api.authsamples-dev.com:446/investments
   routes:
   - name: sample-api-route
+    hosts:
+    - bfflocal.authsamples-dev.com
     paths:
     - /investments
   plugins:
@@ -37,4 +41,3 @@ services:
       trusted_web_origins:
       - https://www.authsamples-dev.com
       cors_enabled: true
-      allow_tokens: true
