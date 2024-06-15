@@ -9,7 +9,7 @@ _transform: true
 services:
 
   #
-  # The SPA calls https://bff.authsamples-dev.com:444/oauth-agent to make OAuth calls
+  # The SPA calls https://bfflocal.authsamples-dev.com:444/oauth-agent to make OAuth calls
   # The gateway then routes to the OAuth Agent API, which calls the Authorization Server
   #
 - name: oauth-agent
@@ -20,11 +20,11 @@ services:
     - /oauth-agent
 
   #
-  # The SPA calls https://bff.authsamples-dev.com:444/investments to make API calls
+  # The SPA calls https://bfflocal.authsamples-dev.com:444/investments to make API calls
   # The gateway then uses a plugin to decrypt secure cookies, then calls back to an API running locally
   #
 - name: sample-api
-  url: https://bff.authsamples-dev.com:446/investments
+  url: https://bfflocal.authsamples-dev.com:446/investments
   routes:
   - name: sample-api-route
     paths:

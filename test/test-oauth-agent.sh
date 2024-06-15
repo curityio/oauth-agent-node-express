@@ -4,7 +4,7 @@
 # Tests to run against OAuth Agent endpoints outside the browser
 ################################################################
 
-export OAUTH_AGENT_BASE_URL='https://bff.authsamples-dev.com:444/oauth-agent'
+export OAUTH_AGENT_BASE_URL='https://bfflocal.authsamples-dev.com:444/oauth-agent'
 export WEB_BASE_URL='https://www.authsamples-dev.com'
 export RESPONSE_FILE=data/response.txt
 export MAIN_COOKIES_FILE=data/main_cookies.txt
