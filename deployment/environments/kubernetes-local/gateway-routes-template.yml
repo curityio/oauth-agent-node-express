@@ -39,7 +39,7 @@ services:
       encryption_key: $COOKIE_ENCRYPTION_KEY
       cookie_name_prefix: mycompany
       trusted_web_origins:
-      - https://web.mycluster.com
+      - https://www.mycluster.com
       cors_enabled: true
       allow_tokens: true
   - name: phantom-token
