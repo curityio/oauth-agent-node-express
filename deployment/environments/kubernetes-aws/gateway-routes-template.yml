@@ -11,26 +11,30 @@ services:
   #
   # The SPA calls https://bff.authsamples-k8s.com/oauth-agent to make OAuth calls
   # The Istio ingress routes here to http://kong-svc.kong.svc:8000/oauth-agent
-  # This gateway then routes to http://oauthagent-svc.applications.svc:8000/oauth-agent
+  # The gateway routes to http://oauthagent-svc.applications.svc:8000/oauth-agent
   # The OAuth agent then calls the authorization server
   #
 - name: oauth-agent
   url: http://oauthagent-svc.applications.svc:8000/oauth-agent
   routes:
   - name: oauth-agent-api-route
+    hosts:
+    - bff.authsamples-k8s.com
     paths:
     - /oauth-agent
 
   #
-  # Apps https://bff.authsamples-k8s.com/investments to make API calls
+  # The SPA calls https://bff.authsamples-k8s.com/investments to make API calls
   # The Istio ingress routes here to http://kong-svc.kong.svc:8000/investments
-  # This gateway then uses plugins to decrypt secure cookies and convert to JWT access tokens when required
+  # The gateway uses plugins to convert a secure cookie to a JWT access token
   # It then routes to http://finalapi-svc.applications.svc:8000/investments
   #
-- name: finalapi
+- name: finalapi-web
   url: http://finalapi-svc.applications.svc:8000/investments
   routes:
-  - name: finalapi-route
+  - name: finalapi-webroute
+    hosts:
+    - bff.authsamples-k8s.com
     paths:
     - /investments
   plugins:
@@ -41,6 +45,28 @@ services:
       trusted_web_origins:
       - https://www.authsamples-k8s.com
       cors_enabled: true
+  - name: phantom-token
+    config:
+      introspection_endpoint: http://curity-idsvr-runtime-svc.curity.svc:8443/oauth/v2/oauth-introspect
+      client_id: api_gateway_client
+      client_secret: Password1
+      token_cache_seconds: 900
+
+  #
+  # Native apps call https://bff.authsamples-k8s.com/investments to make API calls
+  # The Istio ingress routes here to http://kong-svc.kong.svc:8000/investments
+  # The gateway uses plugins to convert an opaque access token to a JWT access token
+  # It then routes to http://finalapi-svc.applications.svc:8000/investments
+  #
+- name: finalapi
+  url: http://finalapi-svc.applications.svc:8000/investments
+  routes:
+  - name: finalapi-route
+    hosts:
+    - api.authsamples-k8s.com
+    paths:
+    - /investments
+  plugins:
   - name: phantom-token
     config:
       introspection_endpoint: http://curity-idsvr-runtime-svc.curity.svc:8443/oauth/v2/oauth-introspect

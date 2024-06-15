@@ -82,6 +82,7 @@ metadata:
 spec:
   hosts:
   - api.$BASE_DOMAIN
+  - bff.$BASE_DOMAIN
   gateways:
   - istio-system/istio-ingress-gateway
   http:
