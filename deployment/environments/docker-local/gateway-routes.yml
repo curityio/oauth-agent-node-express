@@ -38,7 +38,7 @@ services:
   - name: oauth-proxy
     config:
       encryption_key: 33be02f1b76feccf2c30a4847b0ad68d01756d7a9fb7f9a533b12b5d249a9c66
-      cookie_name_prefix: mycompany
+      cookie_name_prefix: authsamples
       trusted_web_origins:
       - https://www.authsamples-dev.com
       cors_enabled: true

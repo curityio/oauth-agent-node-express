@@ -41,7 +41,7 @@ services:
   - name: oauth-proxy
     config:
       encryption_key: $COOKIE_ENCRYPTION_KEY
-      cookie_name_prefix: mycompany
+      cookie_name_prefix: authsamples
       trusted_web_origins:
       - https://www.mycluster.com
       cors_enabled: true
