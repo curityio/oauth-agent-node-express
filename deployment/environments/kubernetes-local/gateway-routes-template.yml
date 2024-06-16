@@ -9,7 +9,7 @@ _transform: true
 services:
 
   #
-  # The SPA calls https://bff.mycluster.com/oauth-agent to make OAuth calls
+  # The SPA calls https://bff.authsamples-k8s-dev.com/oauth-agent to make OAuth calls
   # The Istio ingress routes here to http://kong-svc.kong.svc:8000/oauth-agent
   # The gateway routes to http://oauthagent-svc.applications.svc:8000/oauth-agent
   # The OAuth agent then calls the authorization server
@@ -19,12 +19,12 @@ services:
   routes:
   - name: oauth-agent
     hosts:
-    - bff.mycluster.com
+    - bff.authsamples-k8s-dev.com
     paths:
     - /oauth-agent
 
   #
-  # The SPA calls https://bff.mycluster.com/investments to make API calls
+  # The SPA calls https://bff.authsamples-k8s-dev.com/investments to make API calls
   # The Istio ingress routes here to http://kong-svc.kong.svc:8000/investments
   # The gateway uses plugins to convert a secure cookie to a JWT access token
   # It then routes to http://finalapi-svc.applications.svc:8000/investments
@@ -34,7 +34,7 @@ services:
   routes:
   - name: finalapi-webroute
     hosts:
-    - bff.mycluster.com
+    - bff.authsamples-k8s-dev.com
     paths:
     - /investments
   plugins:
@@ -43,7 +43,7 @@ services:
       encryption_key: $COOKIE_ENCRYPTION_KEY
       cookie_name_prefix: authsamples
       trusted_web_origins:
-      - https://www.mycluster.com
+      - https://www.authsamples-k8s-dev.com
       cors_enabled: true
   - name: phantom-token
     config:
@@ -53,7 +53,7 @@ services:
       token_cache_seconds: 900
 
   #
-  # Native apps call https://api.mycluster.com/investments to make API calls
+  # Native apps call https://api.authsamples-k8s-dev.com/investments to make API calls
   # The Istio ingress routes here to http://kong-svc.kong.svc:8000/investments
   # The gateway uses plugins to convert an opaque access token to a JWT access token
   # It then routes to http://finalapi-svc.applications.svc:8000/investments
@@ -63,7 +63,7 @@ services:
   routes:
   - name: finalapi-route
     hosts:
-    - api.mycluster.com
+    - api.authsamples-k8s-dev.com
     paths:
     - /investments
   plugins:
