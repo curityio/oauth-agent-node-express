@@ -17,8 +17,6 @@
 import {OAuthAgentConfiguration} from './lib/index.js'
 import {CookieSerializeOptions} from 'cookie'
 
-const useSsl = !!process.env.SERVER_CERT_P12_PATH;
-
 export const config: OAuthAgentConfiguration = {
     
     // Host settings
