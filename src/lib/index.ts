@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { ClientOptions } from './clientOptions.js'
+import type { ClientOptions } from './clientOptions.js'
 import OAuthAgentConfiguration from './oauthAgentConfiguration.js'
 import { createAuthorizationRequest, handleAuthorizationResponse } from './loginHandler.js'
 import { validateIDtoken } from './idTokenValidator.js'

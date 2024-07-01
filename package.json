@@ -32,7 +32,7 @@
         "@types/set-cookie-parser": "^2.4.7",
         "@types/url-parse": "^1.4.11",
         "set-cookie-parser": "^2.6.0",
-        "ts-node": "^10.9.2",
+        "tsx": "^4.15.7",
         "typescript": "^5.4.3"
     }
 }

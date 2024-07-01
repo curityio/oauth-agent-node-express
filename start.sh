@@ -32,4 +32,4 @@ fi
 #
 # Then run the OAuth agent
 #
-node --loader ts-node/esm --no-warnings src/server.ts
+npx tsx src/server.ts
