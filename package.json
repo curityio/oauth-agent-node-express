@@ -3,9 +3,9 @@
     "version": "1.6.0",
     "description": "An OAuth Agent that runs on the Express web server",
     "scripts": {
-        "start": "node --loader ts-node/esm --no-warnings src/server.ts",
+        "start": "tsx --no-warnings src/server.ts",
         "wiremock": "wiremock --root-dir test/integration --port 8443",
-        "test": "mocha --loader=ts-node/esm --no-warnings test/integration/**/*.ts",
+        "test": "mocha",
         "build": "rm -rf dist && tsc"
     },
     "author": "Curity AB",
@@ -20,7 +20,7 @@
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
         "express": "^4.19.2",
-        "jose": "^5.2.3",
+        "jose": "^5.6.2",
         "node-fetch": "^3.3.2",
         "url-parse": "^1.5.10"
     },
@@ -35,10 +35,10 @@
         "@types/set-cookie-parser": "^2.4.7",
         "@types/url-parse": "^1.4.11",
         "chai": "^4.3.10",
-        "mocha": "^10.2.0",
+        "mocha": "^10.5.2",
         "set-cookie-parser": "^2.6.0",
-        "ts-node": "^10.9.2",
-        "typescript": "^5.4.3",
-        "wiremock": "^3.6.0"
+        "tsx": "^4.15.7",
+        "typescript": "^5.5.2",
+        "wiremock": "^3.8.0"
     }
 }
