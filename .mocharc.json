@@ -1,0 +1,5 @@
+{
+    "extension": ["ts"],
+    "node-option": ["import=tsx"],
+    "spec": ["test/integration/**/*.ts"]
+}
