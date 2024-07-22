@@ -84,7 +84,7 @@ spec:
   - api.$BASE_DOMAIN
   - bff.$BASE_DOMAIN
   gateways:
-  - istio-system/istio-ingress-gateway
+  - istio-system/default-gateway
   http:
   - route:
     - destination:
