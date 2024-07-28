@@ -13,14 +13,14 @@ services:
       - 444:8000
     volumes:
       - ../environments/docker-local/gateway-routes.yml:/usr/local/kong/declarative/kong.yml
-      - ../../certs/authsamples-dev.ssl.pem:/usr/local/share/certs/authsamples-dev.ssl.pem
+      - ../../certs/authsamples-dev.ssl.crt:/usr/local/share/certs/authsamples-dev.ssl.crt
       - ../../certs/authsamples-dev.ssl.key:/usr/local/share/certs/authsamples-dev.ssl.key
       - ../../certs/authsamples-dev.ca.crt:/usr/local/share/certs/authsamples-dev.ca.crt
     environment:
       KONG_DATABASE: 'off'
       KONG_DECLARATIVE_CONFIG: '/usr/local/kong/declarative/kong.yml'
       KONG_PROXY_LISTEN: '0.0.0.0:8000 http2 ssl'
-      KONG_SSL_CERT: '/usr/local/share/certs/authsamples-dev.ssl.pem'
+      KONG_SSL_CERT: '/usr/local/share/certs/authsamples-dev.ssl.crt'
       KONG_SSL_CERT_KEY: './usr/local/share/certs/authsamples-dev.ssl.key'
       KONG_LUA_SSL_TRUSTED_CERTIFICATE: './usr/local/share/certs/authsamples-dev.ca.crt'
       KONG_LOG_LEVEL: 'info'
