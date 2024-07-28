@@ -13,7 +13,7 @@ export COOKIE_PREFIX=authsamples
 export AUTHORIZATION_SERVER_BASE_URL='https://login.authsamples.com'
 export TEST_USERNAME=guestuser@example.com
 export TEST_PASSWORD=GuestPassword1
-export CURL_CA_BUNDLE='../certs/authsamples-dev.ca.pem'
+export CURL_CA_BUNDLE='../certs/authsamples-dev.ca.crt'
 #export http_proxy='http://127.0.0.1:8888'
 
 #
