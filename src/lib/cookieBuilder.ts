@@ -17,20 +17,16 @@
 import {CookieSerializeOptions, serialize} from 'cookie'
 import {getEncryptedCookie} from './cookieEncrypter.js'
 import OAuthAgentConfiguration from './oauthAgentConfiguration.js'
-import {getATCookieName, getAuthCookieName, getCSRFCookieName, getIDCookieName} from './cookieName.js'
+import {getATCookieName, getAuthCookieName, getIDCookieName} from './cookieName.js'
 import {getTempLoginDataCookieForUnset} from './pkce.js'
 
 const DAY_MILLISECONDS = 1000 * 60 * 60 * 24
 
-function getCookiesForTokenResponse(tokenResponse: any, config: OAuthAgentConfiguration, unsetTempLoginDataCookie: boolean = false, csrfCookieValue?: string): string[] {
+function getCookiesForTokenResponse(tokenResponse: any, config: OAuthAgentConfiguration, unsetTempLoginDataCookie: boolean = false): string[] {
 
     const cookies = [
         getEncryptedCookie(config.cookieOptions, tokenResponse.access_token, getATCookieName(config.cookieNamePrefix), config.encKey)
     ]
-
-    if (csrfCookieValue) {
-        cookies.push(getEncryptedCookie(config.cookieOptions, csrfCookieValue, getCSRFCookieName(config.cookieNamePrefix), config.encKey))
-    }
 
     if (unsetTempLoginDataCookie) {
         cookies.push(getTempLoginDataCookieForUnset(config.cookieOptions, config.cookieNamePrefix))
@@ -66,7 +62,6 @@ function getCookiesForUnset(options: CookieSerializeOptions, cookieNamePrefix: s
         serialize(getAuthCookieName(cookieNamePrefix), "", cookieOptions),
         serialize(getATCookieName(cookieNamePrefix), "", cookieOptions),
         serialize(getIDCookieName(cookieNamePrefix), "", cookieOptions),
-        serialize(getCSRFCookieName(cookieNamePrefix), "", cookieOptions)
     ]
 }
 

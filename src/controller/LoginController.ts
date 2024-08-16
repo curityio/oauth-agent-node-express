@@ -16,21 +16,16 @@
 
 import express from 'express'
 import {
-    ValidateRequestOptions,
     createAuthorizationRequest,
     handleAuthorizationResponse,
     validateIDtoken,
-    decryptCookie,
-    getCSRFCookieName,
     getTokenEndpointResponse,
     getTempLoginDataCookie,
     getTempLoginDataCookieName,
     getCookiesForTokenResponse,
     getATCookieName,
-    generateRandomString,
 } from '../lib/index.js'
 import {config} from '../config.js'
-import validateExpressRequest from '../validateExpressRequest.js'
 import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class LoginController {
@@ -45,10 +40,6 @@ class LoginController {
      * The SPA calls this endpoint to ask the OAuth Agent for the authorization request URL
      */
     startLogin = async (req: express.Request, res: express.Response) => {
-
-        const options = new ValidateRequestOptions()
-        options.requireCsrfHeader = false
-        validateExpressRequest(req, options)
 
         const authorizationRequestData = createAuthorizationRequest(config, req.body)
 
@@ -65,15 +56,10 @@ class LoginController {
      */
     handlePageLoad = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        const options = new ValidateRequestOptions()
-        options.requireCsrfHeader = false
-        validateExpressRequest(req, options)
-        
         const data = await handleAuthorizationResponse(req.body?.pageUrl)
         
         let isLoggedIn = false
         let handled = false
-        let csrfToken: string = ''
 
         if (data.code && data.state) {
 
@@ -83,27 +69,7 @@ class LoginController {
                 validateIDtoken(config, tokenResponse.id_token)
             }
 
-            csrfToken = generateRandomString()
-            const csrfCookie = req.cookies[getCSRFCookieName(config.cookieNamePrefix)]
-            if (csrfCookie) {
-                
-                try {
-                    // Avoid setting a new value if the user opens two browser tabs and signs in on both
-                    csrfToken = decryptCookie(config.encKey, csrfCookie)
-
-                } catch (e) {
-
-                    // If the system has been redeployed with a new cookie encryption key, decrypting old cookies from the browser will fail
-                    // In this case generate a new CSRF token so that the SPA can complete its login without errors
-                    csrfToken = generateRandomString()
-                }
-            } else {
-
-                // Generate a new value otherwise
-                csrfToken = generateRandomString()
-            }
-
-            const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config, true, csrfToken)
+            const cookiesToSet = getCookiesForTokenResponse(tokenResponse, config, true)
             res.set('Set-Cookie', cookiesToSet)
             handled = true
             isLoggedIn = true
@@ -112,10 +78,6 @@ class LoginController {
             
             // During a page reload, return the existing anti forgery token
             isLoggedIn = !!(req.cookies && req.cookies[getATCookieName(config.cookieNamePrefix)])
-            if (isLoggedIn) {
-
-                csrfToken = decryptCookie(config.encKey, req.cookies[getCSRFCookieName(config.cookieNamePrefix)])
-            }
         }
 
         const responseBody = {
@@ -123,10 +85,6 @@ class LoginController {
             isLoggedIn,
         } as any
         
-        if (csrfToken) {
-            responseBody.csrf = csrfToken
-        }
-
         res.status(200).json(responseBody)
     }
 }

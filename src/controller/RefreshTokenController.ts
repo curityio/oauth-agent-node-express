@@ -24,10 +24,8 @@ import {
     getCookiesForRefreshTokenExpiry,
     refreshAccessToken,
     validateIDtoken,
-    ValidateRequestOptions
 } from '../lib/index.js'
 import {InvalidCookieException} from '../lib/exceptions/index.js'
-import validateExpressRequest from '../validateExpressRequest.js'
 import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class RefreshTokenController {
@@ -39,10 +37,6 @@ class RefreshTokenController {
     }
 
     RefreshTokenFromCookie = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-
-        // Check for an allowed origin and the presence of a CSRF token
-        const options = new ValidateRequestOptions()
-        validateExpressRequest(req, options)
 
         const authCookieName = getAuthCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[authCookieName]) {
@@ -66,11 +60,6 @@ class RefreshTokenController {
 
     // To simulate expiry for test purposes
     ExpireRefreshToken = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-
-        const options = new ValidateRequestOptions()
-        options.requireCsrfHeader = true;
-        options.requireTrustedOrigin = true;
-        validateExpressRequest(req, options)
 
         const atCookieName = getATCookieName(config.cookieNamePrefix)
         const authCookieName = getAuthCookieName(config.cookieNamePrefix)

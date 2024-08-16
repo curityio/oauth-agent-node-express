@@ -33,14 +33,11 @@ import exceptionMiddleware from './middleware/exceptionMiddleware.js'
 
 const app = express()
 const corsConfiguration = {
-    origin: config.trustedWebOrigins,
+    origin: config.trustedWebOrigin,
     credentials: true,
     maxAge: 86400,
 }
-
-if (config.corsEnabled) {
-    app.use(cors(corsConfiguration))
-}
+app.use(cors(corsConfiguration))
 
 app.use(cookieParser())
 app.use('*', express.json())
