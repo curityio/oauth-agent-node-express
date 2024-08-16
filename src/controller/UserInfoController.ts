@@ -18,6 +18,7 @@ import express from 'express'
 import {getATCookieName, getUserInfo} from '../lib/index.js'
 import {config} from '../config.js'
 import {InvalidCookieException} from '../lib/exceptions/index.js'
+import validateExpressRequest from '../validateExpressRequest.js'
 import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class UserInfoController {
@@ -28,6 +29,8 @@ class UserInfoController {
     }
 
     getUserInfo = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+        validateExpressRequest(req)
 
         const atCookieName = getATCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[atCookieName]) {

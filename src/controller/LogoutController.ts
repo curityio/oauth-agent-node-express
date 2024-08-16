@@ -18,6 +18,7 @@ import express from 'express'
 import {config} from '../config.js'
 import {getATCookieName, getCookiesForUnset, getLogoutURL} from '../lib/index.js'
 import {InvalidCookieException} from '../lib/exceptions/index.js'
+import validateExpressRequest from '../validateExpressRequest.js'
 import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class LogoutController {
@@ -28,6 +29,8 @@ class LogoutController {
     }
 
     logoutUser = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+        validateExpressRequest(req)
 
         if (req.cookies && req.cookies[getATCookieName(config.cookieNamePrefix)]) {
 

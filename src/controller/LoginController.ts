@@ -26,6 +26,7 @@ import {
     getATCookieName,
 } from '../lib/index.js'
 import {config} from '../config.js'
+import validateExpressRequest from '../validateExpressRequest.js'
 import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class LoginController {
@@ -41,6 +42,8 @@ class LoginController {
      */
     startLogin = async (req: express.Request, res: express.Response) => {
 
+        validateExpressRequest(req)
+
         const authorizationRequestData = createAuthorizationRequest(config, req.body)
 
         res.setHeader('Set-Cookie',
@@ -55,6 +58,8 @@ class LoginController {
      * When an OAuth response is received it is handled and cookies are written
      */
     handlePageLoad = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+        validateExpressRequest(req)
 
         const data = await handleAuthorizationResponse(req.body?.pageUrl)
         

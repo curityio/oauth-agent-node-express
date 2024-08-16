@@ -18,6 +18,7 @@ import express from 'express'
 import {getIDCookieName, getIDTokenClaims} from '../lib/index.js'
 import {config} from '../config.js'
 import {InvalidCookieException} from '../lib/exceptions/index.js'
+import validateExpressRequest from '../validateExpressRequest.js'
 import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class ClaimsController {
@@ -28,6 +29,8 @@ class ClaimsController {
     }
 
     getClaims = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+
+        validateExpressRequest(req)
 
         const idTokenCookieName = getIDCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[idTokenCookieName]) {
