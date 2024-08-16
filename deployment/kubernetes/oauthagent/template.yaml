@@ -54,8 +54,6 @@ spec:
             value: $POST_LOGOUT_REDIRECT_URI
           - name: SCOPE
             value: 'openid profile investments'
-          - name: COOKIE_DOMAIN
-            value: $COOKIE_DOMAIN
           - name: COOKIE_NAME_PREFIX
             value: authsamples
           - name: COOKIE_SECURE

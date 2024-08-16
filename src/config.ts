@@ -40,7 +40,6 @@ export const config: OAuthAgentConfiguration = {
         httpOnly: true,
         sameSite: true,
         secure: !!process.env.SERVER_CERT_P12_PATH || process.env.COOKIE_SECURE === 'true',
-        domain: process.env.COOKIE_DOMAIN || 'api.example.local',
         path: process.env.COOKIE_BASE_PATH || '/',
     } as CookieSerializeOptions,
 
