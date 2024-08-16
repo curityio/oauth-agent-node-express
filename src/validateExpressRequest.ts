@@ -1,5 +1,5 @@
 import express from 'express'
-import {UnauthorizedException} from './lib/exceptions'
+import {UnauthorizedException} from './lib/exceptions/index.js'
 
 export default function validateExpressRequest(req: express.Request) {
 

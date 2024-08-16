@@ -30,7 +30,7 @@ class ClaimsController {
 
     getClaims = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        validateExpressRequest(req)
+        validateExpressRequest(req);
 
         const idTokenCookieName = getIDCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[idTokenCookieName]) {

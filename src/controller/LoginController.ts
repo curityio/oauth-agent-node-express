@@ -42,7 +42,7 @@ class LoginController {
      */
     startLogin = async (req: express.Request, res: express.Response) => {
 
-        validateExpressRequest(req)
+        validateExpressRequest(req);
 
         const authorizationRequestData = createAuthorizationRequest(config, req.body)
 
@@ -59,7 +59,7 @@ class LoginController {
      */
     handlePageLoad = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        validateExpressRequest(req)
+        validateExpressRequest(req);
 
         const data = await handleAuthorizationResponse(req.body?.pageUrl)
         

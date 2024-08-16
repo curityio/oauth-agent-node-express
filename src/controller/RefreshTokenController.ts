@@ -39,7 +39,7 @@ class RefreshTokenController {
 
     RefreshTokenFromCookie = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        validateExpressRequest(req)
+        validateExpressRequest(req);
 
         const authCookieName = getAuthCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[authCookieName]) {
@@ -64,7 +64,7 @@ class RefreshTokenController {
     // To simulate expiry for test purposes
     ExpireRefreshToken = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        validateExpressRequest(req)
+        validateExpressRequest(req);
 
         const atCookieName = getATCookieName(config.cookieNamePrefix)
         const authCookieName = getAuthCookieName(config.cookieNamePrefix)

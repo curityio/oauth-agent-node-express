@@ -30,7 +30,7 @@ class UserInfoController {
 
     getUserInfo = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        validateExpressRequest(req)
+        validateExpressRequest(req);
 
         const atCookieName = getATCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[atCookieName]) {

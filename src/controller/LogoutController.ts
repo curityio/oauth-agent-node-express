@@ -30,7 +30,7 @@ class LogoutController {
 
     logoutUser = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        validateExpressRequest(req)
+        validateExpressRequest(req);
 
         if (req.cookies && req.cookies[getATCookieName(config.cookieNamePrefix)]) {
 
