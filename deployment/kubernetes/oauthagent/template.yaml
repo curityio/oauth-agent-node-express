@@ -60,8 +60,6 @@ spec:
             value: 'true'
           - name: COOKIE_ENCRYPTION_KEY
             value: $COOKIE_ENCRYPTION_KEY
-          - name: CORS_ENABLED
-            value: 'true'
           - name: SERVER_CERT_P12_PATH
             value: ''
           - name: SERVER_CERT_P12_PASSWORD
