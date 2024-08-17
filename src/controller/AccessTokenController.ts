@@ -1,8 +1,8 @@
 import express from 'express'
-import {decryptCookie, getATCookieName, getCookiesForAccessTokenExpiry, ValidateRequestOptions} from '../lib/index.js'
+import {decryptCookie, getATCookieName, getCookiesForAccessTokenExpiry} from '../lib/index.js'
 import {config} from '../config.js'
-import validateExpressRequest from '../validateExpressRequest.js'
 import {InvalidCookieException} from '../lib/exceptions/index.js'
+import validateExpressRequest from '../validateExpressRequest.js'
 import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class AccessTokenController {
@@ -15,10 +15,7 @@ class AccessTokenController {
     // To simulate expiry for test purposes
     ExpireAccessToken = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        const options = new ValidateRequestOptions()
-        options.requireCsrfHeader = true;
-        options.requireTrustedOrigin = true;
-        validateExpressRequest(req, options)
+        validateExpressRequest(req);
 
         const atCookieName = getATCookieName(config.cookieNamePrefix)
         if (req.cookies && req.cookies[atCookieName]) {

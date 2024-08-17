@@ -33,6 +33,7 @@ HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/login/start" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
+-H 'token-handler-version: 1' \
 -c $MAIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then
@@ -88,6 +89,7 @@ HTTP_STATUS=$(curl -i -s -k -X POST "$OAUTH_AGENT_BASE_URL/login/end" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
+-H 'token-handler-version: 1' \
 -c $MAIN_COOKIES_FILE \
 -b $MAIN_COOKIES_FILE \
 -d $PAGE_URL_JSON \

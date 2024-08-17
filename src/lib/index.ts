@@ -18,7 +18,6 @@ import type { ClientOptions } from './clientOptions.js'
 import OAuthAgentConfiguration from './oauthAgentConfiguration.js'
 import { createAuthorizationRequest, handleAuthorizationResponse } from './loginHandler.js'
 import { validateIDtoken } from './idTokenValidator.js'
-import { ValidateRequestOptions } from './validateRequest.js'
 import { getEncryptedCookie, decryptCookie } from './cookieEncrypter.js'
 import { getCookiesForTokenResponse, getCookiesForUnset, getCookiesForAccessTokenExpiry, getCookiesForRefreshTokenExpiry } from './cookieBuilder.js'
 import { getTokenEndpointResponse, refreshAccessToken } from './getToken.js'
@@ -27,12 +26,11 @@ import getIDTokenClaims from './getIDTokenClaims.js'
 import getRedirectUri from './redirectUri.js'
 import getLogoutURL from './getLogoutURL.js'
 import { getTempLoginDataCookie, getTempLoginDataCookieForUnset, generateRandomString } from './pkce.js'
-import { getAuthCookieName, getIDCookieName, getCSRFCookieName, getATCookieName, getTempLoginDataCookieName } from './cookieName.js'
+import { getAuthCookieName, getIDCookieName, getATCookieName, getTempLoginDataCookieName } from './cookieName.js'
 
 export {
     ClientOptions,
     OAuthAgentConfiguration,
-    ValidateRequestOptions,
     createAuthorizationRequest,
     handleAuthorizationResponse,
     validateIDtoken,
@@ -52,7 +50,6 @@ export {
     getCookiesForTokenResponse,
     getATCookieName,
     getTempLoginDataCookieName,
-    getCSRFCookieName,
     getIDCookieName,
     getAuthCookieName,
     generateRandomString,

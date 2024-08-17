@@ -16,7 +16,7 @@
 
 import express from 'express'
 import {config} from '../config.js'
-import {getATCookieName, getCookiesForUnset, getLogoutURL, ValidateRequestOptions} from '../lib/index.js'
+import {getATCookieName, getCookiesForUnset, getLogoutURL} from '../lib/index.js'
 import {InvalidCookieException} from '../lib/exceptions/index.js'
 import validateExpressRequest from '../validateExpressRequest.js'
 import {asyncCatch} from '../middleware/exceptionMiddleware.js';
@@ -30,9 +30,7 @@ class LogoutController {
 
     logoutUser = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
-        // Check for an allowed origin and the presence of a CSRF token
-        const options = new ValidateRequestOptions()
-        validateExpressRequest(req, options)
+        validateExpressRequest(req);
 
         if (req.cookies && req.cookies[getATCookieName(config.cookieNamePrefix)]) {
 
