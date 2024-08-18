@@ -13,7 +13,7 @@ services:
   # The gateway then routes to the OAuth Agent API, which calls the Authorization Server
   #
 - name: oauth-agent
-  url: https://oauthagent-internal.authsamples-dev.com:8000/oauth-agent
+  url: http://oauthagent-internal.authsamples-dev.com:8000/oauth-agent
   routes:
   - name: oauth-agent-api-route
     hosts:
