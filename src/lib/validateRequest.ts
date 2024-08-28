@@ -78,6 +78,6 @@ export class ValidateRequestOptions {
     
     public constructor() {
         this.requireTrustedOrigin = true
-        this.requireCsrfHeader = true
+        this.requireCsrfHeader = false  // TODO: check for logout
     }
 }

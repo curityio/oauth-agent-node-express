@@ -43,13 +43,14 @@ if (config.corsEnabled) {
 
 app.use(cookieParser())
 app.use('*', express.json())
+app.use('*', express.urlencoded({ extended: false }))
 app.use('*', loggingMiddleware)
 app.use('*', exceptionMiddleware)
 app.set('etag', false)
 
 const controllers = {
     '/login': new LoginController(),
-    '/userInfo': new UserInfoController(),
+    '/session': new UserInfoController(),
     '/claims': new ClaimsController(),
     '/logout': new LogoutController(),
     '/refresh': new RefreshTokenController()

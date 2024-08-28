@@ -55,7 +55,7 @@ class LoginController {
         res.setHeader('Set-Cookie',
             getTempLoginDataCookie(authorizationRequestData.codeVerifier, authorizationRequestData.state, config.cookieOptions, config.cookieNamePrefix, config.encKey))
         res.status(200).json({
-            authorizationRequestUrl: authorizationRequestData.authorizationRequestURL
+            authorization_url: authorizationRequestData.authorizationRequestURL
         })
     }
 
@@ -69,7 +69,7 @@ class LoginController {
         options.requireCsrfHeader = false
         validateExpressRequest(req, options)
         
-        const data = await handleAuthorizationResponse(req.body?.pageUrl)
+        const data = req.body;  // already called with code and state
         
         let isLoggedIn = false
         let handled = false

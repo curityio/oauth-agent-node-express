@@ -23,7 +23,7 @@ export const config: OAuthAgentConfiguration = {
     
     // Host settings
     port: process.env.PORT || '8080',
-    endpointsPrefix: '/oauth-agent',
+    endpointsPrefix: '/dev',
     serverCertPath: process.env.SERVER_CERT_P12_PATH || '',
     serverCertPassword: process.env.SERVER_CERT_P12_PASSWORD || '',
 
