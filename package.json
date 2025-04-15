@@ -16,11 +16,11 @@
     },
     "dependencies": {
         "base64url": "^3.0.1",
-        "cookie": "^0.6.0",
+        "cookie": "^1.0.1",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
-        "express": "^4.21.0",
-        "jose": "^5.8.0",
+        "express": "^4.21.2",
+        "jose": "^6.0.10",
         "node-fetch": "^3.3.2",
         "url-parse": "^1.5.10"
     },
@@ -37,8 +37,8 @@
         "chai": "^4.3.10",
         "mocha": "^10.5.2",
         "set-cookie-parser": "^2.6.0",
-        "tsx": "^4.19.1",
-        "typescript": "^5.5.4",
+        "tsx": "^4.19.3",
+        "typescript": "^5.8.3",
         "wiremock": "^3.8.0"
     }
 }
