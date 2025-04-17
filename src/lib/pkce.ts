@@ -15,7 +15,7 @@
  */
 
 import crypto from 'crypto'
-import {CookieSerializeOptions, serialize} from 'cookie'
+import {SerializeOptions, serialize} from 'cookie'
 import {getTempLoginDataCookieName} from './cookieName.js'
 import {encryptCookie} from './cookieEncrypter.js'
 
@@ -44,11 +44,11 @@ function base64UrlEncode(hashedData: string): string {
         .replace(/\//g, '_')
 }
 
-function getTempLoginDataCookie(codeVerifier: string, state: string, options: CookieSerializeOptions, cookieNamePrefix: string, encKey: string): string {
+function getTempLoginDataCookie(codeVerifier: string, state: string, options: SerializeOptions, cookieNamePrefix: string, encKey: string): string {
     return serialize(getTempLoginDataCookieName(cookieNamePrefix), encryptCookie(encKey, JSON.stringify({ codeVerifier, state })), options)
 }
 
-function getTempLoginDataCookieForUnset(options: CookieSerializeOptions, cookieNamePrefix: string): string {
+function getTempLoginDataCookieForUnset(options: SerializeOptions, cookieNamePrefix: string): string {
     const cookieOptions = {
         ...options,
         expires: new Date(Date.now() - DAY_MILLISECONDS)

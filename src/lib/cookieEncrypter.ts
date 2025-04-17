@@ -16,7 +16,7 @@
 
 import crypto from 'crypto'
 import base64url from 'base64url';
-import {CookieSerializeOptions, serialize} from 'cookie'
+import {SerializeOptions, serialize} from 'cookie'
 import {CookieDecryptionException, InvalidCookieException} from '../lib/exceptions/index.js'
 
 const VERSION_SIZE = 1;
@@ -86,7 +86,7 @@ function decryptCookie(encKeyHex: string, encryptedbase64value: string): string 
     }
 }
 
-function getEncryptedCookie(options: CookieSerializeOptions, value: string, name: string, encKey: string): string {
+function getEncryptedCookie(options: SerializeOptions, value: string, name: string, encKey: string): string {
     return serialize(name, encryptCookie(encKey, value), options)
 }
 
