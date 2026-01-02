@@ -44,7 +44,6 @@ if (config.corsEnabled) {
 app.use(cookieParser())
 app.use('*_', express.json())
 app.use('*_', loggingMiddleware)
-app.use('*_', exceptionMiddleware)
 app.set('etag', false)
 
 const controllers = {
@@ -58,6 +57,8 @@ const controllers = {
 for (const [path, controller] of Object.entries(controllers)) {
     app.use(config.endpointsPrefix + path, controller.router)
 }
+
+app.use('*_', exceptionMiddleware)
 
 if (config.serverCertPath) {
 
