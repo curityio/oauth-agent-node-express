@@ -1,5 +1,4 @@
 import {assert, expect} from 'chai'
-import fetch from 'node-fetch'
 import {config} from '../../src/config.js'
 import {OauthAgentStartResponse} from "./responses.js";
 

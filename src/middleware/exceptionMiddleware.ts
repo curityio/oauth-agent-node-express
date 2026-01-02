@@ -52,19 +52,3 @@ export default function exceptionMiddleware(
     }
     response.send(data)
 }
-
-/*
- * Unhandled promise rejections may not be caught properly
- * https://medium.com/@Abazhenov/using-async-await-in-express-with-node-8-b8af872c0016
- */
-export function asyncCatch(fn: any): any {
-
-    return (request: Request, response: Response, next: NextFunction) => {
-
-        Promise
-            .resolve(fn(request, response, next))
-            .catch((e) => {
-                exceptionMiddleware(e, request, response, next)
-            })
-    };
-}

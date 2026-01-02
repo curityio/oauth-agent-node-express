@@ -21,13 +21,12 @@ import {
 } from '../lib/index.js'
 import {InvalidCookieException} from '../lib/exceptions/index.js'
 import validateExpressRequest from '../validateExpressRequest.js'
-import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class RefreshTokenController {
     public router = express.Router()
 
     constructor() {
-        this.router.post('/', asyncCatch(this.RefreshTokenFromCookie))
+        this.router.post('/', this.RefreshTokenFromCookie)
     }
 
     RefreshTokenFromCookie = async (req: express.Request, res: express.Response, next: express.NextFunction) => {

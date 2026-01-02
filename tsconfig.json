@@ -5,8 +5,8 @@
         "target": "ES2022",
         "outDir": "./dist",
         "baseUrl": "./src",
-        "module": "ES2022",
-        "moduleResolution": "Node",
+        "module": "Node18",
+        "moduleResolution": "node16",
         "allowSyntheticDefaultImports": true
     },
     "include": [

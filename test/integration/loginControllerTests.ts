@@ -1,5 +1,4 @@
 import {assert, expect} from 'chai'
-import fetch, {RequestInit} from 'node-fetch';
 import {config} from '../../src/config.js'
 import {fetchStubbedResponse, performLogin, startLogin} from './testUtils.js'
 import {OAuthAgentEndResponse, OAuthAgentErrorResponse, OauthAgentStartResponse} from "./responses.js";

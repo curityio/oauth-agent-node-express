@@ -19,13 +19,12 @@ import {getATCookieName, getUserInfo, ValidateRequestOptions} from '../lib/index
 import {config} from '../config.js'
 import validateExpressRequest from '../validateExpressRequest.js'
 import {InvalidCookieException} from '../lib/exceptions/index.js'
-import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class UserInfoController {
     public router = express.Router()
 
     constructor() {
-        this.router.get('/', asyncCatch(this.getUserInfo))
+        this.router.get('/', this.getUserInfo)
     }
 
     getUserInfo = async (req: express.Request, res: express.Response, next: express.NextFunction) => {

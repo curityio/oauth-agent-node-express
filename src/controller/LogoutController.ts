@@ -19,13 +19,12 @@ import {config} from '../config.js'
 import {getATCookieName, getCookiesForUnset, getLogoutURL, ValidateRequestOptions} from '../lib/index.js'
 import {InvalidCookieException} from '../lib/exceptions/index.js'
 import validateExpressRequest from '../validateExpressRequest.js'
-import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class LogoutController {
     public router = express.Router()
 
     constructor() {
-        this.router.post('/', asyncCatch(this.logoutUser))
+        this.router.post('/', this.logoutUser)
     }
 
     logoutUser = async (req: express.Request, res: express.Response, next: express.NextFunction) => {

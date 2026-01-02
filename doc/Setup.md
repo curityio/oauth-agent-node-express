@@ -6,7 +6,7 @@ Follow the below steps to get set up for developing and testing the OAuth Agent 
 
 Ensure that these tools are installed locally:
 
-- [Node.js 20+](https://nodejs.org/en/download/)
+- [Node.js 22+](https://nodejs.org/en/download/)
 - [Docker](https://www.docker.com/products/docker-desktop)
 - [jq](https://stedolan.github.io/jq/download/)
 

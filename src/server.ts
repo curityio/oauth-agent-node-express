@@ -42,9 +42,9 @@ if (config.corsEnabled) {
 }
 
 app.use(cookieParser())
-app.use('*', express.json())
-app.use('*', loggingMiddleware)
-app.use('*', exceptionMiddleware)
+app.use('*_', express.json())
+app.use('*_', loggingMiddleware)
+app.use('*_', exceptionMiddleware)
 app.set('etag', false)
 
 const controllers = {

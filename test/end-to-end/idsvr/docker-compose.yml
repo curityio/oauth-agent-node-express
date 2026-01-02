@@ -4,7 +4,7 @@ services:
   # A SQL database used by the Curity Identity Server
   #
   curity-data:
-    image: postgres:15.3
+    image: postgres:18.1
     hostname: dbserver
     volumes:
       - ./data-backup.sql:/docker-entrypoint-initdb.d/data-backup.sql

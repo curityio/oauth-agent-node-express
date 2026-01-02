@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-import urlparse from 'url-parse'
 import {ClientOptions} from './clientOptions.js';
 import OAuthAgentConfiguration from './oauthAgentConfiguration.js';
 import {generateHash, generateRandomString} from './pkce.js';
@@ -51,37 +50,41 @@ export function createAuthorizationRequest(config: OAuthAgentConfiguration, opti
 
 export async function handleAuthorizationResponse(pageUrl?: string): Promise<any> {
 
-    const data = getUrlParts(pageUrl)
-
-    if (data.state && data.code) {
-
-        return {
-            code: data.code,
-            state: data.state,
-        }
+    const args = parseUrl(pageUrl)
+    if (!args) {
+        return {}
     }
 
-    if (data.state && data.error) {
+    const state = args.get('state') || ''
+    const code = args.get('code') || ''
+    const error = args.get('error') || ''
 
-        throw new AuthorizationResponseException(
-            data.error,
-            data.error_description || 'Login failed at the Authorization Server')
+    if (state && error) {
+
+        const errorDescription = args.get('error_description') || 'Login failed at the Authorization Server'
+        throw new AuthorizationResponseException(error, errorDescription)
     }
 
     return {
-        code: null,
-        state: null,
+        code,
+        state,
     }
 }
 
-function getUrlParts(url?: string): any {
-    
-    if (url) {
-        const urlData = urlparse(url, true)
-        if (urlData.query) {
-            return urlData.query
+function parseUrl(urlString?: string): URLSearchParams | null {
+
+    try {
+
+        if (urlString) {
+
+            const url = new URL(urlString)
+            return new URLSearchParams(url.search)
         }
+
+    } catch {
+        
+        console.log('Invalid URL received')
     }
 
-    return {}
+    return null
 }
