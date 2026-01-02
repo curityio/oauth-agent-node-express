@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-import fetch from 'node-fetch'
 import {decryptCookie} from './cookieEncrypter.js'
 import {Grant} from './grant.js'
 import OAuthAgentConfiguration from './oauthAgentConfiguration.js'

@@ -1,7 +1,4 @@
-
-import fetch, {RequestInit, Response} from 'node-fetch';
 import setCookie from 'set-cookie-parser';
-import urlParse from 'url-parse';
 import {config} from '../../src/config.js';
 import { ClientOptions } from '../../src/lib/clientOptions.js';
 import {OauthAgentStartResponse} from "./responses.js";
@@ -42,11 +39,11 @@ export async function performLogin(stateOverride: string = ''): Promise<[number,
  */
 export function getCookieString(response: Response) {
 
-    const rawCookies = response.headers.raw()['set-cookie']
+    const rawCookies = response.headers.getSetCookie()
     const cookies = setCookie.parse(rawCookies)
     
     let allCookiesString = '';
-    cookies.forEach((c) => {
+    cookies.forEach((c: any) => {
         allCookiesString += `${c.name}=${c.value};`
     })
 
@@ -86,8 +83,8 @@ export async function startLogin(requestBody: ClientOptions | null = null): Prom
     const response = await fetch(`${oauthAgentBaseUrl}/login/start`, requestOptions)
 
     const responseBody = await response.json() as OauthAgentStartResponse;
-    const parsedUrl = urlParse(responseBody.authorizationRequestUrl, true)
-    const state = parsedUrl.query.state
+    const args = parseUrl(responseBody.authorizationRequestUrl)
+    const state = args && args.get('state') || ''
     
     const cookieString = getCookieString(response)
     return [state!, cookieString]
@@ -125,4 +122,25 @@ async function deleteStub(id: string): Promise<void> {
         console.log(responseData)
         throw new Error('Failed to delete Wiremock stub')
     }
+}
+
+/*
+ * Get a URL into parts
+ */
+function parseUrl(urlString?: string): URLSearchParams | null {
+
+    try {
+
+        if (urlString) {
+
+            const url = new URL(urlString)
+            return new URLSearchParams(url.search)
+        }
+
+    } catch {
+        
+        console.log('Invalid URL received')
+    }
+
+    return null
 }

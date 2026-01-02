@@ -19,13 +19,12 @@ import {getIDCookieName, getIDTokenClaims, ValidateRequestOptions} from '../lib/
 import {config} from '../config.js'
 import validateExpressRequest from '../validateExpressRequest.js'
 import {InvalidCookieException} from '../lib/exceptions/index.js'
-import {asyncCatch} from '../middleware/exceptionMiddleware.js';
 
 class ClaimsController {
     public router = express.Router()
 
     constructor() {
-        this.router.get('/', asyncCatch(this.getClaims))
+        this.router.get('/', this.getClaims)
     }
 
     getClaims = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
