@@ -39,7 +39,7 @@ export async function performLogin(stateOverride: string = ''): Promise<[number,
  */
 export function getCookieString(response: Response) {
 
-    const rawCookies = response.headers.get('set-cookie') || ''
+    const rawCookies = response.headers.getSetCookie()
     const cookies = setCookie.parse(rawCookies)
     
     let allCookiesString = '';
